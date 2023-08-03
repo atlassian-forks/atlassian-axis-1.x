@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ import java.util.ResourceBundle;
  * variables. Any dynamic variable defined in PropertiesUtil.getVariableValue()
  * can be used (such as {date}), as well as arguments in the form {0}, {1}, etc.
  * Argument values are specified in the various overloaded getString() methods.</p>
- * 
+ *
  * @author Richard A. Sitze (rsitze@us.ibm.com)
  * @author Karl Moss (kmoss@macromedia.com)
  * @author Glen Daniels (gdaniels@apache.org)
@@ -64,7 +64,7 @@ public class ProjectResourceBundle extends ResourceBundle {
     private final ResourceBundle resourceBundle;
     private final String resourceName;
 
-    
+
     protected Object handleGetObject(String key)
         throws MissingResourceException
     {
@@ -84,7 +84,7 @@ public class ProjectResourceBundle extends ResourceBundle {
         }
         return obj;
     }
-    
+
     public Enumeration getKeys() {
         Enumeration myKeys = resourceBundle.getKeys();
         if (parent == null) {
@@ -94,12 +94,12 @@ public class ProjectResourceBundle extends ResourceBundle {
             while (myKeys.hasMoreElements()) {
                 set.add(myKeys.nextElement());
             }
-            
+
             Enumeration pKeys = parent.getKeys();
             while (pKeys.hasMoreElements()) {
                 set.add(pKeys.nextElement());
             }
-            
+
             return new Enumeration() {
                     private Iterator it = set.iterator();
                     public boolean hasMoreElements() { return it.hasNext(); }
@@ -107,21 +107,21 @@ public class ProjectResourceBundle extends ResourceBundle {
                 };
         }
     }
-    
+
 
     /**
      * Construct a new ProjectResourceBundle
-     * 
+     *
      * @param projectName The name of the project to which the class belongs.
      *        It must be a proper prefix of the caller's package.
-     * 
+     *
      * @param caller The calling class.
      *        This is used to get the package name to further construct
      *        the basename as well as to get the proper ClassLoader.
-     * 
+     *
      * @param resourceName The name of the resource without the
      *        ".properties" extension
-     * 
+     *
      * @throws MissingResourceException if projectName is not a prefix of
      *         the caller's package name, or if the resource could not be
      *         found/loaded.
@@ -136,17 +136,17 @@ public class ProjectResourceBundle extends ResourceBundle {
 
     /**
      * Construct a new ProjectResourceBundle
-     * 
+     *
      * @param projectName The name of the project to which the class belongs.
      *        It must be a proper prefix of the caller's package.
-     * 
+     *
      * @param caller The calling class.
      *        This is used to get the package name to further construct
      *        the basename as well as to get the proper ClassLoader.
-     * 
+     *
      * @param resourceName The name of the resource without the
      *        ".properties" extension
-     * 
+     *
      * @throws MissingResourceException if projectName is not a prefix of
      *         the caller's package name, or if the resource could not be
      *         found/loaded.
@@ -166,19 +166,19 @@ public class ProjectResourceBundle extends ResourceBundle {
 
     /**
      * Construct a new ProjectResourceBundle
-     * 
+     *
      * @param projectName The name of the project to which the class belongs.
      *        It must be a proper prefix of the caller's package.
-     * 
+     *
      * @param caller The calling class.
      *        This is used to get the package name to further construct
      *        the basename as well as to get the proper ClassLoader.
-     * 
+     *
      * @param resourceName The name of the resource without the
      *        ".properties" extension
-     * 
+     *
      * @param locale The locale
-     * 
+     *
      * @throws MissingResourceException if projectName is not a prefix of
      *         the caller's package name, or if the resource could not be
      *         found/loaded.
@@ -195,22 +195,22 @@ public class ProjectResourceBundle extends ResourceBundle {
 
     /**
      * Construct a new ProjectResourceBundle
-     * 
+     *
      * @param projectName The name of the project to which the class belongs.
      *        It must be a proper prefix of the caller's package.
-     * 
+     *
      * @param caller The calling class.
      *        This is used to get the package name to further construct
      *        the basename as well as to get the proper ClassLoader.
-     * 
+     *
      * @param resourceName The name of the resource without the
      *        ".properties" extension
-     * 
+     *
      * @param locale The locale
-     * 
+     *
      * @param extendsBundle If non-null, then this ExtendMessages will
      *         default to extendsBundle.
-     * 
+     *
      * @throws MissingResourceException if projectName is not a prefix of
      *         the caller's package name, or if the resource could not be
      *         found/loaded.
@@ -232,22 +232,22 @@ public class ProjectResourceBundle extends ResourceBundle {
 
     /**
      * Construct a new ProjectResourceBundle
-     * 
+     *
      * @param projectName The name of the project to which the class belongs.
      *        It must be a proper prefix of the caller's package.
-     * 
+     *
      * @param caller The calling class.
      *        This is used to get the package name to further construct
      *        the basename as well as to get the proper ClassLoader.
-     * 
+     *
      * @param resourceName The name of the resource without the
      *        ".properties" extension
-     * 
+     *
      * @param locale The locale
-     * 
+     *
      * @param extendsBundle If non-null, then this ExtendMessages will
      *         default to extendsBundle.
-     * 
+     *
      * @throws MissingResourceException if projectName is not a prefix of
      *         the caller's package name, or if the resource could not be
      *         found/loaded.
@@ -266,7 +266,7 @@ public class ProjectResourceBundle extends ResourceBundle {
                                    + resourceName + ","
                                    + String.valueOf(locale) + ",...)");
         }
-        
+
         Context context = new Context();
         context.setLocale(locale);
         context.setLoader(loader);
@@ -283,13 +283,13 @@ public class ProjectResourceBundle extends ResourceBundle {
             log.debug("Exception: ", e);
             throw e;
         }
-        
+
         if (bundle == null) {
             throw new MissingResourceException("Cannot find resource '" +
                                                packageName + '.' + resourceName + "'",
                                                resourceName, "");
         }
-        
+
         return bundle;
     }
 
@@ -303,14 +303,14 @@ public class ProjectResourceBundle extends ResourceBundle {
         throws MissingResourceException
     {
         String cacheKey = context.getCacheKey(packageName);
-        
+
         ProjectResourceBundle prb = (ProjectResourceBundle)bundleCache.get(cacheKey);
 
         if (prb == null) {
             String name = packageName + '.' + context.getResourceName();
             ResourceBundle rb = context.loadBundle(packageName);
             ResourceBundle parent = context.getParentBundle(packageName);
-            
+
             if (rb != null) {
                 prb = new ProjectResourceBundle(name, rb);
                 prb.setParent(parent);
@@ -342,7 +342,7 @@ public class ProjectResourceBundle extends ResourceBundle {
     private static final String getPackage(String name) {
         return name.substring(0, name.lastIndexOf('.')).intern();
     }
-    
+
     /**
       * Construct a new ProjectResourceBundle
       */
@@ -352,7 +352,7 @@ public class ProjectResourceBundle extends ResourceBundle {
         this.resourceBundle = bundle;
         this.resourceName = name;
     }
-    
+
     public String getResourceName() {
         return resourceName;
     }
@@ -360,11 +360,11 @@ public class ProjectResourceBundle extends ResourceBundle {
     /**
      * Clears the internal cache
      */
-    public static void clearCache()
+    public static void clearBundleCache()
     {
         bundleCache.clear();
     }
-    
+
     public String toString() {
         return resourceName;
     }
@@ -376,12 +376,12 @@ public class ProjectResourceBundle extends ResourceBundle {
         private String _projectName;
         private String _resourceName;
         private ResourceBundle _parent;
-        
+
         void setLocale(Locale l) {
             /* 1. Docs indicate that if locale is not specified,
              *    then the default local is used in it's place.
              * 2. A null value for locale is invalid.
-             * 
+             *
              * Therefore, default...
              */
             _locale = (l == null) ? defaultLocale : l;
@@ -395,17 +395,17 @@ public class ProjectResourceBundle extends ResourceBundle {
             }
             // END FIX: http://nagoya.apache.org/bugzilla/show_bug.cgi?id=16868
         }
-        
+
         void setProjectName(String name) { _projectName = name.intern(); }
         void setResourceName(String name) { _resourceName = name.intern(); }
         void setParentBundle(ResourceBundle b) { _parent = b; }
-        
+
         Locale getLocale() { return _locale; }
         ClassLoader getLoader() { return _loader; }
         String getProjectName() { return _projectName; }
         String getResourceName() { return _resourceName; }
         ResourceBundle getParentBundle() { return _parent; }
-    
+
         String getCacheKey(String packageName)
         {
             String loaderName = (_loader == null) ? "" : (":" + _loader.hashCode());
@@ -424,7 +424,7 @@ public class ProjectResourceBundle extends ResourceBundle {
             }
             return null;
         }
-    
+
         ResourceBundle getParentBundle(String packageName)
         {
             ResourceBundle p;
@@ -436,7 +436,7 @@ public class ProjectResourceBundle extends ResourceBundle {
             }
             return p;
         }
-        
+
         String validate(String packageName)
             throws MissingResourceException
         {
@@ -452,7 +452,7 @@ public class ProjectResourceBundle extends ResourceBundle {
                                                    packageName, "");
             }
             packageName = packageName.intern();
-    
+
             /* Ensure that project is a proper prefix of class.
              * Terminate project name with '.' to ensure proper match.
              */
@@ -463,7 +463,7 @@ public class ProjectResourceBundle extends ResourceBundle {
                                  + packageName + "'",
                                  packageName + '.' + _resourceName, "");
             }
-                
+
             return packageName;
         }
     }

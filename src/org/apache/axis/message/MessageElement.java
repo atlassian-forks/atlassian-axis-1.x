@@ -41,6 +41,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.TypeInfo;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
@@ -68,9 +69,9 @@ import java.util.Vector;
  *
  * Note: it was made Serializable to help users of Apache SOAP who had
  * exploited the serializability of the DOM tree to migrate to Axis.
- * @todo implement the NodeList methods properly, with tests. 
+ * @todo implement the NodeList methods properly, with tests.
  */
-public class MessageElement extends NodeImpl implements SOAPElement,
+public  class MessageElement extends NodeImpl implements SOAPElement,
         Serializable,
         org.w3c.dom.NodeList,  // ADD Nodelist Interfaces for SAAJ 1.2
         Cloneable
@@ -421,7 +422,7 @@ public class MessageElement extends NodeImpl implements SOAPElement,
                             NodeImpl clonedChild = (NodeImpl)child.cloneNode(deep); // deep == true
                             clonedChild.setParent(clonedSelf);
                             clonedChild.setOwnerDocument(getOwnerDocument());
-                            
+
                             clonedSelf.childDeepCloned( child, clonedChild );
                         }
                     }
@@ -695,6 +696,10 @@ public class MessageElement extends NodeImpl implements SOAPElement,
             }
         }
         return prefixes.iterator();
+    }
+
+    public QName createQName(String s, String s1) throws SOAPException {
+        return null;
     }
 
     /**
@@ -1310,6 +1315,10 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         return child;
     }
 
+    public SOAPElement addChildElement(QName qName) throws SOAPException {
+        return null;
+    }
+
     /**
      * add a child element in the message element's own namespace
      * @param localName
@@ -1415,6 +1424,10 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         return this;
     }
 
+    public SOAPElement addAttribute(QName qName, String s) throws SOAPException {
+        return null;
+    }
+
     /**
      * create a {@link Mapping} mapping and add to our namespace list.
      * @param prefix
@@ -1449,6 +1462,10 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         return attributes.getValue(attrName.getURI(), attrName.getLocalName());
     }
 
+    public String getAttributeValue(QName qName) {
+        return null;
+    }
+
     /**
      * Get an interator to all the attributes of the node.
      * The iterator is over a static snapshot of the node names; if attributes
@@ -1479,6 +1496,10 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         return attrs.iterator();
     }
 
+    public Iterator getAllAttributesAsQNames() {
+        return null;
+    }
+
     // getNamespaceURI implemented above
 
     /**
@@ -1504,6 +1525,14 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         return new PrefixedQName(getNamespaceURI(), getName(), getPrefix());
     }
 
+    public QName getElementQName() {
+        return null;
+    }
+
+    public SOAPElement setElementQName(QName qName) throws SOAPException {
+        return null;
+    }
+
     /**
      * remove an element
      * @param attrName name of the element
@@ -1522,6 +1551,10 @@ public class MessageElement extends NodeImpl implements SOAPElement,
             }
         }
         return removed;
+    }
+
+    public boolean removeAttribute(QName qName) {
+        return false;
     }
 
     /**
@@ -1736,6 +1769,22 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         return false;
     }
 
+    public TypeInfo getSchemaTypeInfo() {
+        return null;
+    }
+
+    public void setIdAttribute(String s, boolean b) throws DOMException {
+
+    }
+
+    public void setIdAttributeNS(String s, String s1, boolean b) throws DOMException {
+
+    }
+
+    public void setIdAttributeNode(Attr attr, boolean b) throws DOMException {
+
+    }
+
     /**
      * This unimplemented operation is meand to return an attribute as a node
      * @see org.w3c.dom.Element#getAttributeNode(String)
@@ -1819,7 +1868,7 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         }
         return nodelist;
     }
-    
+
     /**
      * get the attribute with namespace/local name match.
      * @see org.w3c.dom.Element#getAttributeNS(String, String)
@@ -2043,7 +2092,7 @@ public class MessageElement extends NodeImpl implements SOAPElement,
             if(child.getNodeType()==TEXT_NODE ||
                child.getNodeType()==CDATA_SECTION_NODE ||
                child.getNodeType()==COMMENT_NODE ) {
-                org.apache.axis.message.Text childElement = 
+                org.apache.axis.message.Text childElement =
                     new org.apache.axis.message.Text((CharacterData)child);
                 dest.appendChild(childElement);
             } else {
@@ -2066,7 +2115,7 @@ public class MessageElement extends NodeImpl implements SOAPElement,
         /*--- Fix for AXIS-1817
         if ((recorder != null) && (!_isDirty)) {
             StringWriter writer = new StringWriter();
-            TextSerializationContext outputContext = 
+            TextSerializationContext outputContext =
                 new TextSerializationContext(writer);
             try {
                 recorder.replay(startEventIndex,
@@ -2078,7 +2127,7 @@ public class MessageElement extends NodeImpl implements SOAPElement,
             }
             String value = writer.toString();
             return (value.length() == 0) ? null : value;
-        } 
+        }
         ---*/
 
         if (textRep != null) {

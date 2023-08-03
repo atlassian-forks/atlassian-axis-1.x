@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,7 @@ import org.apache.axis.utils.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
+import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -36,6 +37,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
+import org.w3c.dom.UserDataHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.SOAPException;
@@ -48,9 +50,9 @@ import javax.xml.soap.SOAPException;
  * Implementation => this makes we are fixed to one Implementation - choose
  * delgate depends on the user's parser preference => This is the practically
  * best solution I have now
- * 
+ *
  * @author Heejune Ahn (cityboy@tmax.co.kr)
- *  
+ *
  */
 
 public class SOAPDocumentImpl
@@ -62,7 +64,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * Construct the Document
-     * 
+     *
      * @param sp the soap part
      */
     public SOAPDocumentImpl(SOAPPart sp) {
@@ -76,7 +78,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * @todo : link with SOAP
-     * 
+     *
      * @return
      */
     public DocumentType getDoctype() {
@@ -89,7 +91,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * should not be called, the method will be handled in SOAPPart
-     * 
+     *
      * @return
      */
     public Element getDocumentElement() {
@@ -99,9 +101,9 @@ implements org.w3c.dom.Document, java.io.Serializable {
     /**
      * based on the tagName, we will make different kind SOAP Elements Instance
      * Is really we can determine the Type by the Tagname???
-     * 
+     *
      * @todo : verify this method
-     * 
+     *
      * @param tagName
      * @return @throws
      *         DOMException
@@ -146,10 +148,10 @@ implements org.w3c.dom.Document, java.io.Serializable {
     }
 
     /**
-     * 
+     *
      * Creates an empty <code>DocumentFragment</code> object. @todo not
      * implemented yet
-     * 
+     *
      * @return A new <code>DocumentFragment</code>.
      */
     public DocumentFragment createDocumentFragment() {
@@ -157,7 +159,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     }
     /**
      * Creates a <code>Text</code> node given the specified string.
-     * 
+     *
      * @param data
      *            The data for the node.
      * @return The new <code>Text</code> object.
@@ -172,7 +174,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * Creates a <code>Comment</code> node given the specified string.
-     * 
+     *
      * @param data
      *            The data for the node.
      * @return The new <code>Comment</code> object.
@@ -184,7 +186,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     /**
      * Creates a <code>CDATASection</code> node whose value is the specified
      * string.
-     * 
+     *
      * @param data
      *            The data for the <code>CDATASection</code> contents.
      * @return The new <code>CDATASection</code> object.
@@ -199,7 +201,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     /**
      * Creates a <code>ProcessingInstruction</code> node given the specified
      * name and data strings.
-     * 
+     *
      * @param target
      *            The target part of the processing instruction.
      * @param data
@@ -239,7 +241,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     // implemented by yoonforh 2004-07-30 02:48:50
     public Node importNode(Node importedNode, boolean deep) throws DOMException {
     	Node targetNode = null;
-    
+
     	int type = importedNode.getNodeType();
     	switch (type) {
     	case ELEMENT_NODE :
@@ -248,7 +250,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
         		targetNode = new SOAPBodyElement(el);
         		break;
     	    }
-    
+
     	    SOAPBodyElement target = new SOAPBodyElement();
     	    org.w3c.dom.NamedNodeMap attrs = el.getAttributes();
     	    for (int i = 0; i < attrs.getLength(); i++) {
@@ -272,7 +274,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
         					att.getNodeValue());
         		}
     	    }
-    
+
     	    if (el.getLocalName() == null) {
     	        target.setName(el.getNodeName());
     	    } else {
@@ -280,7 +282,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     	    }
     	    targetNode = target;
     	    break;
-    
+
     	case ATTRIBUTE_NODE :
     	    if (importedNode.getLocalName() == null) {
     	        targetNode = createAttribute(importedNode.getNodeName());
@@ -289,19 +291,19 @@ implements org.w3c.dom.Document, java.io.Serializable {
     					       importedNode.getLocalName());
     	    }
     	    break;
-    
+
     	case TEXT_NODE :
     	    targetNode = createTextNode(importedNode.getNodeValue());
     	    break;
-    
+
     	case CDATA_SECTION_NODE :
     	    targetNode = createCDATASection(importedNode.getNodeValue());
     	    break;
-    
+
     	case COMMENT_NODE :
     	    targetNode = createComment(importedNode.getNodeValue());
     	    break;
-    
+
     	case DOCUMENT_FRAGMENT_NODE :
     	    targetNode = createDocumentFragment();
     	    if (deep) {
@@ -311,40 +313,40 @@ implements org.w3c.dom.Document, java.io.Serializable {
         		}
     	    }
     	    break;
-    
+
     	case ENTITY_REFERENCE_NODE :
     	    targetNode = createEntityReference(importedNode.getNodeName());
     	    break;
-    
+
     	case PROCESSING_INSTRUCTION_NODE :
     	    ProcessingInstruction pi = (ProcessingInstruction) importedNode;
     	    targetNode = createProcessingInstruction(pi.getTarget(), pi.getData());
     	    break;
-    
+
     	case ENTITY_NODE :
     	    // TODO : ...
     	    throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Entity nodes are not supported.");
-    
+
     	case NOTATION_NODE :
     	    // TODO : any idea?
     	    throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Notation nodes are not supported.");
-    
+
     	case DOCUMENT_TYPE_NODE :
     	    throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "DocumentType nodes cannot be imported.");
-    
+
     	case DOCUMENT_NODE :
     	    throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Document nodes cannot be imported.");
-    
+
     	default :
     	    throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Node type (" + type + ") cannot be imported.");
     	}
-    
+
     	return targetNode;
     }
 
     /**
      * Return SOAPElements (what if they want SOAPEnvelope or Header/Body?)
-     * 
+     *
      * @param namespaceURI
      * @param qualifiedName
      * @return @throws
@@ -364,7 +366,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
         if (soapConstants != null) {
             if (qualifiedName.equals(Constants.ELEM_ENVELOPE)) {
                 // TODO: confirm SOAP 1.1!
-                me = new SOAPEnvelope(soapConstants); 
+                me = new SOAPEnvelope(soapConstants);
             } else if (qualifiedName.equals(Constants.ELEM_HEADER)) {
                 me = new SOAPHeader(null, soapConstants);
                 // Dummy SOAPEnv required?
@@ -396,7 +398,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * Attribute is not particularly dealt with in SAAJ.
-     *  
+     *
      */
     public Attr createAttributeNS(String namespaceURI, String qualifiedName)
     throws DOMException {
@@ -406,7 +408,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     /**
      * search the SOAPPart in order of SOAPHeader and SOAPBody for the
      * requested Element name
-     *  
+     *
      */
     public NodeList getElementsByTagNameNS(
             String namespaceURI,
@@ -441,7 +443,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     /**
      * search the SOAPPart in order of SOAPHeader and SOAPBody for the
      * requested Element name
-     *  
+     *
      */
     public NodeList getElementsByTagName(String localName) {
 
@@ -475,7 +477,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
      * are of type ID. Attributes with the name "ID" are not of type ID unless
      * so defined. Implementations that do not know whether attributes are of
      * type ID or not are expected to return <code>null</code>.
-     * 
+     *
      * @param elementId
      *            The unique <code>id</code> value for an element.
      * @return The matching element.
@@ -485,9 +487,79 @@ implements org.w3c.dom.Document, java.io.Serializable {
         return delegate.getElementById(elementId);
     }
 
+    @Override
+    public String getInputEncoding() {
+        return null;
+    }
+
+    @Override
+    public String getXmlEncoding() {
+        return null;
+    }
+
+    @Override
+    public boolean getXmlStandalone() {
+        return false;
+    }
+
+    @Override
+    public void setXmlStandalone(boolean b) throws DOMException {
+
+    }
+
+    @Override
+    public String getXmlVersion() {
+        return null;
+    }
+
+    @Override
+    public void setXmlVersion(String s) throws DOMException {
+
+    }
+
+    @Override
+    public boolean getStrictErrorChecking() {
+        return false;
+    }
+
+    @Override
+    public void setStrictErrorChecking(boolean b) {
+
+    }
+
+    @Override
+    public String getDocumentURI() {
+        return null;
+    }
+
+    @Override
+    public void setDocumentURI(String s) {
+
+    }
+
+    @Override
+    public Node adoptNode(Node node) throws DOMException {
+        return null;
+    }
+
+    @Override
+    public DOMConfiguration getDomConfig() {
+        return null;
+    }
+
+    @Override
+    public void normalizeDocument() {
+
+    }
+
+    @Override
+    public Node renameNode(Node node, String s, String s1) throws DOMException {
+        return null;
+    }
+
     /**
      * Node Implementation
-     *  
+     *
      */
 
     public String getNodeName() {
@@ -508,7 +580,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * override it in sub-classes
-     * 
+     *
      * @return
      */
     public short getNodeType() {
@@ -536,7 +608,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * Do we have to count the Attributes as node ????
-     * 
+     *
      * @return
      */
     public Node getFirstChild() {
@@ -581,7 +653,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
     }
 
     /**
-     * 
+     *
      * we have to have a link to them...
      */
     public Document getOwnerDocument() {
@@ -635,7 +707,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * @todo: Study it more.... to implement the deep mode correctly.
-     *  
+     *
      */
     public Node cloneNode(boolean deep) {
         throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "");
@@ -643,7 +715,7 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     /**
      * @todo: is it OK to simply call the superclass?
-     *  
+     *
      */
     public void normalize() {
         throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "");
@@ -680,5 +752,65 @@ implements org.w3c.dom.Document, java.io.Serializable {
 
     public boolean hasAttributes() {
         throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "");
+    }
+
+    @Override
+    public String getBaseURI() {
+        return null;
+    }
+
+    @Override
+    public short compareDocumentPosition(Node node) throws DOMException {
+        return 0;
+    }
+
+    @Override
+    public String getTextContent() throws DOMException {
+        return null;
+    }
+
+    @Override
+    public void setTextContent(String s) throws DOMException {
+
+    }
+
+    @Override
+    public boolean isSameNode(Node node) {
+        return false;
+    }
+
+    @Override
+    public String lookupPrefix(String s) {
+        return null;
+    }
+
+    @Override
+    public boolean isDefaultNamespace(String s) {
+        return false;
+    }
+
+    @Override
+    public String lookupNamespaceURI(String s) {
+        return null;
+    }
+
+    @Override
+    public boolean isEqualNode(Node node) {
+        return false;
+    }
+
+    @Override
+    public Object getFeature(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public Object setUserData(String s, Object o, UserDataHandler userDataHandler) {
+        return null;
+    }
+
+    @Override
+    public Object getUserData(String s) {
+        return null;
     }
 }

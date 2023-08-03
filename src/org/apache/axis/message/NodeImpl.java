@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
+import org.w3c.dom.UserDataHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -121,7 +122,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
 
     /**
      * Returns whether this node (if it is an element) has any attributes.
-     * 
+     *
      * @return <code>true</code> if this node has any attributes,
      *         <code>false</code> otherwise.
      * @since DOM Level 2
@@ -130,9 +131,69 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
         return attributes.getLength() > 0;
     }
 
+    @Override
+    public String getBaseURI() {
+        return null;
+    }
+
+    @Override
+    public short compareDocumentPosition(Node other) throws DOMException {
+        return 0;
+    }
+
+    @Override
+    public String getTextContent() throws DOMException {
+        return null;
+    }
+
+    @Override
+    public void setTextContent(String textContent) throws DOMException {
+
+    }
+
+    @Override
+    public boolean isSameNode(Node other) {
+        return false;
+    }
+
+    @Override
+    public String lookupPrefix(String namespaceURI) {
+        return null;
+    }
+
+    @Override
+    public boolean isDefaultNamespace(String namespaceURI) {
+        return false;
+    }
+
+    @Override
+    public String lookupNamespaceURI(String prefix) {
+        return null;
+    }
+
+    @Override
+    public boolean isEqualNode(Node arg) {
+        return false;
+    }
+
+    @Override
+    public Object getFeature(String feature, String version) {
+        return null;
+    }
+
+    @Override
+    public Object setUserData(String key, Object data, UserDataHandler handler) {
+        return null;
+    }
+
+    @Override
+    public Object getUserData(String key) {
+        return null;
+    }
+
     /**
      * Returns whether this node has any children.
-     * 
+     *
      * @return <code>true</code> if this node has any children,
      *         <code>false</code> otherwise.
      */
@@ -146,7 +207,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * <code>ATTRIBUTE_NODE</code> and nodes created with a DOM Level 1
      * method, such as <code>createElement</code> from the
      * <code>Document</code> interface, this is always <code>null</code>.
-     * 
+     *
      * @since DOM Level 2
      */
     public String getLocalName() {
@@ -166,7 +227,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * the Namespaces in XML Specification  an attribute does not inherit
      * its namespace from the element it is attached to. If an attribute is
      * not explicitly given a namespace, it simply has no namespace.
-     * 
+     *
      * @since DOM Level 2
      */
     public String getNamespaceURI() {
@@ -184,7 +245,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * The value of this node, depending on its type; see the table above.
      * When it is defined to be <code>null</code>, setting it has no effect.
-     * 
+     *
      * @throws org.w3c.dom.DOMException NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
      * @throws org.w3c.dom.DOMException DOMSTRING_SIZE_ERR: Raised when it would return more characters than
      *                                  fit in a <code>DOMString</code> variable on the implementation
@@ -214,7 +275,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * <code>ATTRIBUTE_NODE</code> and nodes created with a DOM Level 1
      * method, such as <code>createElement</code> from the
      * <code>Document</code> interface, this is always <code>null</code>.
-     * 
+     *
      * @throws org.w3c.dom.DOMException INVALID_CHARACTER_ERR: Raised if the specified prefix contains an
      *                                  illegal character, per the XML 1.0 specification .
      *                                  <br>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
@@ -236,7 +297,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * The value of this node, depending on its type; see the table above.
      * When it is defined to be <code>null</code>, setting it has no effect.
-     * 
+     *
      * @throws org.w3c.dom.DOMException NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
      * @throws org.w3c.dom.DOMException DOMSTRING_SIZE_ERR: Raised when it would return more characters than
      *                                  fit in a <code>DOMString</code> variable on the implementation
@@ -263,7 +324,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * <code>ATTRIBUTE_NODE</code> and nodes created with a DOM Level 1
      * method, such as <code>createElement</code> from the
      * <code>Document</code> interface, this is always <code>null</code>.
-     * 
+     *
      * @throws org.w3c.dom.DOMException INVALID_CHARACTER_ERR: Raised if the specified prefix contains an
      *                                  illegal character, per the XML 1.0 specification .
      *                                  <br>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
@@ -284,8 +345,8 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
 
     /**
      * Set the owner document
-     * 
-     * @param doc 
+     *
+     * @param doc
      */
     public void setOwnerDocument(Document doc) {
         document = doc;
@@ -419,7 +480,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * specified. And, cloning <code>Document</code>,
      * <code>DocumentType</code>, <code>Entity</code>, and
      * <code>Notation</code> nodes is implementation dependent.
-     * 
+     *
      * @param deep If <code>true</code>, recursively clone the subtree under
      *             the specified node; if <code>false</code>, clone only the node
      *             itself (and its attributes, if it is an <code>Element</code>).
@@ -445,7 +506,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * Tests whether the DOM implementation implements a specific feature and
      * that feature is supported by this node.
-     * 
+     *
      * @param feature The name of the feature to test. This is the same name
      *                which can be passed to the method <code>hasFeature</code> on
      *                <code>DOMImplementation</code>.
@@ -465,7 +526,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * Adds the node <code>newChild</code> to the end of the list of children
      * of this node. If the <code>newChild</code> is already in the tree, it
      * is first removed.
-     * 
+     *
      * @param newChild The node to add.If it is a
      *                 <code>DocumentFragment</code> object, the entire contents of the
      *                 document fragment are moved into the child list of this node
@@ -500,7 +561,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * Removes the child node indicated by <code>oldChild</code> from the list
      * of children, and returns it.
-     * 
+     *
      * @param oldChild The node being removed.
      * @return The node removed.
      * @throws org.w3c.dom.DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
@@ -538,7 +599,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * all of its children are inserted, in the same order, before
      * <code>refChild</code>. If the <code>newChild</code> is already in the
      * tree, it is first removed.
-     * 
+     *
      * @param newChild The node to insert.
      * @param refChild The reference node, i.e., the node before which the
      *                 new node must be inserted.
@@ -573,7 +634,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * <code>DocumentFragment</code> children, which are inserted in the
      * same order. If the <code>newChild</code> is already in the tree, it
      * is first removed.
-     * 
+     *
      * @param newChild The new node to put in the child list.
      * @param oldChild The node being replaced in the list.
      * @return The node replaced.
@@ -604,7 +665,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * Returns the the value of the immediate child of this <code>Node</code>
      * object if a child exists and its value is text.
-     * 
+     *
      * @return a <code>String</code> with the text of the immediate child of
      *         this <code>Node</code> object if (1) there is a child and
      *         (2) the child is a <code>Text</code> object;
@@ -617,7 +678,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * Sets the parent of this <code>Node</code> object to the given
      * <code>SOAPElement</code> object.
-     * 
+     *
      * @param parent the <code>SOAPElement</code> object to be set as
      *               the parent of this <code>Node</code> object
      * @throws javax.xml.soap.SOAPException if there is a problem in setting the
@@ -639,7 +700,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * Returns the parent element of this <code>Node</code> object.
      * This method can throw an <code>UnsupportedOperationException</code>
      * if the tree is not kept in memory.
-     * 
+     *
      * @return the <code>SOAPElement</code> object that is the parent of
      *         this <code>Node</code> object or <code>null</code> if this
      *         <code>Node</code> object is root
@@ -672,7 +733,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * <code>detachNode</code> has been called previously.
      */
     public void recycleNode() {
-        //TODO: Fix this for SAAJ 1.2 Implementation        
+        //TODO: Fix this for SAAJ 1.2 Implementation
     }
 
     /**
@@ -681,7 +742,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * the immediate child of this node can be set only if, there is one child
      * node and that node is a Text node, or if there are no children in which
      * case a child Text node will be created.
-     * 
+     *
      * @param value the text to set
      * @throws IllegalStateException if the node is not a Text  node and
      *                               either has more than one child node or has a child node that
@@ -706,7 +767,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
 
     /**
      * make the attributes editable
-     * 
+     *
      * @return AttributesImpl
      */
     protected AttributesImpl makeAttributesEditable() {
@@ -769,17 +830,17 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
     /**
      * get the parent node
      * @return parent node
-     */ 
+     */
     protected NodeImpl getParent() {
         return parent;
     }
 
     /**
-     * Set the parent node and invoke appendChild(this) to 
+     * Set the parent node and invoke appendChild(this) to
      * add this node to the parent's list of children.
      * @param parent
      * @throws SOAPException
-     */ 
+     */
     protected void setParent(NodeImpl parent) throws SOAPException {
         if (this.parent == parent) {
             return;
@@ -797,7 +858,7 @@ public class NodeImpl implements org.w3c.dom.Node, javax.xml.soap.Node,
      * print the contents of this node
      * @param context
      * @throws Exception
-     */ 
+     */
     public void output(SerializationContext context) throws Exception {
         if (textRep == null)
             return;

@@ -1,0 +1,23 @@
+<!--
+  AFTER CHANGING THIS FILE don't forget to issue: ant update-deps
+-->
+<ivy-module version="2.0">
+  <info organisation="org.freemarker" module="freemarker">
+    <license name="BSD-style" url="http://freemarker.org/docs/app_license.html" />
+    <description>
+      Atlassian fork of Axis 1.x
+    </description>
+  </info>
+  <configurations>
+    <conf name="default" extends="runtime" />
+
+    <conf name="runtime"
+        description="for using FreeMarker under J2SE 1.5+ (no optional dependecies included)"
+    />
+  </configurations>
+
+  <dependencies>
+    <!-- build -->
+    <dependency org="com.sun.activation" name="javax.activation" rev="1.2.0" />
+  </dependencies>
+</ivy-module>

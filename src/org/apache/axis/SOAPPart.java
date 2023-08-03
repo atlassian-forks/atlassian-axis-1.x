@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
+import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -46,9 +47,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
+import org.w3c.dom.UserDataHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.Source;
@@ -106,7 +109,7 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
      */
     public static final String ALLOW_FORM_OPTIMIZATION = "axis.form.optimization";
 
-    
+
     //private Hashtable headers = new Hashtable();
     private MimeHeaders mimeHeaders = new MimeHeaders();
 
@@ -277,25 +280,25 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
      * @param writer  the <code>Writer</code> to write to
      */
     public void writeTo(Writer writer) throws IOException {
-        boolean inclXmlDecl = false;         
-        
-        if (msgObject.getMessageContext() != null) {    // if we have message context (JAX-RPC), write xml decl always. 
-            inclXmlDecl = true;            
+        boolean inclXmlDecl = false;
+
+        if (msgObject.getMessageContext() != null) {    // if we have message context (JAX-RPC), write xml decl always.
+            inclXmlDecl = true;
         } else {    // if we have no message context (SAAJ), write xml decl according to property.
             try {
                 String xmlDecl = (String)msgObject.getProperty(SOAPMessage.WRITE_XML_DECLARATION);
                 if (xmlDecl != null && xmlDecl.equals("true")) {
-                    inclXmlDecl = true;                    
-                }                
+                    inclXmlDecl = true;
+                }
             } catch (SOAPException e) {
                 throw new IOException(e.getMessage());
             }
         }
-        
+
         if ( currentForm == FORM_FAULT ) {
             AxisFault env = (AxisFault)currentMessage;
             try {
-                SerializationContext serContext = new SerializationContext(writer, getMessage().getMessageContext()); 
+                SerializationContext serContext = new SerializationContext(writer, getMessage().getMessageContext());
                 serContext.setSendDecl(inclXmlDecl);
                 serContext.setEncoding(currentEncoding);
                 env.output(serContext);
@@ -388,7 +391,7 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
     /**
      * check if the allow optimization flag is on
      * @return form optimization flag
-     */ 
+     */
     private boolean isFormOptimizationAllowed() {
         boolean allowFormOptimization = true;
         Message msg = getMessage();
@@ -407,7 +410,7 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
     public int getCurrentForm() {
         return currentForm;
     }
-    
+
     /**
      * Get the contents of this Part (not the headers!), as a byte
      * array.  This will force buffering of the message.
@@ -593,7 +596,7 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
                 }
                 return currentMessageAsString;
             }
-            
+
             // Save this message in case it is requested later in getAsBytes
             currentMessageAsBytes = (byte[]) currentMessage;
             try{
@@ -1122,6 +1125,36 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
         return document.getElementById(elementId);
     }
 
+    @Override
+    public String getInputEncoding() {
+        return null;
+    }
+
+    @Override
+    public String getXmlEncoding() {
+        return null;
+    }
+
+    @Override
+    public boolean getXmlStandalone() {
+        return false;
+    }
+
+    @Override
+    public void setXmlStandalone(boolean b) throws DOMException {
+
+    }
+
+    @Override
+    public String getXmlVersion() {
+        return null;
+    }
+
+    @Override
+    public void setXmlVersion(String s) throws DOMException {
+
+    }
+
     /////////////////////////////////////////////////////////////
 
     public String getEncoding()
@@ -1156,6 +1189,16 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
         throw new UnsupportedOperationException("Not yet implemented. 74");
     }
 
+    @Override
+    public String getDocumentURI() {
+        return null;
+    }
+
+    @Override
+    public void setDocumentURI(String s) {
+
+    }
+
 
     public  String getVersion()
     {
@@ -1173,6 +1216,21 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
     throws DOMException
     {
         throw new UnsupportedOperationException("Not yet implemented.77");
+    }
+
+    @Override
+    public DOMConfiguration getDomConfig() {
+        return null;
+    }
+
+    @Override
+    public void normalizeDocument() {
+
+    }
+
+    @Override
+    public Node renameNode(Node node, String s, String s1) throws DOMException {
+        return null;
     }
 
     /**
@@ -1276,9 +1334,93 @@ public class SOAPPart extends javax.xml.soap.SOAPPart implements Part
     public boolean hasAttributes(){
         return document.hasAttributes();
     }
-    
+
+    @Override
+    public String getBaseURI() {
+        return null;
+    }
+
+    @Override
+    public short compareDocumentPosition(Node node) throws DOMException {
+        return 0;
+    }
+
+    @Override
+    public String getTextContent() throws DOMException {
+        return null;
+    }
+
+    @Override
+    public void setTextContent(String s) throws DOMException {
+
+    }
+
+    @Override
+    public boolean isSameNode(Node node) {
+        return false;
+    }
+
+    @Override
+    public String lookupPrefix(String s) {
+        return null;
+    }
+
+    @Override
+    public boolean isDefaultNamespace(String s) {
+        return false;
+    }
+
+    @Override
+    public String lookupNamespaceURI(String s) {
+        return null;
+    }
+
+    @Override
+    public boolean isEqualNode(Node node) {
+        return false;
+    }
+
+    @Override
+    public Object getFeature(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public Object setUserData(String s, Object o, UserDataHandler userDataHandler) {
+        return null;
+    }
+
+    @Override
+    public Object getUserData(String s) {
+        return null;
+    }
+
     public boolean isBodyStream() {
-        return (currentForm == SOAPPart.FORM_INPUTSTREAM || currentForm == SOAPPart.FORM_BODYINSTREAM);        
+        return (currentForm == SOAPPart.FORM_INPUTSTREAM || currentForm == SOAPPart.FORM_BODYINSTREAM);
+    }
+
+    public String getValue() {
+        return null;
+    }
+
+    public void setValue(String s) {
+
+    }
+
+    public void setParentElement(SOAPElement soapElement) throws SOAPException {
+
+    }
+
+    public SOAPElement getParentElement() {
+        return null;
+    }
+
+    public void detachNode() {
+
+    }
+
+    public void recycleNode() {
+
     }
 }
 

@@ -1,12 +1,12 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.util.Vector;
 /**
  * Inner class stores sets of <param>s.
  * It can hold <fileset>s or <item>s or both.
- * 
+ *
  * @author <a href="mailto:tpv@spamcop.net">Tim Vernum</a>
  * @author Davanum Srinivas
  * @author Richard A. Sitze
@@ -83,9 +83,9 @@ public class ParamSet {
         and then <item>s. The ordering of the buildfile is
         not guaranteed. */
         Vector values = new Vector();
-        Enumeration enum = filesets.elements();
-        while (enum.hasMoreElements()) {
-            FileSet fileSet = (FileSet) enum.nextElement();
+        Enumeration elements = filesets.elements();
+        while (elements.hasMoreElements()) {
+            FileSet fileSet = (FileSet) elements.nextElement();
             File base = fileSet.getDir(project);
             DirectoryScanner scanner = fileSet.getDirectoryScanner(project);
             if (TYPE_DIR != type) {
@@ -103,9 +103,9 @@ public class ParamSet {
                 }
             }
         }
-        enum = items.elements();
-        while (enum.hasMoreElements()) {
-            ParamItem item = (ParamItem) enum.nextElement();
+        elements = items.elements();
+        while (elements.hasMoreElements()) {
+            ParamItem item = (ParamItem) elements.nextElement();
             values.addElement(item.getValue());
         }
         return values.elements();
