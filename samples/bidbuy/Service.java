@@ -1,4 +1,4 @@
-package samples.bidbuy ;
+package samples.bidbuy;
 
 public class Service implements java.io.Serializable {
     private String ServiceName;

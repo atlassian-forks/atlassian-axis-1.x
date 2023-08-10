@@ -14,7 +14,7 @@
 Notes:
    This is a build file for use with the Jakarta Ant build tool.
    For more information on using the build refer to building-axis.html under docs
-   
+
 
 Prerequisites:
    jakarta-ant        from http://jakarta.apache.org/ant/
@@ -38,8 +38,8 @@ Optional components:
    jms                from http://java.sun.com/products/jms/
    castor             from http://castor.exolab.org/
    xmlbeans           from http://xmlbeans.apache.org/
-   
-j2ee.jar contains the mailapi, activation and servlet libraries   
+
+j2ee.jar contains the mailapi, activation and servlet libraries
 
 Build Instructions:
    To build, run
@@ -91,9 +91,9 @@ Copyright:
     description="compile the source and create the jar files">
     <depend srcdir="${src.dir}" destdir="${build.dest}"
             cache="${build.dir}/dependencycache" closure="no">
-    </depend>  
+    </depend>
     <javac srcdir="${src.dir}" destdir="${build.dest}"  nowarn="${nowarn}" debug="${debug}"
-      deprecation="${deprecation}" 
+      deprecation="${deprecation}"
       source="${source}"
       classpathref="classpath">
       <exclude name="**/old/**/*" />
@@ -185,7 +185,7 @@ Copyright:
       <include name="resource*.properties"/>
       <replacefilter token="#today#" value="${build.time}"/>
       <replacefilter token="#axisVersion#" value="${axis.version}"/>
-    </replace> 
+    </replace>
 
     <tstamp/>
     <jar jarfile="${build.lib}/${name}.jar" basedir="${build.dest}" >
@@ -195,7 +195,7 @@ Copyright:
       <manifest>
         <section name="org/apache/axis">
           <attribute name="Implementation-Title" value="Apache Axis"/>
-          <attribute name="Implementation-Version" value="${axis.version} ${TSTAMP} ${TODAY}"/> 
+          <attribute name="Implementation-Version" value="${axis.version} ${TSTAMP} ${TODAY}"/>
           <attribute name="Implementation-Vendor" value="Apache Web Services"/>
         </section>
       </manifest>
@@ -378,7 +378,7 @@ Copyright:
           description="create API docs jar">
 
     <jar jarfile="${build.lib}/${name}-api.jar" basedir="${build.javadocs}" />
-    
+
   </target>
 
   <!-- =================================================================== -->
@@ -388,7 +388,7 @@ Copyright:
           description="create source code jar">
 
     <jar jarfile="${build.lib}/${name}-src.jar" basedir="${src.dir}" />
-    
+
   </target>
 
   <!-- =================================================================== -->
@@ -417,13 +417,13 @@ Copyright:
       </fileset>
     </copy>
     <copy todir="${build.webapp}/samples">
-      <fileset dir="./samples"/>
+      <fileset dir="src/main/java/samples"/>
     </copy>
     <copy todir="${build.webapp}/WEB-INF/classes/samples">
       <fileset dir="${build.samples}"/>
     </copy>
     <copy todir="${build.webapp}/WEB-INF">
-      <fileset dir="${samples.dir}/stock">
+      <fileset dir="/samples/stock">
         <include name="*.lst"/>
       </fileset>
     </copy>
@@ -457,7 +457,7 @@ Copyright:
     </copy>
     <copy todir="${dist.dir}/samples">
       <fileset dir="${build.samples}"/>
-      <fileset dir="./samples"/>
+      <fileset dir="src/main/java/samples"/>
     </copy>
     <copy todir="${dist.dir}/docs">
       <fileset dir="${docs.dir}"/>
@@ -466,7 +466,7 @@ Copyright:
       <fileset dir="${webapp}"/>
     </copy>
     <copy todir="${dist.dir}/webapps/axis/WEB-INF">
-      <fileset dir="${samples.dir}/stock">
+      <fileset dir="/samples/stock">
         <include name="*.lst"/>
       </fileset>
     </copy>
@@ -559,15 +559,15 @@ Copyright:
       <fileset dir="webapps/axis" includes="**/*.class" />
     </delete>
     <delete dir="test-reports"/>
-    <delete file="TEST-test.functional.FunctionalTests.txt"/>
+    <delete file="TEST-test.FunctionalTests.txt"/>
     <delete file="GetQuote.wsdl"/>
     <property name="axis-ant.present" value="false"/>
   </target>
-  
+
   <!-- =================================================================== -->
   <!-- Check the style of the Axis source                                 -->
   <!-- =================================================================== -->
-  <target name="checkstyle" 
+  <target name="checkstyle"
     description="Check the style of the Axis source" >
     <ant inheritAll="${ant.inheritAll}" inheritRefs="${ant.inheritRefs}" dir="${axis.home}" target="checkstyle"
       antfile="xmls/checkstyle.xml"
@@ -580,15 +580,15 @@ Copyright:
     </target>
 
 
-  <target name="changelog" 
+  <target name="changelog"
     description="Generate the changelog for Axis"
     depends="setenv" >
     <cvschangelog dir="."
                 destfile="${build.dir}/changelog.xml"
                 start="4 May 2005"
-    />        
-    <style in="${build.dir}/changelog.xml" 
-           out="${axis.home}/docs/cvslog.html" 
+    />
+    <style in="${build.dir}/changelog.xml"
+           out="${axis.home}/docs/cvslog.html"
            style="${axis.home}/tools/changelog.xsl">
       <param name="title" expression="Apache Axis 1.2.1 Final ChangeLog (Changes after 1.2 Final)"/>
       <param name="module" expression="ws-axis/java"/>

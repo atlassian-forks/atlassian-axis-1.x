@@ -1,4 +1,4 @@
-package samples.bidbuy ;
+package samples.bidbuy;
 
 import java.util.Vector;
 

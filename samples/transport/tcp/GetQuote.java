@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package samples.transport.tcp ;
+package samples.transport.tcp;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.EngineConfiguration;
@@ -36,21 +36,21 @@ import java.net.URL;
  */
 public class GetQuote {
     public  String symbol ;
-    
+
     // helper function; does all the real work
     public float getQuote (String args[]) throws Exception {
         Call.addTransportPackage("samples.transport");
         Call.setTransportForProtocol("tcp", TCPTransport.class);
-        
+
         Options opts = new Options( args );
-        
+
         args = opts.getRemainingArgs();
-        
+
         if ( args == null ) {
             System.err.println( "Usage: GetQuote <symbol>" );
             System.exit(1);
         }
-        
+
         String namespace = "urn:xmltoday-delayed-quotes";
         symbol = args[0] ;
 
@@ -63,22 +63,22 @@ public class GetQuote {
 
         Service service = new Service(config);
         Call call = (Call)service.createCall();
-        
+
         call.setTransport(new TCPTransport());
-        
+
         call.setTargetEndpointAddress( new URL(opts.getURL()) );
         call.setOperationName( new QName("urn:xmltoday-delayed-quotes", "getQuote") );
         call.addParameter( "symbol", XMLType.XSD_STRING, ParameterMode.IN );
         call.setReturnType( XMLType.XSD_FLOAT );
-        
+
         // TESTING HACK BY ROBJ
         if (symbol.equals("XXX_noaction")) {
             symbol = "XXX";
         }
-        
+
         call.setUsername( opts.getUser() );
         call.setPassword( opts.getPassword() );
-        
+
         // useful option for profiling - perhaps we should remove before
         // shipping?
         String countOption = opts.isValueSet('c');
@@ -87,7 +87,7 @@ public class GetQuote {
             count=Integer.valueOf(countOption).intValue();
             System.out.println("Iterating " + count + " times");
         }
-        
+
         Float res = new Float(0.0F);
         for (int i=0; i<count; i++) {
             Object ret = call.invoke(new Object[] {symbol} );
@@ -97,10 +97,10 @@ public class GetQuote {
             }
             res = (Float) ret;
         }
-        
+
         return res.floatValue();
     }
-    
+
     public static void main(String args[]) {
         try {
             GetQuote gq = new GetQuote();
@@ -112,8 +112,8 @@ public class GetQuote {
             e.printStackTrace();
         }
     }
-    
+
     public GetQuote () {
     };
-    
+
 };

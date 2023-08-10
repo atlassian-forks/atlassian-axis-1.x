@@ -1,4 +1,4 @@
-package samples.transport ;
+package samples.transport;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
