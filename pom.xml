@@ -8,13 +8,6 @@
     <artifactId>atlassian-axis-1.x</artifactId>
     <version>1.2.1-atlassian-1-SNAPSHOT</version>
 
-    <repositories>
-        <repository>
-            <id>cantara</id>
-            <url>https://mvnrepo.cantara.no/content/repositories/releases/</url>
-        </repository>
-  </repositories>
-
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -147,8 +140,8 @@
 
         <!-- https://mvnrepository.com/artifact/org.apache.oro/com.springsource.org.apache.oro -->
         <dependency>
-            <groupId>org.apache.oro</groupId>
-            <artifactId>com.springsource.org.apache.oro</artifactId>
+            <groupId>oro</groupId>
+            <artifactId>oro</artifactId>
             <version>2.0.8</version>
         </dependency>
 
@@ -421,33 +414,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>select-java-signatures</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <source>
-                                javaVersion = project.properties['javaVersion']
-                                if (javaVersion == '1.4') {
-                                    artifactId = 'java14-sun'
-                                } else if (javaVersion == '1.5') {
-                                    artifactId = 'java15-sun'
-                                } else if (javaVersion == '1.6') {
-                                    artifactId = 'java16-sun'
-                                }
-                                project.properties['signatureArtifactId'] = artifactId
-                                project.properties['signatureVersion'] = '1.0'
-                            </source>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin> -->
             <plugin>
                 <!-- This serves two purposes:
                       (1) we want to generate source JARs for all builds, not just release builds;

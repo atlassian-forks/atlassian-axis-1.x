@@ -51,7 +51,7 @@ public class PerfService_ServiceTestCase extends junit.framework.TestCase {
             throws java.rmi.RemoteException {
         String[] s = new String[count];
         for (int i = 0; i < s.length; i++) {
-            s[i] = "qwertyuiop�asdfghjkl��zxcvbnm";
+            s[i] = "qwertyuiopåasdfghjklöäzxcvbnm";
         }
         Date start = new Date();
         String value = binding.handleStringArray(s);
