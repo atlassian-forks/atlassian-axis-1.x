@@ -118,25 +118,12 @@
             <version>4.0.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/progress.message/sonic_Client -->
-        <!-- <dependency>
-            <groupId>progress.message</groupId>
-            <artifactId>sonic_Client</artifactId>
-            <version>7.5</version>
-        </dependency> -->
-
         <!-- https://mvnrepository.com/artifact/org.codehaus.castor/castor-xml -->
         <dependency>
             <groupId>org.codehaus.castor</groupId>
             <artifactId>castor-xml</artifactId>
             <version>1.4.1</version>
         </dependency>
-
-        <!-- <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-            <version>2.4.0</version>
-        </dependency> -->
 
         <!-- https://mvnrepository.com/artifact/org.apache.oro/com.springsource.org.apache.oro -->
         <dependency>
@@ -160,7 +147,7 @@
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
-            <version>3.0.1</version>
+            <version>3.1-atlassian-2</version>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
