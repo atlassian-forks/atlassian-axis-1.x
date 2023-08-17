@@ -1,4 +1,4 @@
-package samples.bidbuy ;
+package samples.bidbuy;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -112,9 +112,9 @@ public class rfq extends JPanel {
     regListPanel.setBorder( regServerBorder );
     regListPanel.add( new JLabel( "Select the servers you want to request " +
                                   "a price from:"), BorderLayout.NORTH );
-                
-    tableModel = new MyTableModel( new Object[] {"", "Name", "URL", "Type", 
-                                                 "WSDL", "State", "Quote", 
+
+    tableModel = new MyTableModel( new Object[] {"", "Name", "URL", "Type",
+                                                 "WSDL", "State", "Quote",
                                                  ""}, 0 );
     serverTable = new JTable( 0, NUM_COLUMNS );
     serverTable.setModel( tableModel );
@@ -232,7 +232,7 @@ public class rfq extends JPanel {
     registerButton.setEnabled( false );
     registerButton.addActionListener( new ActionListener() {
         public void actionPerformed(ActionEvent event) {
-          if ( "Register Server".equals(event.getActionCommand()) ) 
+          if ( "Register Server".equals(event.getActionCommand()) )
             registerNewServer();
         };
       });
@@ -331,7 +331,7 @@ public class rfq extends JPanel {
         };
       });
 
-    JSplitPane  splitPane = new JSplitPane( 0, regListPanel, 
+    JSplitPane  splitPane = new JSplitPane( 0, regListPanel,
                                                new JScrollPane(purchasePanel));
     add( splitPane, BorderLayout.CENTER );
     setSize(getPreferredSize());
@@ -344,7 +344,7 @@ public class rfq extends JPanel {
 
     if ( name == null || "".equals(name) ) return ;
     count = regServerList.getItemCount();
-    for ( i = 0 ; i < count ; i++ ) 
+    for ( i = 0 ; i < count ; i++ )
       if ( name.equals( regServerList.getItemAt(i) ) ) return ;
     regServerList.addItem( name );
     saveRegList();
@@ -420,7 +420,7 @@ public class rfq extends JPanel {
         try {
           value = vv.ping( url );
 
-          tableModel.setValueAt( value.booleanValue() ? "Alive" : "Down", 
+          tableModel.setValueAt( value.booleanValue() ? "Alive" : "Down",
                                  i, STATE_COLUMN );
           serverTable.repaint();
         }
@@ -476,7 +476,7 @@ public class rfq extends JPanel {
           serverTable.repaint();
 
           String str = (String) tableModel.getValueAt(i, NAME_COLUMN);
-          for ( j = 0 ; j < buyList.getItemCount(); j++ ) 
+          for ( j = 0 ; j < buyList.getItemCount(); j++ )
             if ( ((String)buyList.getItemAt(j)).equals(str) ) break ;
           if ( j == buyList.getItemCount() )
             buyList.addItem( str );
@@ -572,11 +572,11 @@ public class rfq extends JPanel {
       parent = parent.getParent();
     final JDialog j = new JDialog((JFrame)parent, "Register Server", true );
     Container  pane = j.getContentPane();
-    final JTextField  fName = new JTextField(20), 
-                      fURL  = new JTextField(20), 
-                      fType = new JTextField(20), 
+    final JTextField  fName = new JTextField(20),
+                      fURL  = new JTextField(20),
+                      fType = new JTextField(20),
                       fWsdl = new JTextField(20);
-    JButton     regButton, cancelButton ; 
+    JButton     regButton, cancelButton ;
 
     pane.setLayout( new GridBagLayout() );
     GridBagConstraints c = new GridBagConstraints();
@@ -652,10 +652,10 @@ public class rfq extends JPanel {
     j.pack();
     Point p = new Point( parent.getLocation() );
     Dimension d = parent.getSize();
-    p.setLocation( (int)(p.getX() + d.getWidth()/2), 
+    p.setLocation( (int)(p.getX() + d.getWidth()/2),
                    (int)(p.getY() + d.getHeight()/2) );
     d = j.getSize();
-    j.setLocation( (int)(p.getX() - d.getWidth()/2), 
+    j.setLocation( (int)(p.getX() - d.getWidth()/2),
                    (int)(p.getY() - d.getHeight()/2) );
     j.show();
   }
@@ -667,11 +667,11 @@ public class rfq extends JPanel {
       parent = parent.getParent();
     final JDialog j = new JDialog((JFrame)parent, "Add Bid Server", true );
     Container  pane = j.getContentPane();
-    final JTextField  fName = new JTextField(20), 
-                      fURL  = new JTextField(20), 
-                      fType = new JTextField(20), 
+    final JTextField  fName = new JTextField(20),
+                      fURL  = new JTextField(20),
+                      fType = new JTextField(20),
                       fWsdl = new JTextField(20);
-    JButton     addButton, cancelButton ; 
+    JButton     addButton, cancelButton ;
 
     pane.setLayout( new GridBagLayout() );
     GridBagConstraints c = new GridBagConstraints();
@@ -747,10 +747,10 @@ public class rfq extends JPanel {
     j.pack();
     Point p = new Point( parent.getLocation() );
     Dimension d = parent.getSize();
-    p.setLocation( (int)(p.getX() + d.getWidth()/2), 
+    p.setLocation( (int)(p.getX() + d.getWidth()/2),
                    (int)(p.getY() + d.getHeight()/2) );
     d = j.getSize();
-    j.setLocation( (int)(p.getX() - d.getWidth()/2), 
+    j.setLocation( (int)(p.getX() - d.getWidth()/2),
                    (int)(p.getY() - d.getHeight()/2) );
     j.show();
   }
@@ -801,7 +801,7 @@ public class rfq extends JPanel {
       int              count = regServerList.getItemCount();
       int              i ;
 
-      for ( i = 0 ; i < count ; i++ ) 
+      for ( i = 0 ; i < count ; i++ )
         pw.println( (String) regServerList.getItemAt(i) );
       pw.close();
 

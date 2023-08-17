@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package samples.message ;
+package samples.message;
 
 import org.w3c.dom.Element;
 import javax.xml.soap.SOAPEnvelope;

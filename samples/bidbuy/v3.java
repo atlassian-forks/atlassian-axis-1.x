@@ -1,4 +1,4 @@
-package samples.bidbuy ;
+package samples.bidbuy;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class v3 implements vInterface {
-  public void register(String registryURL, samples.bidbuy.Service s) 
+  public void register(String registryURL, samples.bidbuy.Service s)
                  throws Exception {
     try {
       Service  service = new Service();
@@ -27,7 +27,7 @@ public class v3 implements vInterface {
       call.addParameter("ServiceUrl", XMLType.XSD_STRING, ParameterMode.IN);
       call.addParameter("ServiceType", XMLType.XSD_STRING, ParameterMode.IN);
       call.addParameter("ServiceWSDL", XMLType.XSD_STRING, ParameterMode.IN);
-      
+
       call.invoke( new Object[] { s.getServiceName(), s.getServiceUrl(),
                                   s.getServiceType(), s.getServiceWsdl() } );
     }
@@ -166,7 +166,7 @@ public class v3 implements vInterface {
       call.addParameter( "Address", XMLType.XSD_STRING, ParameterMode.IN );
       call.addParameter( "ProductName", XMLType.XSD_STRING, ParameterMode.IN);
       call.addParameter( "Quantity", XMLType.XSD_INT, ParameterMode.IN );
-      
+
       String res = (String) call.invoke(new Object[] { "123 Main St.",
                                                        "Widget",
                                                        new Integer(quantity)});
@@ -224,8 +224,8 @@ public class v3 implements vInterface {
       call.registerTypeMapping(cls, liqn, BeanSerializerFactory.class, BeanDeserializerFactory.class);
 
       LineItem[]     lineItems = new LineItem[numItems];
-      
-      
+
+
       for ( i = 0 ; i < numItems ; i++ )
         lineItems[i] = new LineItem("Widget"+i,quantity,new BigDecimal(price));
 

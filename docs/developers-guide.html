@@ -58,7 +58,7 @@ Conventions for the Java Programming Language"</a></li>
 
 <li>
 When fixing a <a href="http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1=&emailtype1=substring&emailassigned_to1=1&email2=&emailtype2=substring&emailreporter2=1&bugidtype=include&bug_id=&changedin=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&product=Axis&short_desc=&short_desc_type=allwordssubstr&long_desc=&long_desc_type=allwordssubstr&bug_file_loc=&bug_file_loc_type=allwordssubstr&keywords=&keywords_type=anywords&field0-0-0=noop&type0-0-0=noop&value0-0-0=&order=bugs.bug_id">
-"Axis Bugzilla Bug"</a> include the href of the 
+"Axis Bugzilla Bug"</a> include the href of the
 bug in the cvs commit message.</li>
 
 <li>
@@ -70,7 +70,7 @@ modularity of Axis, the
 impact on users must be considered and, preferably, documented.</li>
 
 <li>
-If you are making a big change that may affect interoperability, please 
+If you are making a big change that may affect interoperability, please
 run the <a href="http://xml.apache.org/~rubys/echotest.pl">echotest2 round 2 interop test</a> to ensure that your change does not result in any new interop failures.  You will also need the <a href="http://xml.apache.org/~rubys/client_deploy.wsdd">client_deploy.wsdd</a>.  Here are the <a href="http://xml.apache.org/~rubys/ApacheClientInterop.html">nightly interop test results</a>.
 </ul>
 
@@ -323,7 +323,7 @@ A combination of settings will enable you to see the log events that
 you are interested in and omit the others.
 For example, the combination:
 <pre>
-log4j.logger.org.apache.axis=DEBUG 
+log4j.logger.org.apache.axis=DEBUG
 log4j.logger.org.apache.axis.encoding=INFO
 log4j.logger.org.apache.axis.utils=INFO
 log4j.logger.org.apache.axis.message=INFO
@@ -347,23 +347,23 @@ while limiting console output to INFO (and higher).
 </ul>
 <h3>
 <a name="Axis Servlet Query String Plug-ins">Axis Servlet Query String Plug-ins</h3>
-Any servlet that is derived from the <code>org.apache.axis.transport.http.AxisServlet</code> class 
-supports a number of standard query strings (<i>?list</i>, <i>?method</i>, and <i>?wsdl</i>) that 
-provide information from or perform operations on a web service (for instance, <i>?method</i> is 
-used to invoke a method on a web service and <i>?wsdl</i> is used to retrieve the WSDL document for 
-a web service).  Axis servlets are not limited to these three query strings and developers may 
-create their own &quot;plug-ins&quot; by implementing the <code>org.apache.axis.transport.http.QSHandler</code> 
+Any servlet that is derived from the <code>org.apache.axis.transport.http.AxisServlet</code> class
+supports a number of standard query strings (<i>?list</i>, <i>?method</i>, and <i>?wsdl</i>) that
+provide information from or perform operations on a web service (for instance, <i>?method</i> is
+used to invoke a method on a web service and <i>?wsdl</i> is used to retrieve the WSDL document for
+a web service).  Axis servlets are not limited to these three query strings and developers may
+create their own &quot;plug-ins&quot; by implementing the <code>org.apache.axis.transport.http.QSHandler</code>
 interface.  There is one method in this interface that must be implemented, with the following signature:
 <pre>
 public void invoke (MessageContext msgContext) throws AxisFault;
 </pre>
-The <code>org.apache.axis.MessageContext</code> instance provides the developer with a number of useful 
-objects (such as the Axis engine instance, and HTTP servlet objects) that are accessible by its 
-<code>getProperty</code> method.  The following constants can be used to retrieve various objects provided 
+The <code>org.apache.axis.MessageContext</code> instance provides the developer with a number of useful
+objects (such as the Axis engine instance, and HTTP servlet objects) that are accessible by its
+<code>getProperty</code> method.  The following constants can be used to retrieve various objects provided
 by the Axis servlet invoking the query string plug-in:
 <ul>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.PLUGIN_NAME</strong><br>
-A <code>String</code> containing the name of the query string plug-in.  For instance, if the query string <i>?wsdl</i> is 
+A <code>String</code> containing the name of the query string plug-in.  For instance, if the query string <i>?wsdl</i> is
 provided, the name of the plugin is <i>wsdl</i>.
 <br><br>
 </li>
@@ -372,12 +372,12 @@ A <code>String</code> containing the name of the Axis servlet that inovked the q
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.PLUGIN_IS_DEVELOPMENT</strong><br>
-A <code>Boolean</code> containing <code>true</code> if this version of Axis is considered to be in development 
+A <code>Boolean</code> containing <code>true</code> if this version of Axis is considered to be in development
 mode, <code>false</code> otherwise.
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.PLUGIN_ENABLE_LIST</strong><br>
-A <code>Boolean</code> containing <code>true</code> if listing of the Axis server configuration is allowed, 
+A <code>Boolean</code> containing <code>true</code> if listing of the Axis server configuration is allowed,
 <code>false</code> otherwise.
 <br><br>
 </li>
@@ -386,50 +386,50 @@ A <code>org.apache.axis.server.AxisServer</code> object containing the engine fo
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.MC_HTTP_SERVLETREQUEST</strong><br>
-The <code>javax.servlet.http.HttpServletRequest</code> object from the Axis servlet that invoked the 
+The <code>javax.servlet.http.HttpServletRequest</code> object from the Axis servlet that invoked the
 query string plug-in
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.MC_HTTP_SERVLETRESPONSE</strong><br>
-The <code>javax.servlet.http.HttpServletResponse</code> object from the Axis servlet that invoked the 
+The <code>javax.servlet.http.HttpServletResponse</code> object from the Axis servlet that invoked the
 query string plug-in
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.PLUGIN_WRITER</strong><br>
-The <code>java.io.PrintWriter</code> object from the Axis servlet that invoked the 
+The <code>java.io.PrintWriter</code> object from the Axis servlet that invoked the
 query string plug-in
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.PLUGIN_LOG</strong><br>
-The <code>org.apache.commons.logging.Log</code> object from the Axis servlet that invoked the query 
+The <code>org.apache.commons.logging.Log</code> object from the Axis servlet that invoked the query
 string plug-in, which is used to log messages.
 <br><br>
 </li>
 <li><strong>org.apache.axis.transport.http.HTTPConstants.PLUGIN_EXCEPTION_LOG</strong><br>
-The <code>org.apache.commons.logging.Log</code> object from the Axis servlet that invoked the query 
+The <code>org.apache.commons.logging.Log</code> object from the Axis servlet that invoked the query
 string plug-in, which is used to log exceptions.
 <br><br>
 </li>
 </ul>
-Query string plug-in development is much like normal servlet development since the same basic 
+Query string plug-in development is much like normal servlet development since the same basic
 information and methods of output are available to the developer.  Below is an example query string
-plug-in which simply displays the value of the system clock (<code>import</code> statements have been 
+plug-in which simply displays the value of the system clock (<code>import</code> statements have been
 omitted for brevity):
 <pre>
 public class QSClockHandler implements QSHandler {
      public void invoke (MessageContext msgContext) throws AxisFault {
           PrintWriter out = (PrintWriter) msgContext.getProperty (HTTPConstants.PLUGIN_WRITER);
           HttpServletResponse response = (HttpServletResponse) msgContext.getProperty (HTTPConstants.MC_HTTP_SERVLETRESPONSE);
-          
+
           response.setContentType ("text/html");
-          
+
           out.println ("&lt;HTML&gt;&lt;BODY&gt;&lt;H1&gt;" + System.currentTimeMillis() + "&lt;/H1&gt;&lt;/BODY&gt;&lt;/HTML&gt;");
      }
 }
 </pre>
-Once a query string plug-in class has been created, the Axis server must be set up to recognize the 
-query string which invokes it.  See the section <a href="reference.html#Deployment">Deployment (WSDD) Reference</a> in the 
-<a href="reference.html">Axis Reference Guide</a> for information on how the HTTP transport section of the Axis server configuration 
+Once a query string plug-in class has been created, the Axis server must be set up to recognize the
+query string which invokes it.  See the section <a href="reference.html#Deployment">Deployment (WSDD) Reference</a> in the
+<a href="reference.html">Axis Reference Guide</a> for information on how the HTTP transport section of the Axis server configuration
 file must be set up.
 
 
@@ -928,10 +928,10 @@ testcase="no"></font></tt>
 <br>
 <li>
 <font color="#000000">Enable the <font color="#993366">run</font><font color="#000000"> target in the new
- build.xml file.</font> You need to choose from the execute-Component and the (soon to be introduced) 
-execute-Simple-Test target.  These control HOW the test is invoked when run as a single component.  
-The <font color="#993366">execute-Component</font> sets up the tcp-server and http-server prior to running the test, as 
-well as handles deploying and services that may be needed.  The <font color="#993366">execute-Simple-test</font> 
+ build.xml file.</font> You need to choose from the execute-Component and the (soon to be introduced)
+execute-Simple-Test target.  These control HOW the test is invoked when run as a single component.
+The <font color="#993366">execute-Component</font> sets up the tcp-server and http-server prior to running the test, as
+well as handles deploying and services that may be needed.  The <font color="#993366">execute-Simple-test</font>
 simply invokes the raw test class file.<BR>
 <BR>
 <li>
@@ -944,8 +944,8 @@ verify.&nbsp; Check in your test.</font></li>
 <h2><a NAME="TestStructure"></a>Test Structure</H2>
 <a href="AxisTestRedesign.html">The Test and Samples Redesign Document is here</a><BR>
 <P>
-As of Axis 1.0, RC1, we have moved to a "componentized" test structure.  Instead of having one high-level large 
-recursive function, there are smaller, simple "component" build.xml files in the leaf level of the test/** and 
+As of Axis 1.0, RC1, we have moved to a "componentized" test structure.  Instead of having one high-level large
+recursive function, there are smaller, simple "component" build.xml files in the leaf level of the test/** and
 samples/** trees.</P>
 <P>
 These "component" files have a common layout. Their primary targets are:<BR>
@@ -983,37 +983,37 @@ the <a href="http://jakarta.apache.org/oro/api/org/apache/oro/text/regex/package
 <a NAME="JUnit"></a>JUnit and Axis</h2>
 
 <p>
-You try to run some JUnit tests on an Axis client that invokes a web service, 
+You try to run some JUnit tests on an Axis client that invokes a web service,
 and you always get this exception:
 <pre>
-java.lang.ExceptionInInitializerError 
-at org.apache.axis.client.Service.<init>(Service.java:108) 
-... 
+java.lang.ExceptionInInitializerError
+at org.apache.axis.client.Service.<init>(Service.java:108)
+...
 
-Caused by: org.apache.commons.logging.LogConfigurationException: ... 
-org.apache.commons.logging.impl.Jdk14Logger does not implement Log 
+Caused by: org.apache.commons.logging.LogConfigurationException: ...
+org.apache.commons.logging.impl.Jdk14Logger does not implement Log
 at org.apache.commons.logging.impl.LogFactoryImpl.newInstance
-(LogFactoryImpl.java:555) 
+(LogFactoryImpl.java:555)
 ...
 </pre>
 <p>
-Actually, the Jdk14Logger does implement Log. What you have is a JUnit classloading 
-issue. JUnit's graphical TestRunner has a feature where it will dynamically 
-reload modified classes every time the user presses the "Run" button. This way, 
-the user doesn't need to relaunch the TestRunner after every edit. For this, 
-JUnit uses its own classloader, junit.runner.TestCaseClassLoader. As of JUnit 
-3.8.1, confusion can arise between TestCaseClassLoader and the system class 
+Actually, the Jdk14Logger does implement Log. What you have is a JUnit classloading
+issue. JUnit's graphical TestRunner has a feature where it will dynamically
+reload modified classes every time the user presses the "Run" button. This way,
+the user doesn't need to relaunch the TestRunner after every edit. For this,
+JUnit uses its own classloader, junit.runner.TestCaseClassLoader. As of JUnit
+3.8.1, confusion can arise between TestCaseClassLoader and the system class
 loader as to which loader did or should load which classes.
 <p>
 There are two ways to avoid this problem.
 <ul>
-<li>Sure and simple fix. Turn off dynamic class reloading by running 
-junit.swingui.TestRunner with the -noloading argument. 
+<li>Sure and simple fix. Turn off dynamic class reloading by running
+junit.swingui.TestRunner with the -noloading argument.
 </li>
 <p>
-<li>Finicky and fancy fix, only necessary if you want dynamic class reloading. 
-Tell TestCaseClassLoader to ignore certain packages and their sub-packages, 
-deferring them to the system classloader. You can do this using a file located 
+<li>Finicky and fancy fix, only necessary if you want dynamic class reloading.
+Tell TestCaseClassLoader to ignore certain packages and their sub-packages,
+deferring them to the system classloader. You can do this using a file located
 in junit.jar, junit/runner/excluded.properties. Its content appears as follows:
 <pre>
 #
@@ -1031,56 +1031,56 @@ excluded.8=net.jini.*
 </pre></li>
 </ul>
 <p>
-Copy this file, preserving the directory path, into another location, e.g. 
-deployDir. So the copied properties file's path will be 
-deployDir/junit/runner/excluded.properties. Add an extra entry to the end of 
+Copy this file, preserving the directory path, into another location, e.g.
+deployDir. So the copied properties file's path will be
+deployDir/junit/runner/excluded.properties. Add an extra entry to the end of
 this file:
 <pre>
 excluded.9=org.apache.*
 </pre>
 <p>
-Edit your classpath so that deployDir appears before junit.jar. This way, the 
-modified excluded.properties will be used, rather than the default. (Don't add 
+Edit your classpath so that deployDir appears before junit.jar. This way, the
+modified excluded.properties will be used, rather than the default. (Don't add
 the path to excluded.properties itself to the classpath.)
 <p>
-This fix will prevent the commons-logging exception. However, other 
+This fix will prevent the commons-logging exception. However, other
 classloading problems might still arise. For example:
 <pre>
-Dec 10, 2002 7:16:16 PM org.apache.axis.encoding.ser.BeanPropertyTarget set 
-SEVERE: Could not convert [Lfoo.bar.Child; to bean field 'childrenAsArray', 
-type [Lfoo.bar.Child; 
-Dec 10, 2002 7:16:16 PM org.apache.axis.client.Call invoke 
-SEVERE: Exception: 
-java.lang.IllegalArgumentException: argument type mismatch 
+Dec 10, 2002 7:16:16 PM org.apache.axis.encoding.ser.BeanPropertyTarget set
+SEVERE: Could not convert [Lfoo.bar.Child; to bean field 'childrenAsArray',
+type [Lfoo.bar.Child;
+Dec 10, 2002 7:16:16 PM org.apache.axis.client.Call invoke
+SEVERE: Exception:
+java.lang.IllegalArgumentException: argument type mismatch
 at org.apache.axis.encoding.ser.BeanPropertyTarget.set
-(BeanPropertyTarget.java:182) 
+(BeanPropertyTarget.java:182)
 at org.apache.axis.encoding.DeserializerImpl.valueComplete
-(DeserializerImpl.java:284) 
+(DeserializerImpl.java:284)
 ...
 </pre>
 <p>
-In this case, you have no choice but to give up on dynamic class reloading and 
+In this case, you have no choice but to give up on dynamic class reloading and
 use the -noloading argument.
 <p>
-One other heads-up about JUnit testing of an Axis web service. Suppose you have 
-run JUnit tests locally on the component that you want to expose as a web 
-service. You press the "Run" button to initiate a series of tests. Between each 
-test, all your data structures are re-initialized. Your tests produce a long 
+One other heads-up about JUnit testing of an Axis web service. Suppose you have
+run JUnit tests locally on the component that you want to expose as a web
+service. You press the "Run" button to initiate a series of tests. Between each
+test, all your data structures are re-initialized. Your tests produce a long
 green bar. Good.
 <p>
-Suppose you now want to run JUnit tests on an Axis client that is connecting to 
-an application server running the Axis web application and with it your web 
-service. Between each test, JUnit will automatically re-initialize your client. 
+Suppose you now want to run JUnit tests on an Axis client that is connecting to
+an application server running the Axis web application and with it your web
+service. Between each test, JUnit will automatically re-initialize your client.
 <p>
-Your server-side data structures are a different matter. If you're checking 
-your server data at the end of each test (as you should be) and you run more 
-than one test at a time, the second and later tests will fail because they are 
-generating cumulative data on the Axis server based on preceding tests rather 
+Your server-side data structures are a different matter. If you're checking
+your server data at the end of each test (as you should be) and you run more
+than one test at a time, the second and later tests will fail because they are
+generating cumulative data on the Axis server based on preceding tests rather
 than fresh data based only on the current one.
 <p>
-This means that, for each test, you must manually re-initialize your web 
-service. One way to accomplish this is to add to your web service interface a 
-re-initialize operation. Then have the client call that operation at the start 
+This means that, for each test, you must manually re-initialize your web
+service. One way to accomplish this is to add to your web service interface a
+re-initialize operation. Then have the client call that operation at the start
 of each test.
 
 
@@ -1107,10 +1107,10 @@ The SOAP messages for all of the tests should appear in the tcpmon window.
 If you are debugging code that is running as a web application using
 a web application server (such as Tomcat) then you may also use the
 SOAP Monitor utility to view the SOAP request and response messages.
-<br>Start up the SOAP monitor utility by loading the SOAP monitor applet 
+<br>Start up the SOAP monitor utility by loading the SOAP monitor applet
 in your web browser window:
 <blockquote><tt>http://localhost:&lt;port&gt;/axis/SOAPMonitor</tt></blockquote>.
-As you run your tests, the SOAP messages should appear in the SOAP 
+As you run your tests, the SOAP messages should appear in the SOAP
 monitor window.
 <p>
 <code>SOAP Monitor</code> is described in more detail in the
@@ -1123,7 +1123,7 @@ In one window start the server:
 In another window, first deploy the service you're testing:
 <blockquote><tt>java org.apache.axis.client.AdminClient deploy.wsdd</tt></blockquote>
 Then bring up the JUnit user interface with your test.  For example, to run the the multithread test case:
-<blockquote><tt>java junit.swingui.TestRunner -noloading test.wsdl.multithread.MultithreadTestCase</tt></blockquote>
+<blockquote><tt>java junit.swingui.TestRunner -noloading test.MultithreadTestCase</tt></blockquote>
 
 <h4>Turning on Debug Output</h4>
 This section is oriented to the Axis default logger: Log4J.
@@ -1229,8 +1229,8 @@ which enforces avoidance of
 It follows that you will need to remove your statements
 before checking the code back in.
 <p>
-As an alternative, 
-we strongly encourage you to 
+As an alternative,
+we strongly encourage you to
 take a few moments and introduce debug statements:
 <code>log.debug("reasonably terse and meaningful message")</code>.
 If a debug message is useful for understanding a problem now,

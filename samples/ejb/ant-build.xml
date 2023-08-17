@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Session Beans as Web Services" default="deployejb" basedir=".">
+<project name="Session Beans as Web Services" default="deployejb" basedir="">
 
     <property environment="env"/>
     <property name="deploy.dir" value="${env.JBOSS_DEPLOY}"/>
@@ -7,10 +7,10 @@
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="src"/>
     <property name="metainf.dir" value="META-INF"/>
- 	  <property name="axis.dir" location="../../"/>
+ 	  <property name="axis.dir" location="../../../../../"/>
 
 	<path id="classpath.id">
-		<fileset dir="${axis.dir}/build/lib">
+		<fileset dir="/build/lib">
 			<include name="*.jar"/>
 		</fileset>
     <pathelement location="${deploy.dir}/../lib/jboss-j2ee.jar"/>
@@ -29,16 +29,16 @@
     loaderref="axis" >
         <classpath refid="classpath.id"/>
   </taskdef>
-  
+
 	<target name="w2j-simplebean" depends="j2w-simplebean">
-			<axis-wsdl2java output="${build.dir}/java" testcase="true" url="./simplebean.wsdl"> 
+			<axis-wsdl2java output="${build.dir}/java" testcase="true" url="./simplebean.wsdl">
 				<mapping namespace="http://localhost:8080/axis/services/SimpleBean" package="com.test.simplebean"/>
-			</axis-wsdl2java> 
+			</axis-wsdl2java>
 	</target>
 
     <target name="prepare">
         <delete>
-            <fileset dir="${basedir}" includes="*jar"/>
+            <fileset dir="/" includes="*jar"/>
         </delete>
         <mkdir dir="${build.dir}/java"/>
     </target>
@@ -49,47 +49,47 @@
 
     <target name="build-client" depends="w2j-simplebean">
          <javac classpathref="classpath.id" srcdir="${build.dir}/java" destdir="${build.dir}"/>
-    </target>        
-    
+    </target>
+
     <target name="run-junit" depends="build-client, deployws">
 			<junit>
 				<classpath refid="classpath.id"/>
 				<formatter type="plain" usefile="false"/>
 				<test name="com.test.simplebean.SimpleBeanServiceTestCase"/>
 			</junit>
-		</target>        
+		</target>
 
-    
+
     <target name="jar" depends="compile">
         <jar destfile="${app.name}.jar">
             <fileset dir="${build.dir}">
                 <include name="**/*.class" />
             </fileset>
-            <metainf dir="${metainf.dir}"/>
-        </jar>	
+            <metainf dir="META-INF"/>
+        </jar>
     </target>
-    
+
     <target name="deployejb" depends="jar">
         <copy file="${app.name}.jar" todir="${deploy.dir}"/>
     </target>
-    
+
     <target name="deployws">
         <axis-admin xmlfile="deploy.wsdd"/>
     </target>
-    
+
     <target name="undeployws">
         <axis-admin xmlfile="undeploy.wsdd"/>
     </target>
-    
+
     <target name="j2w-simplebean">
         <axis-java2wsdl	classname="samples.ejb.SimpleBean" classpath="${build.dir}"
 			methods="sayHello"
                         output="simplebean.wsdl"
                         location="http://localhost:8080/axis/services/SimpleBean"
                         namespace="http://localhost:8080/axis/services/SimpleBean"
-                        namespaceImpl="http://localhost:8080/axis/services/SimpleBean"/> 
+                        namespaceImpl="http://localhost:8080/axis/services/SimpleBean"/>
     </target>
-    
+
     <target name="j2w-nicethingsbean">
         <axis-java2wsdl	classname="samples.ejb.NiceThingsBean"
 			methods="sayHello,findNiceThingsFor,updateNiceThingsFor"
@@ -100,12 +100,12 @@
                             "http://localhost:8080/axis/services/NiceThingsBean">
             <complextype classname="samples.ejb.NiceThings"
                          namespace="urn:NiceThingsBean"/>
-<!-- You can also pass in another serializer/deserializer if you don't want to use the default 
+<!-- You can also pass in another serializer/deserializer if you don't want to use the default
         BeanSerializerFactory for a particular complextype
                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"  -->
-        </axis-java2wsdl>  
-    </target>        
+        </axis-java2wsdl>
+    </target>
 	<target name="clean">
 		<delete dir="${build.dir}"/>
 	</target>

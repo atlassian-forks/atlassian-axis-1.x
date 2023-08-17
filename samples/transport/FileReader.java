@@ -1,14 +1,14 @@
-package samples.transport ;
+package samples.transport;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ public class FileReader extends Thread {
         Thread.sleep( 100 );
         File file = new File( "xml" + nextNum + ".req" );
         if ( !file.exists() ) continue ;
-          
+
           // avoid race condition where file comes to exist but we were halted -- RobJ
           if (pleaseStop) continue;
 
@@ -54,7 +54,7 @@ public class FileReader extends Thread {
         FileInputStream fis = new FileInputStream( file );
 
         int thisNum = nextNum++; // increment early to avoid infinite loops
-        
+
         Message msg = new Message( fis );
         msg.getSOAPPartAsBytes();
 
@@ -74,7 +74,7 @@ public class FileReader extends Thread {
             msg = new Message(new AxisFault(e.toString()));
             msg.setMessageContext(msgContext);
         }
-        
+
         byte[] buf = msg.getSOAPPartAsBytes();
         FileOutputStream fos = new FileOutputStream( "xml" + thisNum + ".res" );
         fos.write( buf );

@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package samples.stock ;
+package samples.stock;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,8 +36,8 @@ public class StockQuoteService {
   }
 
   public float getQuote (String symbol) throws Exception {
-    // get a real (delayed by 20min) stockquote from 
-    // http://services.xmethods.net/axis/. The IP addr 
+    // get a real (delayed by 20min) stockquote from
+    // http://services.xmethods.net/axis/. The IP addr
     // below came from the host that the above form posts to ..
 
     if ( symbol.equals("XXX") ) return( (float) 55.25 );
