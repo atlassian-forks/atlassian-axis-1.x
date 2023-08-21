@@ -775,6 +775,11 @@ public  class MessageElement extends NodeImpl implements SOAPElement,
         this.namespaces = namespaces;
     }
 
+    public ArrayList getNSMappings()
+    {
+        return this.namespaces;
+    }
+
     /**
      * get the prefix for a given namespace URI
      * @param searchNamespaceURI namespace

@@ -53,7 +53,7 @@ public class TestMessageService extends TestCase {
         SOAPService service = new SOAPService(new MsgProvider());
 
         service.setName("MessageService");
-        service.setOption("className", "test.TestService");
+        service.setOption("className", "test.MSGDispatch.TestService");
         service.setOption("allowedMethods", "*");
         service.getServiceDescription().setDefaultNamespace("http://db.com");
         service.getServiceDescription().setStyle(Style.MESSAGE);
@@ -116,9 +116,10 @@ public class TestMessageService extends TestCase {
         SOAPBodyElement respBody = result.getFirstBody();
         assertEquals(new QName("http://db.com", "testEnvelope"), respBody.getQName());
         Iterator i = respBody.getNamespacePrefixes();
-        assertNotNull("No namespace mappings");
+        assertTrue("No namespace mappings", i.hasNext());
         assertEquals("Non-default namespace found", "", i.next());
-        assertTrue("Multiple namespace mappings", !i.hasNext());
+        assertEquals("ns1 namespace found", "ns1", i.next());
+        assertTrue("Unwanted namespace mappings", !i.hasNext());
 
         Vector headers = result.getHeaders();
         assertEquals("Had " + headers.size() + " headers, needed 1", 1, headers.size());
@@ -156,8 +157,9 @@ public class TestMessageService extends TestCase {
         SOAPBodyElement respBody = result.getFirstBody();
         assertEquals(new QName("http://db.com", "testElementEcho"), respBody.getQName());
         Iterator i = respBody.getNamespacePrefixes();
-        assertNotNull("No namespace mappings");
+        assertTrue("No namespace mappings", i.hasNext());
         assertEquals("Non-default namespace found", "", i.next());
-        assertTrue("Multiple namespace mappings", !i.hasNext());
+        assertEquals("ns1 namespace found", "ns1", i.next());
+        assertTrue("Unwanted namespace mappings", !i.hasNext());
     }
 }
