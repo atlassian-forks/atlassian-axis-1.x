@@ -29,6 +29,8 @@ import org.apache.axis.server.AxisServer;
 import org.apache.axis.transport.local.LocalTransport;
 import org.apache.commons.logging.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Test the "application" scope option - lots of threads call the same service
@@ -39,7 +41,7 @@ import org.apache.commons.logging.Log;
  */
 public class TestApplicationScope extends TestCase {
     protected static Log log =
-        LogFactory.getLog(TestApplicationScope.class.getName());
+            LogFactory.getLog(TestApplicationScope.class.getName());
 
     private BasicServerConfig config;
     private AxisServer server;
@@ -66,6 +68,10 @@ public class TestApplicationScope extends TestCase {
         config.deployService(SERVICE_NAME, service);
     }
 
+    protected void tearDown() throws Exception {
+        TestService.destroyService();
+    }
+
     public class TestRunnable implements Runnable {
         private int reps;
 
@@ -81,22 +87,22 @@ public class TestApplicationScope extends TestCase {
 
             for (int i = 0; i < reps; i++) {
                 try {
-                    String ret = (String)call.invoke("hello", null);
+                    String ret = (String) call.invoke("hello", null);
                     if (ret == null) {
                         MessageContext msgContext = call.getMessageContext();
                         String respStr = msgContext.getResponseMessage().getSOAPPartAsString();
 
                         String reqStr = msgContext.getRequestMessage().getSOAPPartAsString();
                         String nullStr = "Got null response! Request message:\r\n" + reqStr + "\r\n\r\n" +
-                                  "Response message:\r\n" + respStr;
+                                "Response message:\r\n" + respStr;
                         log.fatal(nullStr);
                         setError(new Exception(nullStr));
                     } else if (!ret.equals(TestService.MESSAGE)) {
                         setError(new Exception("Messages didn't match (got '" +
-                                               ret +
-                                               "' wanted '" +
-                                               TestService.MESSAGE +
-                                               "'!"));
+                                ret +
+                                "' wanted '" +
+                                TestService.MESSAGE +
+                                "'!"));
                         return;
                     }
                 } catch (AxisFault axisFault) {
@@ -108,6 +114,7 @@ public class TestApplicationScope extends TestCase {
     }
 
     private Exception error = null;
+
     synchronized void setError(Exception e) {
         if (error == null) {
             error = e;
@@ -118,17 +125,14 @@ public class TestApplicationScope extends TestCase {
         int threads = 50;
         int reps = 10;
 
-        ThreadGroup group = new ThreadGroup("TestThreads");
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
 
         for (int i = 0; i < threads; i++) {
             TestRunnable tr = new TestRunnable(reps);
-            Thread thread = new Thread(group, tr, "TestThread #" + i);
-            thread.start();
+            executor.submit(tr);
         }
 
-        while (group.activeCount() > 0 && error == null) {
-            Thread.sleep(100);
-        }
+        executor.shutdown();
 
         if (error != null) {
             throw error;
