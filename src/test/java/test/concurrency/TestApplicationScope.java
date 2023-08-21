@@ -70,6 +70,7 @@ public class TestApplicationScope extends TestCase {
 
     protected void tearDown() throws Exception {
         TestService.destroyService();
+        server.stop();
     }
 
     public class TestRunnable implements Runnable {

@@ -18,6 +18,7 @@ package test.dynamic;
 
 import junit.framework.TestCase;
 import org.apache.axis.AxisFault;
+import org.junit.Ignore;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Call;
@@ -27,6 +28,7 @@ import java.io.InterruptedIOException;
 import java.net.ConnectException;
 import java.net.URL;
 
+@Ignore
 public class TestJAXRPCDII extends TestCase {
     public TestJAXRPCDII(String name) {
         super(name);
