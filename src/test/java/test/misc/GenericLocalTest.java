@@ -44,7 +44,7 @@ import org.apache.axis.Handler;
  *
  * @author Glen Daniels (gdaniels@apache.org)
  */
-public class GenericLocalTest extends TestCase {
+public abstract class GenericLocalTest extends TestCase {
     protected AxisServer server;
     protected SimpleProvider config;
     protected LocalTransport transport;
