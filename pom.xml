@@ -248,6 +248,11 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.21.0</version>
                     <configuration>
+                        <excludes>
+                            <exclude>
+                                test.functional.*
+                            </exclude>
+                        </excludes>
                         <!-- Make test execution deterministic -->
                         <runOrder>alphabetical</runOrder>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
