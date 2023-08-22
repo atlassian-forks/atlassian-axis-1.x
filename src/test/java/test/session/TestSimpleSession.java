@@ -54,6 +54,11 @@ public class TestSimpleSession extends TestCase implements ServiceLifecycle {
         super(name);
     }
 
+    protected void tearDown() {
+        initCalls = 0;
+        destroyCalls = 0;
+    }
+
     public void testSessionAPI() {
         SimpleSession session = new SimpleSession();
         Object val = new Float(5.6666);
