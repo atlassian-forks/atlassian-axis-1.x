@@ -67,7 +67,7 @@ public class TestOutParams2 extends TestCase {
 
         SOAPService service = new SOAPService(null, new RPCProvider(), null);
         service.setName("TestOutParamsService");
-        service.setOption("className", "test.TestOutParams2");
+        service.setOption("className", "test.outparams2.TestOutParams2");
         service.setOption("allowedMethods", "serviceMethod");
 
         ServiceDesc description = new JavaServiceDesc();

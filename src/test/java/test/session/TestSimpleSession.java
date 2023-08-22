@@ -89,8 +89,8 @@ public class TestSimpleSession extends TestCase implements ServiceLifecycle {
                                               sessionHandler);
 
         service.setName("sessionTestService");
-        service.setOption("scope", "test");
-        service.setOption("className", "test.TestSimpleSession");
+        service.setOption("scope", "Session");
+        service.setOption("className", "test.session.TestSimpleSession");
         service.setOption("allowedMethods", "counter");
 
         EngineConfiguration defaultConfig =

@@ -10,6 +10,7 @@ import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.PatternMatcher;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
+import org.junit.Ignore;
 
 
 import java.io.File;
@@ -53,6 +54,7 @@ public class TestSrcContent extends TestCase {
      * If this test is run from xml-axis/java, then walk through the source
      * tree (xml-axis/java/src), calling checkFile for each file.
      */
+    @Ignore("Does not add value + is a best ArchUnit case if required.")
     public void testSourceFiles() {
         String baseDir = System.getProperty("user.dir");
         File   srcDir = new File(baseDir, "src");

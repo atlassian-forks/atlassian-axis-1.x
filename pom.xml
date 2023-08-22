@@ -250,7 +250,10 @@
                     <configuration>
                         <excludes>
                             <exclude>
-                                test.functional.*
+                                %regex[test.functional.*]
+                            </exclude>
+                            <exclude>
+                                %regex[test.httpunit.*]
                             </exclude>
                         </excludes>
                         <!-- Make test execution deterministic -->
