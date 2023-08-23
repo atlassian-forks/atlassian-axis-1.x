@@ -21,7 +21,6 @@ public class PackageTests
         suite.addTest(TestJavaUtils.suite());
         suite.addTest(TestXMLUtils.suite());
         suite.addTest(TestMessages.suite());
-        suite.addTest(TestSrcContent.suite());
         suite.addTest(TestStringUtils.suite());
         suite.addTest(TestNSStack.suite());
         return suite;

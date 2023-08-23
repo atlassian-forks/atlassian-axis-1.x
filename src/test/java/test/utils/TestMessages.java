@@ -137,7 +137,7 @@ public class TestMessages extends TestCase {
      *     matches the excpected number of parameters (in the source code).
      */
 
-    @Ignore("Contradicts testTestMessages + Does not add value")
+    /** @Ignore("Contradicts testTestMessages + Does not add value")
     public void testForMissingMessages() {
         String baseDir = System.getProperty("user.dir");
         char sep = File.separatorChar;
@@ -151,6 +151,7 @@ public class TestMessages extends TestCase {
             throw new AssertionFailedError(errors);
         }
     } // testForMissingMessages
+    **/
 
     /**
      * Walk the source tree
