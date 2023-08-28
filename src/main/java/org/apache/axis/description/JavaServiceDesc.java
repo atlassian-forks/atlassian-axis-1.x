@@ -1,12 +1,12 @@
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -105,7 +106,7 @@ public class JavaServiceDesc implements ServiceDesc {
     private HashMap name2OperationsMap = null;
     private HashMap qname2OperationsMap = null;
     private transient HashMap method2OperationMap = new HashMap();
-    
+
     // THE FOLLOWING STUFF IS ALL JAVA-SPECIFIC, AND WILL BE FACTORED INTO
     // A JAVA-SPECIFIC SUBCLASS.  --Glen
 
@@ -194,7 +195,7 @@ public class JavaServiceDesc implements ServiceDesc {
      */
     public boolean isWrapped()
     {
-        return ((style == Style.RPC) || 
+        return ((style == Style.RPC) ||
                 (style == Style.WRAPPED));
     }
 
@@ -320,7 +321,7 @@ public class JavaServiceDesc implements ServiceDesc {
      * get the documentation for the service
      */
 	public String getDocumentation() {
-    	return documentation; 
+    	return documentation;
     }
 
     /**
@@ -360,7 +361,7 @@ public class JavaServiceDesc implements ServiceDesc {
                 }
             }
         }
-        
+
         if (qname2OperationsMap != null) {
             QName qname = operation.getElementQName();
             ArrayList list = (ArrayList)qname2OperationsMap.get(qname);
@@ -368,7 +369,7 @@ public class JavaServiceDesc implements ServiceDesc {
                 list.remove(operation);
             }
         }
-        
+
         if (method2OperationMap != null) {
             Method method = operation.getMethod();
             if (method != null) {
@@ -376,7 +377,7 @@ public class JavaServiceDesc implements ServiceDesc {
             }
         }
     }
-    
+
     public void addOperationDesc(OperationDesc operation)
     {
         operations.add(operation);
@@ -520,23 +521,23 @@ public class JavaServiceDesc implements ServiceDesc {
         getSyncedOperationsForName(implClass,
                                    ((OperationDesc)overloads.get(0)).getName());
 
+        // Convert to operationDescarray before sorting to avoid concurrency issues
+        OperationDesc[] operationDescarray = (OperationDesc[]) overloads.toArray(
+                new OperationDesc[overloads.size()]);
+
         // Sort the overloads by number of arguments - prevents us calling methods
         // with more parameters than supplied in the request (with missing parameters
         // defaulted to null) when a perfectly good method exists with exactly the
         // supplied parameters.
-        Collections.sort(overloads,
-            new Comparator() {
-                public int compare(Object o1, Object o2)
-                {
-                    Method meth1 = ((OperationDesc)o1).getMethod();
-                    Method meth2 = ((OperationDesc)o2).getMethod();
+        Arrays.sort(operationDescarray,
+                (o1, o2) -> {
+                    Method meth1 = o1.getMethod();
+                    Method meth2 = o2.getMethod();
                     return (meth1.getParameterTypes().length -
-                                         meth2.getParameterTypes().length);
-                }
-            });
+                            meth2.getParameterTypes().length);
+                });
 
-        OperationDesc [] array = new OperationDesc [overloads.size()];
-        return (OperationDesc[])overloads.toArray(array);
+        return operationDescarray;
     }
 
     private synchronized void initQNameMap() {
@@ -638,11 +639,11 @@ public class JavaServiceDesc implements ServiceDesc {
             return;
 
         // Find the method.  We do this once for each Operation.
-        
+
         Method[] methods = getMethods(implClass);
         // A place to keep track of possible matches
         Method possibleMatch = null;
-        
+
         for (int i = 0; i < methods.length; i++) {
             Method method = methods[i];
             if (Modifier.isPublic(method.getModifiers()) &&
@@ -711,7 +712,7 @@ public class JavaServiceDesc implements ServiceDesc {
                             if (!JavaUtils.isConvertable(paramClass, actualType)) {
                                 break;
                             }
-                            
+
                             if (!actualType.isAssignableFrom(paramClass)) {
                                 // This doesn't fit without conversion
                                 conversionNecessary = true;
@@ -728,7 +729,7 @@ public class JavaServiceDesc implements ServiceDesc {
                     // failed.
                     continue;
                 }
-                
+
                 // This is our latest possibility
                 possibleMatch = method;
 
@@ -748,7 +749,7 @@ public class JavaServiceDesc implements ServiceDesc {
         if (possibleMatch != null) {
             Class returnClass = possibleMatch.getReturnType();
             oper.setReturnClass(returnClass);
-            
+
             QName returnType = oper.getReturnType();
             if (returnType == null) {
                 oper.setReturnType(getTypeMapping().getTypeQName(returnClass));
@@ -756,7 +757,7 @@ public class JavaServiceDesc implements ServiceDesc {
 
             // Do the faults
             createFaultMetadata(possibleMatch, oper);
-                
+
             oper.setMethod(possibleMatch);
             method2OperationMap.put(possibleMatch, oper);
             return;
@@ -813,7 +814,7 @@ public class JavaServiceDesc implements ServiceDesc {
             }
         } else if (params.length == 2) {
             if (((params[0] == SOAPEnvelope.class) &&
-                    (params[1] == SOAPEnvelope.class)) || 
+                    (params[1] == SOAPEnvelope.class)) ||
                 ((params[0] == javax.xml.soap.SOAPEnvelope.class) &&
                     (params[1] == javax.xml.soap.SOAPEnvelope.class)) &&
                     (method.getReturnType() == void.class)){
@@ -823,7 +824,7 @@ public class JavaServiceDesc implements ServiceDesc {
         if( null != allowedMethods && !allowedMethods.isEmpty() )
           throw new InternalException (Messages.getMessage("badMsgMethodParams",
                                                          method.getName()));
-        return    OperationDesc.MSG_METHOD_NONCONFORMING;                                              
+        return    OperationDesc.MSG_METHOD_NONCONFORMING;
     }
 
     /**
@@ -906,26 +907,26 @@ public class JavaServiceDesc implements ServiceDesc {
      * Is this method from ServiceLifeCycle interface?
      * @param m
      * @return true if this method is from ServiceLifeCycle interface
-     */ 
+     */
     private boolean isServiceLifeCycleMethod(Class implClass, Method m) {
         if(javax.xml.rpc.server.ServiceLifecycle.class.isAssignableFrom(implClass)) {
-            String methodName = m.getName(); 
+            String methodName = m.getName();
 
             if(methodName.equals("init")) {
-                // Check if the method signature is 
+                // Check if the method signature is
                 // "public abstract void init(Object context) throws ServiceException;"
-                Class[] classes = m.getParameterTypes(); 
-                if(classes != null && 
-                   classes.length == 1 && 
-                   classes[0] == Object.class && 
+                Class[] classes = m.getParameterTypes();
+                if(classes != null &&
+                   classes.length == 1 &&
+                   classes[0] == Object.class &&
                    m.getReturnType() == Void.TYPE) {
                     return true;
                 }
             } else if (methodName.equals("destroy")){
-                // Check if the method signature is 
+                // Check if the method signature is
                 // "public abstract void destroy();"
-                Class[] classes = m.getParameterTypes(); 
-                if(classes != null && 
+                Class[] classes = m.getParameterTypes();
+                if(classes != null &&
                    classes.length == 0 &&
                    m.getReturnType() == Void.TYPE) {
                     return true;
@@ -934,7 +935,7 @@ public class JavaServiceDesc implements ServiceDesc {
         }
         return false;
     }
-    
+
     /**
      * Recursive helper class for loadServiceDescByIntrospection
      */
@@ -1006,7 +1007,7 @@ public class JavaServiceDesc implements ServiceDesc {
                 methodName.equals("getOperationDescs"))
                 return;
         }
-        
+
         // If we have no implementation class, don't worry about it (we're
         // probably on the client)
         if (implClass == null)
@@ -1128,7 +1129,7 @@ public class JavaServiceDesc implements ServiceDesc {
                 methodName.equals("getOperationDescs"))
                 return;
         }
-        
+
         Method [] methods = getMethods(implClass);
 
         for (int i = 0; i < methods.length; i++) {
@@ -1197,10 +1198,10 @@ public class JavaServiceDesc implements ServiceDesc {
 
         boolean isWSICompliant = JavaUtils.isTrue(
                 AxisProperties.getProperty(Constants.WSIBP11_COMPAT_PROPERTY));
-        
+
         // Make an OperationDesc, fill in common stuff
         OperationDesc operation = new OperationDesc();
-        
+
         // If we're WS-I compliant, we can't have overloaded operation names.
         // If we find duplicates, we generate unique names for them and map
         // those names to the correct Method.
@@ -1348,7 +1349,7 @@ public class JavaServiceDesc implements ServiceDesc {
 
                 FaultDesc fault = operation.getFaultByClass(ex, false);
                 boolean isNew;
-                
+
                 // If we didn't find one, create a new one
                 if (fault == null) {
                     fault = new FaultDesc();
@@ -1356,15 +1357,15 @@ public class JavaServiceDesc implements ServiceDesc {
                 } else {
                     isNew = false;
                 }
-                
+
                 // Try to fil in any parts of the faultDesc that aren't there
-                
+
                 // XMLType
                 QName xmlType = fault.getXmlType();
                 if (xmlType == null) {
                     fault.setXmlType(getTypeMapping().getTypeQName(ex));
                 }
-                
+
                 // Name and Class Name
                 String pkgAndClsName = ex.getName();
                 if (fault.getClassName() == null) {
@@ -1376,7 +1377,7 @@ public class JavaServiceDesc implements ServiceDesc {
                             pkgAndClsName.length());
                     fault.setName(name);
                 }
-                
+
                 // Parameters
                 // We add a single parameter which points to the type
                 if (fault.getParameters() == null) {
@@ -1396,7 +1397,7 @@ public class JavaServiceDesc implements ServiceDesc {
                     exceptionParams.add(param);
                     fault.setParameters(exceptionParams);
                 }
-                
+
                 // QName
                 if (fault.getQName() == null) {
                     fault.setQName(new QName(pkgAndClsName));

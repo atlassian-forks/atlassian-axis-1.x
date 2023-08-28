@@ -30,7 +30,7 @@ public class TestAllowedMethods extends TestCase {
             " <service name=\"" + SERVICE_NAME + "\" " +
                       "provider=\"java:RPC\">\n" +
             "   <parameter name=\"allowedMethods\" value=\"allowed\"/>" +
-            "   <parameter name=\"className\" value=\"test.TestAllowedMethods\"/>" +
+            "   <parameter name=\"className\" value=\"test.wsdd.TestAllowedMethods\"/>" +
             " </service>\n" +
             "</deployment>";
 

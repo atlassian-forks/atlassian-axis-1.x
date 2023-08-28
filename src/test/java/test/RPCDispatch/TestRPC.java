@@ -96,7 +96,7 @@ public class TestRPC extends TestCase {
     public void testReverseString() throws Exception {
         // Register the reverseString service
         SOAPService reverse = new SOAPService(new RPCProvider());
-        reverse.setOption("className", "test.Service");
+        reverse.setOption("className", "test.RPCDispatch.Service");
         reverse.setOption("allowedMethods", "reverseString");
         provider.deployService(new QName(null,SOAPAction), reverse);
 
@@ -112,7 +112,7 @@ public class TestRPC extends TestCase {
         try {
             // Register the reverseString service
             SOAPService reverse = new SOAPService(new RPCProvider());
-            reverse.setOption("className", "test.Service");
+            reverse.setOption("className", "test.RPCDispatch.Service");
             reverse.setOption("allowedMethods", "reverseString2");
             provider.deployService(new QName(null,SOAPAction), reverse);
 
@@ -131,7 +131,7 @@ public class TestRPC extends TestCase {
     public void testReverseStringWithCommaDelimiter() throws Exception {
         // Register the reverseString service
         SOAPService reverse = new SOAPService(new RPCProvider());
-        reverse.setOption("className", "test.Service");
+        reverse.setOption("className", "test.RPCDispatch.Service");
         reverse.setOption("allowedMethods", "reverseString2,reverseString");
         provider.deployService(new QName(null,SOAPAction), reverse);
 
@@ -145,7 +145,7 @@ public class TestRPC extends TestCase {
     public void testReverseStringWithSpaceDelimiter() throws Exception {
         // Register the reverseString service
         SOAPService reverse = new SOAPService(new RPCProvider());
-        reverse.setOption("className", "test.Service");
+        reverse.setOption("className", "test.RPCDispatch.Service");
         reverse.setOption("allowedMethods", "reverseString2 reverseString");
         provider.deployService(new QName(null,SOAPAction), reverse);
 
@@ -159,7 +159,7 @@ public class TestRPC extends TestCase {
     public void testReverseStringWithStar() throws Exception {
         // Register the reverseString service
         SOAPService reverse = new SOAPService(new RPCProvider());
-        reverse.setOption("className", "test.Service");
+        reverse.setOption("className", "test.RPCDispatch.Service");
         reverse.setOption("allowedMethods", "*");
         provider.deployService(new QName(null,SOAPAction), reverse);
 
@@ -174,7 +174,7 @@ public class TestRPC extends TestCase {
     public void testReverseData() throws Exception {
         // Register the reverseData service
         SOAPService reverse = new SOAPService(new RPCProvider());
-        reverse.setOption("className", "test.Service");
+        reverse.setOption("className", "test.RPCDispatch.Service");
         reverse.setOption("allowedMethods", "reverseData");
         provider.deployService(new QName(null, SOAPAction), reverse);
 
@@ -190,7 +190,7 @@ public class TestRPC extends TestCase {
     public void testMessageContextImplicit() throws Exception {
         // Register the targetService service
         SOAPService tgtSvc = new SOAPService(new RPCProvider());
-        tgtSvc.setOption("className", "test.Service");
+        tgtSvc.setOption("className", "test.RPCDispatch.Service");
         tgtSvc.setOption("allowedMethods", "targetServiceImplicit");
         provider.deployService(new QName(null, SOAPAction), tgtSvc);
 
@@ -205,7 +205,7 @@ public class TestRPC extends TestCase {
     public void testNull() throws Exception {
         // Register the echoInt service
         SOAPService echoInt = new SOAPService(new RPCProvider());
-        echoInt.setOption("className", "test.Service");
+        echoInt.setOption("className", "test.RPCDispatch.Service");
         echoInt.setOption("allowedMethods", "echoInt");
         provider.deployService(new QName(null, SOAPAction), echoInt);
 
@@ -219,7 +219,7 @@ public class TestRPC extends TestCase {
     public void testSimpleFault() throws Exception {
         // Register the reverseData service
         SOAPService simpleFault = new SOAPService(new RPCProvider());
-        simpleFault.setOption("className", "test.Service");
+        simpleFault.setOption("className", "test.RPCDispatch.Service");
         simpleFault.setOption("allowedMethods", "simpleFault");
         provider.deployService(new QName(null, SOAPAction), simpleFault);
 
@@ -227,7 +227,7 @@ public class TestRPC extends TestCase {
             rpc("simpleFault", new Object[] {"foobar"});
         } catch (AxisFault result) {
             assertEquals("faultString was not set correctly.",
-                "test.Service$TestFault: foobar",
+                "test.RPCDispatch.Service$TestFault: foobar",
                 result.getFaultString());
             return;
         }

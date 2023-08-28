@@ -59,7 +59,7 @@ public class TestOutParams extends TestCase {
                                               new RPCProvider(),
                                               null);
 	service.setName("TestOutParamsService");
-        service.setOption("className", "test.TestOutParams");
+        service.setOption("className", "test.outparams2.TestOutParams");
         service.setOption("allowedMethods", "serviceMethod");
 
         EngineConfiguration defaultConfig =

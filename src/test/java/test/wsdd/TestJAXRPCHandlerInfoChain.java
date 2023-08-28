@@ -71,9 +71,9 @@ public class TestJAXRPCHandlerInfoChain extends TestCase implements Handler {
             + SERVICE_NAME
             + "\" "
             + "provider=\"java:RPC\">\n"
-            + "   <parameter name=\"className\" value=\"test.TestJAXRPCHandlerInfoChain\"/>"
+            + "   <parameter name=\"className\" value=\"test.wsdd.TestJAXRPCHandlerInfoChain\"/>"
             + "   <handlerInfoChain>"
-            + "     <handlerInfo classname=\"test.TestJAXRPCHandlerInfoChain\">"
+            + "     <handlerInfo classname=\"test.wsdd.TestJAXRPCHandlerInfoChain\">"
             + "       <parameter name=\"param1\" value=\"hossa\"/>"
             + "     </handlerInfo>"
             + "     <role soapActorName=\"" + ROLE_ONE + "\"/>"

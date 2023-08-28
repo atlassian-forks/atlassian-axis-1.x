@@ -54,6 +54,11 @@ public class TestSimpleSession extends TestCase implements ServiceLifecycle {
         super(name);
     }
 
+    protected void tearDown() {
+        initCalls = 0;
+        destroyCalls = 0;
+    }
+
     public void testSessionAPI() {
         SimpleSession session = new SimpleSession();
         Object val = new Float(5.6666);
@@ -89,8 +94,8 @@ public class TestSimpleSession extends TestCase implements ServiceLifecycle {
                                               sessionHandler);
 
         service.setName("sessionTestService");
-        service.setOption("scope", "test");
-        service.setOption("className", "test.TestSimpleSession");
+        service.setOption("scope", "Session");
+        service.setOption("className", "test.session.TestSimpleSession");
         service.setOption("allowedMethods", "counter");
 
         EngineConfiguration defaultConfig =

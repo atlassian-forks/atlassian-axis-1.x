@@ -21,7 +21,7 @@ public class TestInheritance extends TestCase {
         SimpleProvider config = new SimpleProvider();
 
         SOAPService service = new SOAPService(new RPCProvider());
-        service.setOption("className", "test.Child");
+        service.setOption("className", "test.inheritance.Child");
         service.setOption("allowedMethods", "*");
         config.deployService("inheritanceTest", service);
 

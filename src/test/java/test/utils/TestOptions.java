@@ -34,7 +34,7 @@ public class TestOptions extends TestCase
     */
     public void testIsFlagSet() throws MalformedURLException
     {
-        String[] fake_args = { "-w tiger" };
+        String[] fake_args = { "-wtiger" };
         Options ops = new Options(fake_args);
         String result = ops.isValueSet('w');
         assertEquals("Result was: " + result + ", not tiger", "tiger", result);

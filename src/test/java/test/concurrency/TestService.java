@@ -40,6 +40,14 @@ public class TestService {
         }
     }
 
+    public static void destroyService() throws Exception {
+        synchronized (lock) {
+            if (singleton != null) {
+                singleton = null;
+            }
+        }
+    }
+
     public String hello() {
         return MESSAGE;
     }

@@ -68,10 +68,5 @@ public class TestFaultsSample extends TestCase {
             throw new Exception("Fault returned from test: "+e);
         }
     }
-
-    public static void main(String[] args) throws Exception {
-        TestFaultsSample tester = new TestFaultsSample("test");
-        tester.testFaultsService();
-    }
 }
 

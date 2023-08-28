@@ -69,7 +69,7 @@ public class TestSerializedRPC extends XMLTestCase {
 
         // Register the reverseString service
         SOAPService reverse = new SOAPService(new RPCProvider());
-        reverse.setOption("className", "test.Service");
+        reverse.setOption("className", "test.RPCDispatch.Service");
         reverse.setOption("allowedMethods", "*");
 
         JavaServiceDesc desc = new JavaServiceDesc();

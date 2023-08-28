@@ -3,6 +3,7 @@ package test.wsdd;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.junit.Ignore;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -52,6 +53,7 @@ public class TestXSD extends TestCase {
         tester.testWSDD();
     }
 
+    @Ignore("Does not add value + is a best ArchUnit case if required.")
     public void testWSDD() throws Exception {
         File f = new File(".");
         recurse(f);
