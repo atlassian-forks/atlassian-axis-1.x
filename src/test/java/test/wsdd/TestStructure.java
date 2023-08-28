@@ -28,8 +28,6 @@ public class TestStructure extends TestCase {
     }
 
     protected void setUp() {
-        //InputStream is = getClass().getResourceAsStream(INPUT_FILE);
-        //FileProvider provider = new FileProvider(is);
         FileProvider provider = new FileProvider(INPUT_FILE);
         server = new AxisServer(provider);
     }
