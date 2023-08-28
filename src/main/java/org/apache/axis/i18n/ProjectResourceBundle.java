@@ -59,7 +59,7 @@ public class ProjectResourceBundle extends ResourceBundle {
     // The element is a ResourceBundle object
     private static final Hashtable bundleCache = new Hashtable();
 
-    private static final Locale defaultLocale = Locale.getDefault().getLanguage().equals("ja") ?  Locale.getDefault() : Locale.ROOT;
+    private static final Locale defaultLocale = Locale.getDefault();
 
     private final ResourceBundle resourceBundle;
     private final String resourceName;
