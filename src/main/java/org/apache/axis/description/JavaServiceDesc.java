@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -476,7 +477,7 @@ public class JavaServiceDesc implements ServiceDesc {
      * overloads)
      * @return null for no match
      */
-    public synchronized OperationDesc [] getOperationsByQName(QName qname)
+    public OperationDesc [] getOperationsByQName(QName qname)
     {
         // Look in our mapping of QNames -> operations.
 
@@ -520,23 +521,23 @@ public class JavaServiceDesc implements ServiceDesc {
         getSyncedOperationsForName(implClass,
                                    ((OperationDesc)overloads.get(0)).getName());
 
+        // Convert to operationDescarray before sorting to avoid concurrency issues
+        OperationDesc[] operationDescarray = (OperationDesc[]) overloads.toArray(
+                new OperationDesc[overloads.size()]);
+
         // Sort the overloads by number of arguments - prevents us calling methods
         // with more parameters than supplied in the request (with missing parameters
         // defaulted to null) when a perfectly good method exists with exactly the
         // supplied parameters.
-        Collections.sort(overloads,
-            new Comparator() {
-                public int compare(Object o1, Object o2)
-                {
-                    Method meth1 = ((OperationDesc)o1).getMethod();
-                    Method meth2 = ((OperationDesc)o2).getMethod();
+        Arrays.sort(operationDescarray,
+                (o1, o2) -> {
+                    Method meth1 = o1.getMethod();
+                    Method meth2 = o2.getMethod();
                     return (meth1.getParameterTypes().length -
-                                         meth2.getParameterTypes().length);
-                }
-            });
+                            meth2.getParameterTypes().length);
+                });
 
-        OperationDesc [] array = new OperationDesc [overloads.size()];
-        return (OperationDesc[])overloads.toArray(array);
+        return operationDescarray;
     }
 
     private synchronized void initQNameMap() {
