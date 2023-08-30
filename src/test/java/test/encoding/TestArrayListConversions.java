@@ -58,7 +58,7 @@ public class TestArrayListConversions extends TestCase {
             SOAPService service = new SOAPService(new RPCProvider());
             service.setEngine(server);
 
-            service.setOption("className", "test.TestArrayListConversions");
+            service.setOption("className", "test.encoding.TestArrayListConversions");
             service.setOption("allowedMethods", "*");
 
             ServiceDesc desc = service.getInitializedServiceDesc(null);

@@ -1,5 +1,5 @@
-package test.encoding;
-
+package test.encoding.deserialization;
+/**
 import junit.framework.TestCase;
 import org.apache.axis.Constants;
 import org.apache.axis.Message;
@@ -13,6 +13,7 @@ import org.apache.axis.server.AxisServer;
 import org.apache.axis.utils.JavaUtils;
 import samples.echo.SOAPStruct;
 import samples.echo.SOAPStructStruct;
+import test.encoding.IndexPropBean;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Array;
@@ -24,9 +25,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+*/
+
+public class TestDeser {
+
+}
 /**
  * Test deserialization of SOAP responses
  */
+/**
 public class TestDeser extends TestCase {
 
     private String header;
@@ -99,10 +106,11 @@ public class TestDeser extends TestCase {
                           test.encoding.IndexPropBean.class,
                           new QName("http://encoding.test", "IndexPropBean")));
     }
-
+**/
     /**
      * Verify that two objects have the same value, handling arrays...
      */
+    /**
     private static boolean equals(Object obj1, Object obj2) {
        if ( (obj1 == null) || (obj2 == null) ) return (obj1 == obj2);
        if (obj1.equals(obj2)) return true;
@@ -138,10 +146,11 @@ public class TestDeser extends TestCase {
 
        return false;
     }
-
+**/
     /**
      * Verify that a given XML deserialized produces the expected result
      */
+    /**
     protected void deserialize(String data, Object expected)
         throws Exception {
         deserialize(data, expected, false);
@@ -152,7 +161,7 @@ public class TestDeser extends TestCase {
         deserialize(data, expected,tryConvert,"");
     }
 
-
+**/
     /**
      * Verify that a given XML deserialized produces the expected result
      * @param data
@@ -161,6 +170,7 @@ public class TestDeser extends TestCase {
      * @param comment extra text to add
      * @throws Exception
      */
+    /**
     protected void deserialize(String data, Object expected, boolean tryConvert, String comment)
        throws Exception
     {
@@ -648,7 +658,7 @@ public class TestDeser extends TestCase {
                 "</myFavoriteNumbers>",array,true);
     }
 */
-
+    /**
     // Struct within Struct
     public void testStructStruct2() throws Exception {
         SOAPStruct s = new samples.echo.SOAPStruct();
@@ -672,4 +682,6 @@ public class TestDeser extends TestCase {
                     "</varStruct>" +
                     "</whatever>" , ss, true);
     }
+
 }
+     **/

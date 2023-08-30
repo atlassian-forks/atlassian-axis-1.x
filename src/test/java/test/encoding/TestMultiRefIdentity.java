@@ -35,24 +35,6 @@ public class TestMultiRefIdentity extends TestCase {
         return new TestSuite(test.encoding.TestMultiRefIdentity.class);
     }
 
-    public static void main(String[] argv) {
-
-        boolean swing = false;
-        if (argv.length > 0) {
-            if ("-swing".equals(argv[0])) {
-                swing = true;
-            }
-        }
-
-        if (swing) {
-            junit.swingui.TestRunner.main(new String[] {"test.TestMultiRefIdentity"});
-        } else {
-            System.out.println("use '-swing' for the Swing version.");
-            junit.textui.TestRunner.main(new String[] {"test.TestMultiRefIdentity"});
-        }
-    }
-
-
     public TestMultiRefIdentity(String name) {
         super(name);
     }

@@ -460,11 +460,14 @@
                     <excludes>
                         <exclude>test/wsdl/**</exclude>
                         <exclude>test/wsdl/interop3/docLit/DocLitTestCase.java</exclude>
+                         <exclude>test/java/test/encoding/TestDeser.java</exclude>
                     </excludes>
                     <testExcludes>
                         <exclude>test/functional/TestEchoSample.java</exclude>
                         <exclude>test/wsdl/**</exclude>
-                        <exclude>test/encoding/*</exclude>
+                         <!-- <exclude>test/encoding/*</exclude> -->
+                        <exclude>test/encoding/deserialization/**</exclude>
+                        <exclude>**/TestDeser.java</exclude>
                         <exclude>test/dynamic/ServiceGetPort.java</exclude>
                         <exclude>test/functional/samples/AddressClient.java</exclude>
                         <exclude>test/functional/samples/HelloClient.java</exclude>

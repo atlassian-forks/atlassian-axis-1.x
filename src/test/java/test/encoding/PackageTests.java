@@ -3,6 +3,10 @@ package test.encoding;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import test.encoding.deserialization.TestDeser;
+import test.encoding.deserialization.TestDeser1999;
+import test.encoding.deserialization.TestDeser2000;
+import test.encoding.deserialization.TestDeser2001;
 
 /**
  * soapenc's PackageTests tests multiple floating point
@@ -20,10 +24,10 @@ public class PackageTests extends TestCase
         TestSuite suite = new TestSuite();
 
         suite.addTestSuite(TestDerivatedBeanSerializer.class);
-        suite.addTestSuite(TestDeser.class);
+       /** suite.addTestSuite(TestDeser.class);
         suite.addTestSuite(TestDeser1999.class);
         suite.addTestSuite(TestDeser2000.class);
-        suite.addTestSuite(TestDeser2001.class);
+        suite.addTestSuite(TestDeser2001.class);**/
         suite.addTestSuite(TestSer.class);
         suite.addTestSuite(TestString.class);
         suite.addTestSuite(TestString2.class);

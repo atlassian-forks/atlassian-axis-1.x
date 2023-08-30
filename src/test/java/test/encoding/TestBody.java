@@ -28,17 +28,24 @@ public class TestBody extends TestCase {
 
     private String request = "<?xml version=\"1.0\"?>\n" + "<soap:Envelope " + "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" " + "xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">" + "<soap:Body>\n" + "<method xmlns=\"" + namespace + "\">\n" + "<arg>5</arg>" + "</method>\n" + "</soap:Body>\n" + "</soap:Envelope>\n";
 
+    @Override
+    protected void setUp() throws Exception {
+    }
     public void testBodyNamespace() throws Exception {
         SimpleProvider provider = new SimpleProvider();
 
         // register the service with the engine
         SOAPService target = new SOAPService(new RPCProvider());
-        target.setOption(JavaProvider.OPTION_CLASSNAME, "test.TestBody");
+        //target.setOption(JavaProvider.OPTION_CLASSNAME, "test.encoding.TestBody");
+        target.setOption(JavaProvider.OPTION_CLASSNAME, "test.encoding.TestBody");
         provider.deployService(new QName(null,namespace), target);
 
         // setup
         AxisEngine engine = new AxisServer(provider);
         engine.init();
+
+       // provider.configureEngine(engine);
+        //provider.deployService(new QName(null,namespace), target);
 
         // create a message in context
         MessageContext msgContext = new MessageContext(engine);
@@ -54,10 +61,5 @@ public class TestBody extends TestCase {
 
         // verify the service is set
         assertEquals("The target is not the same as the message context service handler", target, msgContext.getService());
-    }
-
-    public static void main(String[] args) throws Exception {
-        TestBody tester = new TestBody("test");
-        tester.testBodyNamespace();
     }
 }

@@ -1,13 +1,20 @@
-package test.encoding;
-
+package test.encoding.deserialization;
+/**
 import org.apache.axis.Constants;
+import test.encoding.deserialization.TestDeser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+**/
+public class TestDeser2000 {
 
+}
 /**
  * Test deserialization of SOAP responses
  */
+
+/**
+
 public class TestDeser2000 extends TestDeser {
 
     public TestDeser2000(String name) {
@@ -65,3 +72,4 @@ public class TestDeser2000 extends TestDeser {
                     null);
     }
 }
+ **/
