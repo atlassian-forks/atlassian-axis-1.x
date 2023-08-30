@@ -44,6 +44,7 @@ public class FunctionalTests extends AxisTestBase {
         if(isPropertyTrue("test.functional.httpunit.adminservlet")) {
             suite.addTestSuite(AdminTest.class);
         }
+        suite.addTestSuite(XssTest.class);
         return suite;
     }
 }

@@ -22,6 +22,7 @@ import com.meterware.httpunit.*;
 import java.io.*;
 import java.net.MalformedURLException;
 
+import org.apache.axis.war.HttpUtils;
 import org.xml.sax.SAXException;
 
 /**
