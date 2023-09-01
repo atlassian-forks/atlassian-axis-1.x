@@ -3,10 +3,6 @@ package test.encoding;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import test.encoding.deserialization.TestDeser;
-import test.encoding.deserialization.TestDeser1999;
-import test.encoding.deserialization.TestDeser2000;
-import test.encoding.deserialization.TestDeser2001;
 
 /**
  * soapenc's PackageTests tests multiple floating point

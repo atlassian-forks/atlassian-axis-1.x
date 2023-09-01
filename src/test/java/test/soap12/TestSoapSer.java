@@ -28,13 +28,13 @@ import java.io.Writer;
 
 /** Little serialization test with a struct.
  */
-public class TestSer extends TestCase {
+public class TestSoapSer extends TestCase {
     Log log =
-            LogFactory.getLog(TestSer.class.getName());
+            LogFactory.getLog(TestSoapSer.class.getName());
 
     public static final String myNS = "urn:myNS";
 
-    public TestSer(String name) {
+    public TestSoapSer(String name) {
         super(name);
     }
 
