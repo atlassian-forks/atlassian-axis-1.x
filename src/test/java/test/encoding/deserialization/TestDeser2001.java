@@ -1,5 +1,5 @@
 package test.encoding.deserialization;
-/**
+
 import org.apache.axis.Constants;
 import org.apache.axis.types.Day;
 import org.apache.axis.types.Duration;
@@ -23,21 +23,16 @@ import org.apache.axis.types.UnsignedLong;
 import org.apache.axis.types.UnsignedShort;
 import org.apache.axis.types.Year;
 import org.apache.axis.types.YearMonth;
-import test.encoding.deserialization.TestDeser;
 
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
-**/
-public class TestDeser2001 {
 
-}
 /**
  * Test deserialization of SOAP responses
  */
-/**
 public class TestDeser2001 extends TestDeser {
 
     public TestDeser2001(String name) {
@@ -48,7 +43,6 @@ public class TestDeser2001 extends TestDeser {
     /**
      * Test deserialization of Date responses
      */
-/**
     public void testMinDate() throws Exception {
         Calendar date = Calendar.getInstance();
         date.set(1999, 04, 31, 0, 0, 0);
@@ -58,11 +52,10 @@ public class TestDeser2001 extends TestDeser {
                      "</result>",
                      date.getTime());
     }
-**/
+
     /**
      * Test deserialization of dateTime (Calendar) responses
      */
-    /**
     public void testMinDateTime() throws Exception {
         Calendar date = Calendar.getInstance();
         date.set(1999,04,31, 12, 01, 30);
@@ -104,11 +97,10 @@ public class TestDeser2001 extends TestDeser {
                      "</result>",
                      date);
     }
- **/
+
     /**
      * Test the xsd:Time deserialization
      */
-    /**
     public void testTimeZ() throws Exception {
         Calendar date = Calendar.getInstance();
         date.set(Calendar.HOUR_OF_DAY, 12);
@@ -134,8 +126,6 @@ public class TestDeser2001 extends TestDeser {
     /**
      * this isnt a test, it is here to list timezones
      */
-
-    /**
     public void NotestListTimeZones() throws Exception {
         String ids[] = TimeZone.getAvailableIDs();
         for (int i = 9; i < ids.length; i++) {
@@ -147,7 +137,6 @@ public class TestDeser2001 extends TestDeser {
      * test local time costs
      * @throws Exception
      */
-    /**
     public void NotestTimeLocal() throws Exception {
         deserializeCalendar(TimeZone.getDefault());
     }
@@ -156,7 +145,6 @@ public class TestDeser2001 extends TestDeser {
 //     * test that this works in Wintertime
 //     * @throws Exception
 //     */
-    /**
     public void testTimeUKWinter() throws Exception {
         deserializeCalendar(TimeZone.getTimeZone("GMT+0:00"));
     }
@@ -173,7 +161,6 @@ public class TestDeser2001 extends TestDeser {
      * this test is here to track down odd behaviour on one system related to these TZ tests
      *
      */
-    /**
     public void testTimeZoneLogicWorks() {
 
         TimeZone tz=TimeZone.getTimeZone("GMT");
@@ -226,7 +213,6 @@ public class TestDeser2001 extends TestDeser {
      * @param cal
      * @return an offset string such as +3:00 or -2:30. GMT is returned as -00:00
      */
-    /**
     private String calcGMTOffset(Calendar cal) {
         int msecOffset = cal.get(Calendar.ZONE_OFFSET) +
                 cal.get(Calendar.DST_OFFSET);
@@ -429,6 +415,4 @@ public class TestDeser2001 extends TestDeser {
         TestDeser2001 deser=new TestDeser2001("");
         deser.testTimeUKWinter();
     }
-
 }
-     **/

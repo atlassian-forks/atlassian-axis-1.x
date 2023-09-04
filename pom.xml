@@ -262,6 +262,9 @@
                                 %regex[test.httpunit.*]
                             </exclude>
                             <exclude>
+                                %regex[test.httpunit.deserialization.*]
+                            </exclude>
+                            <exclude>
                                 **/TestJAXRPCDII.java
                             </exclude>
                             <exclude>

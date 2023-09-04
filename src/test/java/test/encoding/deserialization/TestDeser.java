@@ -1,5 +1,5 @@
 package test.encoding.deserialization;
-/**
+
 import junit.framework.TestCase;
 import org.apache.axis.Constants;
 import org.apache.axis.Message;
@@ -25,15 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-*/
 
-public class TestDeser {
 
-}
 /**
  * Test deserialization of SOAP responses
  */
-/**
+
 public class TestDeser extends TestCase {
 
     private String header;
@@ -106,11 +103,10 @@ public class TestDeser extends TestCase {
                           test.encoding.IndexPropBean.class,
                           new QName("http://encoding.test", "IndexPropBean")));
     }
-**/
+
     /**
      * Verify that two objects have the same value, handling arrays...
      */
-    /**
     private static boolean equals(Object obj1, Object obj2) {
        if ( (obj1 == null) || (obj2 == null) ) return (obj1 == obj2);
        if (obj1.equals(obj2)) return true;
@@ -146,11 +142,10 @@ public class TestDeser extends TestCase {
 
        return false;
     }
-**/
+
     /**
      * Verify that a given XML deserialized produces the expected result
      */
-    /**
     protected void deserialize(String data, Object expected)
         throws Exception {
         deserialize(data, expected, false);
@@ -161,7 +156,6 @@ public class TestDeser extends TestCase {
         deserialize(data, expected,tryConvert,"");
     }
 
-**/
     /**
      * Verify that a given XML deserialized produces the expected result
      * @param data
@@ -170,7 +164,6 @@ public class TestDeser extends TestCase {
      * @param comment extra text to add
      * @throws Exception
      */
-    /**
     protected void deserialize(String data, Object expected, boolean tryConvert, String comment)
        throws Exception
     {
@@ -641,7 +634,6 @@ public class TestDeser extends TestCase {
                     "</whatever>" , ss, true);
     }
 
-/*
     public void testBug18390() throws Exception {
         String[] s = new String[] {"GW671055X"};
         deserialize("<molNames soapenc:arrayType=\"xsd:string[1]\"> " +
@@ -657,8 +649,7 @@ public class TestDeser extends TestCase {
                 "   <number>4</number> \n" +
                 "</myFavoriteNumbers>",array,true);
     }
-*/
-    /**
+
     // Struct within Struct
     public void testStructStruct2() throws Exception {
         SOAPStruct s = new samples.echo.SOAPStruct();
@@ -684,4 +675,4 @@ public class TestDeser extends TestCase {
     }
 
 }
-     **/
+
