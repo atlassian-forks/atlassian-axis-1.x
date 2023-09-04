@@ -36,16 +36,12 @@ public class TestBody extends TestCase {
 
         // register the service with the engine
         SOAPService target = new SOAPService(new RPCProvider());
-        //target.setOption(JavaProvider.OPTION_CLASSNAME, "test.encoding.TestBody");
         target.setOption(JavaProvider.OPTION_CLASSNAME, "test.encoding.TestBody");
         provider.deployService(new QName(null,namespace), target);
 
         // setup
         AxisEngine engine = new AxisServer(provider);
         engine.init();
-
-       // provider.configureEngine(engine);
-        //provider.deployService(new QName(null,namespace), target);
 
         // create a message in context
         MessageContext msgContext = new MessageContext(engine);
