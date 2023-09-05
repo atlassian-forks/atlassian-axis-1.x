@@ -26,11 +26,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-
 /**
  * Test deserialization of SOAP responses
  */
-
 public class TestDeser extends TestCase {
 
     private String header;
