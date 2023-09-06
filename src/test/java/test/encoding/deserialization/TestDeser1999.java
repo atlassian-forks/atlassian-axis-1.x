@@ -1,7 +1,6 @@
-package test.encoding;
+package test.encoding.deserialization;
 
 import org.apache.axis.Constants;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 

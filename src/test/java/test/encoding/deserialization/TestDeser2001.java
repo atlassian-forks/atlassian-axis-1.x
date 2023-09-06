@@ -1,4 +1,4 @@
-package test.encoding;
+package test.encoding.deserialization;
 
 import org.apache.axis.Constants;
 import org.apache.axis.types.Day;
@@ -126,7 +126,6 @@ public class TestDeser2001 extends TestDeser {
     /**
      * this isnt a test, it is here to list timezones
      */
-
     public void NotestListTimeZones() throws Exception {
         String ids[] = TimeZone.getAvailableIDs();
         for (int i = 9; i < ids.length; i++) {

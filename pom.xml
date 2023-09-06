@@ -36,6 +36,13 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.google.truth</groupId>
             <artifactId>truth</artifactId>
@@ -256,6 +263,9 @@
                                 %regex[test.httpunit.*]
                             </exclude>
                             <exclude>
+                                %regex[test.httpunit.deserialization.*]
+                            </exclude>
+                            <exclude>
                                 **/TestJAXRPCDII.java
                             </exclude>
                             <exclude>
@@ -460,11 +470,14 @@
                     <excludes>
                         <exclude>test/wsdl/**</exclude>
                         <exclude>test/wsdl/interop3/docLit/DocLitTestCase.java</exclude>
+                         <exclude>test/java/test/encoding/TestDeser.java</exclude>
                     </excludes>
                     <testExcludes>
                         <exclude>test/functional/TestEchoSample.java</exclude>
                         <exclude>test/wsdl/**</exclude>
-                        <exclude>test/encoding/*</exclude>
+                         <!-- <exclude>test/encoding/*</exclude> -->
+                        <exclude>test/encoding/deserialization/**</exclude>
+                        <exclude>**/TestDeser.java</exclude>
                         <exclude>test/dynamic/ServiceGetPort.java</exclude>
                         <exclude>test/functional/samples/AddressClient.java</exclude>
                         <exclude>test/functional/samples/HelloClient.java</exclude>

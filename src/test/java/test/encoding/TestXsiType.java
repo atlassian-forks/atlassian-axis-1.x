@@ -76,7 +76,7 @@ public class TestXsiType extends TestCase {
         server.setOption(AxisEngine.PROP_SEND_XSI, Boolean.FALSE);
 
         SOAPService service = new SOAPService(new RPCProvider());
-        service.setOption("className", "test.TestXsiType");
+        service.setOption("className", "test.encoding.TestXsiType");
         service.setOption("allowedMethods", "*");
         provider.deployService("TestService", service);
 
@@ -105,12 +105,5 @@ public class TestXsiType extends TestCase {
     public double serviceMethod()
     {
         return 3.14159;
-    }
-
-    public static void main(String [] args) throws Exception
-    {
-        TestXsiType tester = new TestXsiType("test");
-        tester.testNoXsiTypes();
-        tester.testTypelessDeserialization();
     }
 }

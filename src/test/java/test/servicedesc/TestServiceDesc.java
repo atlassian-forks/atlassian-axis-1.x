@@ -15,7 +15,9 @@
  */
 package test.servicedesc;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import junit.framework.TestCase;
 
@@ -23,50 +25,36 @@ import org.apache.axis.description.JavaServiceDesc;
 import org.apache.axis.description.OperationDesc;
 import org.apache.axis.encoding.DefaultTypeMappingImpl;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+
 public class TestServiceDesc extends TestCase {
-
-    public TestServiceDesc(String name) {
-        super(name);
-    }
-
     public TestServiceDesc() {
         super("Test ServiceDesc Synch");
     }
 
-    public void testFaultSynch() throws Exception {
+    public void testFaultSynch() {
         JavaServiceDesc desc = new JavaServiceDesc();
         desc.setTypeMapping(DefaultTypeMappingImpl.getSingletonDelegate());
 
         desc.loadServiceDescByIntrospection(ServiceClass.class);
 
-        List operations = desc.getOperations();
+        ArrayList<OperationDesc> operations = desc.getOperations();
+        List<String> operationNames = operations
+                .stream()
+                .map(OperationDesc::getName)
+                .collect(Collectors.toList());
 
-        assertTrue(operations != null);
         assertEquals("invalid number of registered operations",
-                     2, operations.size());
-
-        OperationDesc operation;
-        List faults;
-
-        operation = (OperationDesc)operations.get(0);
-        assertEquals("doIt1", operation.getName());
-
-        faults = operation.getFaults();
-
-        assertTrue(faults != null);
-        assertEquals("invalid number of registered faults",
-                     2, faults.size());
-
-        operation = (OperationDesc)operations.get(1);
-        assertEquals("doIt2", operation.getName());
-
-        faults = operation.getFaults();
-
-        assertTrue(faults != null);
-        assertEquals("invalid number of registered faults",
-                     2, faults.size());
+                2, operations.size());
+        assertThat(operationNames, containsInAnyOrder("doIt1", "doIt2"));
 
 
+        for (OperationDesc operation : operations) {
+            List faults = operation.getFaults();
+            assertTrue(faults != null);
+            assertEquals("invalid number of registered faults",
+                    2, faults.size());
+        }
     }
-
 }

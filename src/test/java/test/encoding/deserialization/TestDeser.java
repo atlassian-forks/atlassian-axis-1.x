@@ -1,4 +1,4 @@
-package test.encoding;
+package test.encoding.deserialization;
 
 import junit.framework.TestCase;
 import org.apache.axis.Constants;
@@ -13,6 +13,7 @@ import org.apache.axis.server.AxisServer;
 import org.apache.axis.utils.JavaUtils;
 import samples.echo.SOAPStruct;
 import samples.echo.SOAPStructStruct;
+import test.encoding.IndexPropBean;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Array;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
 /**
  * Test deserialization of SOAP responses
  */
@@ -151,7 +153,6 @@ public class TestDeser extends TestCase {
             throws Exception {
         deserialize(data, expected,tryConvert,"");
     }
-
 
     /**
      * Verify that a given XML deserialized produces the expected result
@@ -631,7 +632,6 @@ public class TestDeser extends TestCase {
                     "</whatever>" , ss, true);
     }
 
-/*
     public void testBug18390() throws Exception {
         String[] s = new String[] {"GW671055X"};
         deserialize("<molNames soapenc:arrayType=\"xsd:string[1]\"> " +
@@ -647,7 +647,6 @@ public class TestDeser extends TestCase {
                 "   <number>4</number> \n" +
                 "</myFavoriteNumbers>",array,true);
     }
-*/
 
     // Struct within Struct
     public void testStructStruct2() throws Exception {
@@ -672,4 +671,6 @@ public class TestDeser extends TestCase {
                     "</varStruct>" +
                     "</whatever>" , ss, true);
     }
+
 }
+

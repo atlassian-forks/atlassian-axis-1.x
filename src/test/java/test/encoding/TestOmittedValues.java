@@ -77,7 +77,7 @@ public class TestOmittedValues extends TestCase {
         AxisServer server = new AxisServer(config);
 
         SOAPService service = new SOAPService(new RPCProvider());
-        service.setOption("className", "test.TestOmittedValues");
+        service.setOption("className", "test.encoding.TestOmittedValues");
         service.setOption("allowedMethods", "*");
 
         ServiceDesc desc = service.getServiceDescription();
