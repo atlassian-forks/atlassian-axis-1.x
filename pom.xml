@@ -13,11 +13,26 @@
     <groupId>axis</groupId>
     <artifactId>axis</artifactId>
     <version>1.2.1-atlassian-1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <javaVersion>1.4</javaVersion>
+        <baseUrl>http://axis.apache.org/axis/java</baseUrl>
+        <baseSiteUrl>scm:svn:https://svn.apache.org/repos/asf/axis/site/axis/java</baseSiteUrl>
     </properties>
+    <distributionManagement>
+        <site>
+            <id>axis</id>
+            <url>${baseSiteUrl}/</url>
+        </site>
+    </distributionManagement>
+
+    <modules>
+        <module>axis-war</module>
+        <module>soapmonitor-applet</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -159,6 +174,18 @@
         </dependency>
 
         <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-jsp</artifactId>
+            <version>8.1.14.v20131031</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>8.1.14.v20131031</version>
+        </dependency>
+
+        <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1-atlassian-2</version>
@@ -209,6 +236,7 @@
             <artifactId>httpunit</artifactId>
             <version>1.7</version>
         </dependency>
+
     </dependencies>
 
     <prerequisites>
@@ -348,46 +376,6 @@
                     </executions>
                 </plugin>
                 <plugin>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>7.5.4.v20111024</version>
-                    <configuration>
-                        <scanIntervalSeconds>10</scanIntervalSeconds>
-                        <stopKey>foo</stopKey>
-                        <stopPort>${jetty.stopPort}</stopPort>
-                        <connectors>
-                            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                                <port>${test.httpunit.ServicePort}</port>
-                                <maxIdleTime>60000</maxIdleTime>
-                            </connector>
-                        </connectors>
-                        <webAppConfig>
-                            <contextPath>/axis</contextPath>
-                            <descriptor>${project.build.directory}/web.xml</descriptor>
-                        </webAppConfig>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>start-jetty</id>
-                            <phase>pre-integration-test</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <scanIntervalSeconds>0</scanIntervalSeconds>
-                                <daemon>true</daemon>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>stop-jetty</id>
-                            <phase>post-integration-test</phase>
-                            <goals>
-                                <goal>stop</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.7</version>
                 </plugin>
@@ -412,8 +400,53 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>7.5.4.v20111024</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.1.1</version>
+                    <configuration>
+                        <packagingExcludes>WEB-INF/lib/soapmonitor-applet-*.jar</packagingExcludes>
+                        <packagingExcludes>*.jws</packagingExcludes>
+                        <overlays>
+                            <overlay>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>soapmonitor-applet</artifactId>
+                                <type>jar</type>
+                            </overlay>
+                        </overlays>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copy-web-xml</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <!-- Since we run a Jetty instance in the same JVM as Maven (Note that
+                                     this is not optimal, but the run-forked goal doesn't work in this
+                                     case), we can't use system properties. Therefore we supply the
+                                     configuration using context parameters in web.xml, but this requires
+                                     filtering. -->
+                                <outputDirectory>${project.build.directory}</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/test</directory>
+                                        <includes>
+                                            <include>web.xml</include>
+                                        </includes>
+                                        <filtering>true</filtering>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.gmaven</groupId>
@@ -440,7 +473,8 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
+
+         <plugins>
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>1.1.1</version>
@@ -487,6 +521,147 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            %regex[test.functional.*]
+                        </exclude>
+                        <exclude>
+                            %regex[test.httpunit.*]
+                        </exclude>
+                        <exclude>
+                            **/TestJAXRPCDII.java
+                        </exclude>
+                        <exclude>
+                            **/TestXSD.java
+                        </exclude>
+                        <exclude>
+                            **/TestSrcContent.java
+                        </exclude>
+                    </excludes>
+                    <!-- Make test execution deterministic -->
+                    <runOrder>alphabetical</runOrder>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <systemPropertyVariables>
+                        <!-- Axis doesn't contain META-INF/services/* files for SAAJ. Instead, the SAAJ API
+                             library provided by Axis uses the Axis SAAJ implementation by default. That's an issue on Java 1.6
+                             because the SAAJ API provided by the JRE will be used. Therefore we need to set this system property
+                             to execute the SAAJ unit tests on Java 1.6. -->
+                        <javax.xml.soap.MessageFactory>org.apache.axis.soap.MessageFactoryImpl</javax.xml.soap.MessageFactory>
+                        <javax.xml.soap.SOAPFactory>org.apache.axis.soap.SOAPFactoryImpl</javax.xml.soap.SOAPFactory>
+                        <javax.xml.soap.SOAPConnectionFactory>org.apache.axis.soap.SOAPConnectionFactoryImpl</javax.xml.soap.SOAPConnectionFactory>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>reserve-network-port</id>
+                        <goals>
+                            <goal>reserve-network-port</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <portNames>
+                                <portName>test.httpunit.ServicePort</portName>
+                                <portName>jetty.stopPort</portName>
+                            </portNames>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>7.5.4.v20111024</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <stopKey>foo</stopKey>
+                    <stopPort>${jetty.stopPort}</stopPort>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>${test.httpunit.ServicePort}</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                    <webAppConfig>
+                        <contextPath>/axis</contextPath>
+                        <descriptor>${project.build.directory}/web.xml</descriptor>
+                    </webAppConfig>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <scanIntervalSeconds>0</scanIntervalSeconds>
+                            <daemon>true</daemon>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <includes>
+                        <include>
+                            %regex[test.httpunit.*]
+                        </include>
+                    </includes>
+                    <!-- See the corresponding surefire configuration for more information about this. -->
+                    <runOrder>alphabetical</runOrder>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <systemPropertyVariables>
+                        <javax.xml.soap.MessageFactory>org.apache.axis.soap.MessageFactoryImpl</javax.xml.soap.MessageFactory>
+                        <javax.xml.soap.SOAPFactory>org.apache.axis.soap.SOAPFactoryImpl</javax.xml.soap.SOAPFactory>
+                        <javax.xml.soap.SOAPConnectionFactory>org.apache.axis.soap.SOAPConnectionFactoryImpl</javax.xml.soap.SOAPConnectionFactory>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>%regex[test.httpunit.*]</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <test.functional.webapp.url>http://localhost:${test.httpunit.ServicePort}/axis
+                                </test.functional.webapp.url>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.4</version>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.2</version>
@@ -529,4 +704,26 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+    <profile>
+        <id>apache-release</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <!-- Skip the execution configured in org.apache:apache. We use our own configuration. -->
+                            <id>attach-sources</id>
+                            <phase>none</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+    </profiles>
 </project>

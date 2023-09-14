@@ -132,9 +132,9 @@ Copyright:
    <!-- this is our test suite for httpunit -->
 
   <target name="run-test"
-      depends="compile" 
-      if="execute.httpunit"
-      description="test axis on a server" >
+          depends="compile"
+          if="execute.httpunit"
+          description="test axis on a server" >
     <junit printsummary="false"
            errorProperty="test.failed"
            failureProperty="test.failed"
@@ -142,8 +142,8 @@ Copyright:
            fork="true">
       <classpath 
         refid="test.classpath"/>
-      <sysproperty key="test.functional.webapp.url" 
-        value="${test.functional.webapp.url}"/>
+      <sysproperty key="test.functional.webapp.url"
+                   value="http://localhost:8088/axis"/>
       <formatter type="xml"/>
       <formatter type="brief" usefile="false"/>
       <test name="${testcase}" if="testcase"/>
