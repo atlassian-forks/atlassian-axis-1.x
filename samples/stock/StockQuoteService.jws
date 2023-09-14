@@ -30,35 +30,22 @@ import org.apache.axis.utils.XMLUtils ;
  * @author Doug Davis (dug@us.ibm.com)
  */
 public class StockQuoteService {
+
+  private HashMap map = new HashMap();
+
   public float getQuote (String symbol) throws Exception {
-    // get a real (delayed by 20min) stockquote from 
-    // http://services.xmethods.net/axis/. The IP addr 
-    // below came from the host that the above form posts to ..
 
     // NOTE THAT THIS RETURNS 66.25 WHERE THE ORDINARY EXAMPLE RETURNS 55.25!
     if ( symbol.equals("XXX") ) return( (float) 66.25 );
 
-    Document doc = null ;
-    
-    doc = XMLUtils.newDocument( "http://services.xmethods.net/axis/getQuote?s="
-                                +symbol );
+    Float price = (Float) map.get(symbol);
+        if(price != null){
+          return price.floatValue();
+        }
+        return 42.00;
+  }
 
-    Element  elem = doc.getDocumentElement();
-    NodeList list = elem.getElementsByTagName("stock_quote");
-
-    elem = (Element) list.item(0);
-    list = elem.getElementsByTagName( "price" );
-    elem = (Element) list.item( 0 );
-    String quoteStr = elem.getAttribute("value");
-    try {
-      return Float.valueOf(quoteStr).floatValue();
-    } catch (NumberFormatException e1) {
-      // maybe its an int?
-      try {
-        return Integer.valueOf(quoteStr).intValue() * 1.0F;
-      } catch (NumberFormatException e2) {
-        return -1.0F;
-      }
-    }
+  public void update(String symbol, float price) {
+      map.put(symbol, new Float(price));
   }
 }
