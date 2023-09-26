@@ -10,6 +10,11 @@
             </complexType>
             <element name="MyElement" nillable="true" type="tns1:MyComplexType"/>
             <complexType name="NamedValue">
+
+
+
+
+
                 <sequence>
                     <element name="name" nillable="true" type="xsd:string"/>
                     <element name="value" nillable="true" type="xsd:anyType"/>

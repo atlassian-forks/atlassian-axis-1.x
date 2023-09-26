@@ -10,9 +10,6 @@ import org.apache.axis.message.RPCParam;
 import org.apache.axis.message.SOAPEnvelope;
 import org.apache.axis.server.AxisServer;
 
-import test.wsdl.arrays2.data.*;
-import test.wsdl.arrays2.data.inner.*;
-
 import java.util.Vector;
 
 public class TestArrays2TestCase extends junit.framework.TestCase {

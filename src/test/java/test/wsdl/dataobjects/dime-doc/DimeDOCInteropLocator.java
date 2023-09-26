@@ -1,0 +1,142 @@
+/**
+ * DimeDOCInteropLocator.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
+package test.wsdl.dataobjects.dime-doc;
+
+public class DimeDOCInteropLocator extends org.apache.axis.client.Service implements test.wsdl.dataobjects.dime-doc.DimeDOCInterop {
+
+    public DimeDOCInteropLocator() {
+    }
+
+
+    public DimeDOCInteropLocator(org.apache.axis.EngineConfiguration config) {
+        super(config);
+    }
+
+    public DimeDOCInteropLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
+        super(wsdlLoc, sName);
+    }
+
+    // Use to get a proxy class for DimeDOCSoapPort
+    private java.lang.String DimeDOCSoapPort_address = "http://localhost:8080/axis/services/DimeDOCSoapPort";
+
+    public java.lang.String getDimeDOCSoapPortAddress() {
+        return DimeDOCSoapPort_address;
+    }
+
+    // The WSDD service name defaults to the port name.
+    private java.lang.String DimeDOCSoapPortWSDDServiceName = "DimeDOCSoapPort";
+
+    public java.lang.String getDimeDOCSoapPortWSDDServiceName() {
+        return DimeDOCSoapPortWSDDServiceName;
+    }
+
+    public void setDimeDOCSoapPortWSDDServiceName(java.lang.String name) {
+        DimeDOCSoapPortWSDDServiceName = name;
+    }
+
+    public test.wsdl.dataobjects.dime-doc.AttachmentsPortType getDimeDOCSoapPort() throws javax.xml.rpc.ServiceException {
+       java.net.URL endpoint;
+        try {
+            endpoint = new java.net.URL(DimeDOCSoapPort_address);
+        }
+        catch (java.net.MalformedURLException e) {
+            throw new javax.xml.rpc.ServiceException(e);
+        }
+        return getDimeDOCSoapPort(endpoint);
+    }
+
+    public test.wsdl.dataobjects.dime-doc.AttachmentsPortType getDimeDOCSoapPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+        try {
+            test.wsdl.dataobjects.dime-doc.AttachmentsBindingStub _stub = new test.wsdl.dataobjects.dime-doc.AttachmentsBindingStub(portAddress, this);
+            _stub.setPortName(getDimeDOCSoapPortWSDDServiceName());
+            return _stub;
+        }
+        catch (org.apache.axis.AxisFault e) {
+            return null;
+        }
+    }
+
+    public void setDimeDOCSoapPortEndpointAddress(java.lang.String address) {
+        DimeDOCSoapPort_address = address;
+    }
+
+    /**
+     * For the given interface, get the stub implementation.
+     * If this service has no port for the given interface,
+     * then ServiceException is thrown.
+     */
+    public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+        try {
+            if (test.wsdl.dataobjects.dime-doc.AttachmentsPortType.class.isAssignableFrom(serviceEndpointInterface)) {
+                test.wsdl.dataobjects.dime-doc.AttachmentsBindingStub _stub = new test.wsdl.dataobjects.dime-doc.AttachmentsBindingStub(new java.net.URL(DimeDOCSoapPort_address), this);
+                _stub.setPortName(getDimeDOCSoapPortWSDDServiceName());
+                return _stub;
+            }
+        }
+        catch (java.lang.Throwable t) {
+            throw new javax.xml.rpc.ServiceException(t);
+        }
+        throw new javax.xml.rpc.ServiceException("There is no stub implementation for the interface:  " + (serviceEndpointInterface == null ? "null" : serviceEndpointInterface.getName()));
+    }
+
+    /**
+     * For the given interface, get the stub implementation.
+     * If this service has no port for the given interface,
+     * then ServiceException is thrown.
+     */
+    public java.rmi.Remote getPort(javax.xml.namespace.QName portName, Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
+        if (portName == null) {
+            return getPort(serviceEndpointInterface);
+        }
+        java.lang.String inputPortName = portName.getLocalPart();
+        if ("DimeDOCSoapPort".equals(inputPortName)) {
+            return getDimeDOCSoapPort();
+        }
+        else  {
+            java.rmi.Remote _stub = getPort(serviceEndpointInterface);
+            ((org.apache.axis.client.Stub) _stub).setPortName(portName);
+            return _stub;
+        }
+    }
+
+    public javax.xml.namespace.QName getServiceName() {
+        return new javax.xml.namespace.QName("http://soapinterop.org/attachments/wsdl", "DimeDOCInterop");
+    }
+
+    private java.util.HashSet ports = null;
+
+    public java.util.Iterator getPorts() {
+        if (ports == null) {
+            ports = new java.util.HashSet();
+            ports.add(new javax.xml.namespace.QName("http://soapinterop.org/attachments/wsdl", "DimeDOCSoapPort"));
+        }
+        return ports.iterator();
+    }
+
+    /**
+    * Set the endpoint address for the specified port name.
+    */
+    public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
+        
+if ("DimeDOCSoapPort".equals(portName)) {
+            setDimeDOCSoapPortEndpointAddress(address);
+        }
+        else 
+{ // Unknown Port Name
+            throw new javax.xml.rpc.ServiceException(" Cannot set Endpoint Address for Unknown Port" + portName);
+        }
+    }
+
+    /**
+    * Set the endpoint address for the specified port name.
+    */
+    public void setEndpointAddress(javax.xml.namespace.QName portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
+        setEndpointAddress(portName.getLocalPart(), address);
+    }
+
+}

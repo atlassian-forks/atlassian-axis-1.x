@@ -15,11 +15,14 @@
  */
 package test.wsdl.choice;
 
-public class ChoiceServiceSoapImpl implements test.wsdl.choice.ChoiceServiceSoap {
+import test.wsdl.dataobjects.AttrGroupService.Record1;
+import test.wsdl.dataobjects.AttrGroupService.Record2;
 
-    public test.wsdl.choice.Record2 get(test.wsdl.choice.Record1 parameters) throws java.rmi.RemoteException {
+public class ChoiceServiceSoapImpl implements ChoiceServiceSoap {
+
+    public Record2 get(Record1 parameters) throws java.rmi.RemoteException {
         Record2 r = new Record2();
-        r.setElem(parameters.getElem());
+        r.setElem2(String.valueOf(parameters.getElem1()));
         return r;
     }
 

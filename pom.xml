@@ -527,6 +527,150 @@
                     <attach>true</attach>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>axistools-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>generate-wsdl-resources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${basedir}/src/test/java/test/wsdl/data</sourceDirectory>
+                            <outputDirectory>${basedir}/src/test/java</outputDirectory>
+                            <packageSpace>test.wsdl.dataobjects</packageSpace>
+                            <subPackageByFileName>true</subPackageByFileName>
+                            <wsdlFiles>
+                                <wsdlFile>adaptive.wsdl</wsdlFile>
+                                <!-- <wsdlFile>AddressBook.wsdl</wsdlFile> -->
+                                <wsdlFile>AddressInOut.wsdl</wsdlFile>
+                                <wsdlFile>any.wsdl</wsdlFile>
+                                <wsdlFile>ArrayTest.wsdl</wsdlFile>
+                                <wsdlFile>AttrGroupService.wsdl</wsdlFile>
+                                <wsdlFile>attribute-qualify.wsdl</wsdlFile>
+                                <wsdlFile>bug1191.wsdl</wsdlFile>
+                                 <wsdlFile>ChoiceService.wsdl</wsdlFile>
+                                <wsdlFile>CityBB.wsdl</wsdlFile>
+                                <wsdlFile>clash.wsdl</wsdlFile>
+                                <wsdlFile>complex-doc-literal.wsdl</wsdlFile>
+                                <wsdlFile>complex-rpc-encoded.wsdl</wsdlFile>
+                                <wsdlFile>Compound1.wsdl</wsdlFile>
+                                <wsdlFile>Compound2.wsdl</wsdlFile>
+                                <wsdlFile>ComprehensiveTypes.wsdl</wsdlFile>
+                                <wsdlFile>DataService.wsdl</wsdlFile>
+                                <wsdlFile>DataTypes.wsdl</wsdlFile>
+                                 <wsdlFile>deploy.wsdl</wsdlFile>
+                                <wsdlFile>dime-doc.wsdl</wsdlFile>
+                                <wsdlFile>dime-rpc.wsdl</wsdlFile>
+                                <wsdlFile>duplicate-element.wsdl</wsdlFile>
+                                <wsdlFile>echo.wsdl</wsdlFile>
+                                 <wsdlFile>echo2.wsdl</wsdlFile>
+                                <wsdlFile>employee.wsdl</wsdlFile>
+                                <wsdlFile>emptysa.wsdl</wsdlFile>
+                                <wsdlFile>esr.wsdl</wsdlFile>
+                                <wsdlFile>ExtensibilityQuery.wsdl</wsdlFile>
+                                <wsdlFile>extension.wsdl</wsdlFile>
+                                <wsdlFile>FaultService.wsdl</wsdlFile>
+                                <wsdlFile>FileGen.wsdl</wsdlFile>
+                                <wsdlFile>genPort.wsdl</wsdlFile>
+                                <wsdlFile>good.wsdl</wsdlFile>
+                                <wsdlFile>group5-5.wsdl</wsdlFile>
+                                <wsdlFile>Groups.wsdl</wsdlFile>
+                                <wsdlFile>header.wsdl</wsdlFile>
+                               <!-- <wsdlFile>Import.wsdl</wsdlFile> -->
+                                <!-- <wsdlFile>Import1.wsdl</wsdlFile> -->
+                                <!-- <wsdlFile>Import1B.wsdl</wsdlFile>
+                                <wsdlFile>Import2.wsdl</wsdlFile>
+                                <wsdlFile>Import2B.wsdl</wsdlFile>
+                                <wsdlFile>Import3.wsdl</wsdlFile>
+                                <wsdlFile>ImportBinding1.wsdl</wsdlFile>
+                                <wsdlFile>ImportBinding2.wsdl</wsdlFile>
+                                <wsdlFile>ImportInterface.wsdl</wsdlFile>
+                                <wsdlFile>ImportMessages.wsdl</wsdlFile>
+                                <wsdlFile>ImportInterfImportMessagesXSDImport.wsdl</wsdlFile>
+                                <wsdlFile>importtypes.wsdl</wsdlFile>
+                                -->
+                                <wsdlFile>InheritanceTest.wsdl</wsdlFile>
+                                <wsdlFile>inout.wsdl</wsdlFile>
+                                <wsdlFile>interoptestdoclit.wsdl</wsdlFile>
+                                <wsdlFile>interoptestdoclitparameters.wsdl</wsdlFile>
+                                <wsdlFile>InteropTestRpcEnc.wsdl</wsdlFile>
+                                <wsdlFile>JavaNames.wsdl</wsdlFile>
+                                <wsdlFile>javarpchandler.wsdl</wsdlFile>
+                                <wsdlFile>MArrayTest.wsdl</wsdlFile>
+                                <wsdlFile>marshall.wsdl</wsdlFile>
+                                <wsdlFile>marshall2.wsdl</wsdlFile>
+                                <wsdlFile>marshall3.wsdl</wsdlFile>
+                                <wsdlFile>mime.wsdl</wsdlFile>
+                                <wsdlFile>mime-doc.wsdl</wsdlFile>
+                                <wsdlFile>mime-rpc.wsdl</wsdlFile>
+                                <wsdlFile>multibinding.wsdl</wsdlFile>
+                                <!-- <wsdlFile>MultiImp.wsdl</wsdlFile> -->
+                                <wsdlFile>MultiRefTest.wsdl</wsdlFile>
+                                <wsdlFile>Nested.wsdl</wsdlFile>
+                                <wsdlFile>omit.wsdl</wsdlFile>
+                                <wsdlFile>oneway.wsdl</wsdlFile>
+                                <wsdlFile>opStyles.wsdl</wsdlFile>
+                                <wsdlFile>opStylesDoc.wsdl</wsdlFile>
+                                <wsdlFile>parameterOrder.wsdl</wsdlFile>
+                                <wsdlFile>polymorphism.wsdl</wsdlFile>
+                                <wsdlFile>prmitiveWrappers.wsdl</wsdlFile>
+                                <wsdlFile>qualifytest.wsdl</wsdlFile>
+                                <wsdlFile>QueryTest.wsdl</wsdlFile>
+                                <wsdlFile>QueryTypes.wsdl</wsdlFile>
+                                <wsdlFile>ram.wsdl</wsdlFile>
+                                <!-- <wsdlFile>refattr.wsdl</wsdlFile> -->
+                                <wsdlFile>reportservice.wsdl</wsdlFile>
+                                <!-- <wsdlFile>round4XSD.wsdl</wsdlFile> -->
+                                <wsdlFile>Round5BaseTypes.wsdl</wsdlFile>
+                                <wsdlFile>rpcParams.wsdl</wsdlFile>
+                                <wsdlFile>SalesRankNPrice.wsdl</wsdlFile>
+                                <wsdlFile>schema2.wsdl</wsdlFile>
+                                <wsdlFile>selectiveFileGen.wsdl</wsdlFile>
+                                <wsdlFile>SequenceTest.wsdl</wsdlFile>
+                                <wsdlFile>session.wsdl</wsdlFile>
+                                <wsdlFile>simple-doc-literal.wsdl</wsdlFile>
+                                <wsdlFile>simple-rpc-encoded.wsdl</wsdlFile>
+                                <wsdlFile>soap12-add-test.wsdl</wsdlFile>
+                                <wsdlFile>soap12-test.wsdl</wsdlFile>
+                                <wsdlFile>stubheaders.wsdl</wsdlFile>
+                                <wsdlFile>testdate.wsdl</wsdlFile>
+                                <!-- <wsdlFile>testimport.wsdl</wsdlFile> -->
+                                <wsdlFile>thing.wsdl</wsdlFile>
+                                <wsdlFile>uddi_v2.wsdl</wsdlFile>
+                                <wsdlFile>UnionService.wsdl</wsdlFile>
+                                <wsdlFile>useraccount.wsdl</wsdlFile>
+                                <wsdlFile>wrapped_inout.wsdl</wsdlFile>
+                                <!-- <wsdlFile>wsrf-WS-ResourceProperties-1.2-draft-01-impl.wsdl</wsdlFile> -->
+                            </wsdlFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>deploy-artifact</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <ant antfile="${project.basedir}/src/test/java/tools/build.xml">
+                                    <target name="printEnv"/>
+                                </ant>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> -->
         </plugins>
     </build>
 </project>

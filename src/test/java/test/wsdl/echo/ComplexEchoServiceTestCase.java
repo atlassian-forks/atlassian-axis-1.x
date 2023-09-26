@@ -7,6 +7,17 @@
 
 package test.wsdl.echo;
 
+import test.wsdl.dataobjects.echo.ArrayOfNamedValue;
+import test.wsdl.dataobjects.echo.ComplexEchoServiceSoapBindingStub;
+import test.wsdl.dataobjects.echo.ComplexEchoService_ServiceLocator;
+import test.wsdl.dataobjects.echo.Echo;
+import test.wsdl.dataobjects.echo.MyComplexType;
+import test.wsdl.dataobjects.echo.MyComplexType2;
+import test.wsdl.dataobjects.echo.MyElement2Response;
+import test.wsdl.dataobjects.echo.NamedValue;
+import test.wsdl.dataobjects.echo.NamedValueSet;
+import test.wsdl.dataobjects.echo.holders.MyComplexTypeHolder;
+
 public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
     public ComplexEchoServiceTestCase(String name) {
         super(name);
@@ -14,15 +25,15 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
 
     public void testComplexEchoServiceWSDL() throws Exception {
         javax.xml.rpc.ServiceFactory serviceFactory = javax.xml.rpc.ServiceFactory.newInstance();
-        java.net.URL url = new java.net.URL(new test.wsdl.echo.ComplexEchoServiceLocator().getComplexEchoServiceAddress() + "?WSDL");
-        javax.xml.rpc.Service service = serviceFactory.createService(url, new test.wsdl.echo.ComplexEchoServiceLocator().getServiceName());
+        java.net.URL url = new java.net.URL(new ComplexEchoService_ServiceLocator().getComplexEchoServiceAddress() + "?WSDL");
+        javax.xml.rpc.Service service = serviceFactory.createService(url, new ComplexEchoService_ServiceLocator().getServiceName());
         assertTrue(service != null);
     }
 
     public void test1ComplexEchoServiceEcho() {
-        test.wsdl.echo.Echo binding;
+        Echo binding;
         try {
-            binding = new test.wsdl.echo.ComplexEchoServiceLocator().getComplexEchoService();
+            binding = new ComplexEchoService_ServiceLocator().getComplexEchoService();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
@@ -30,9 +41,9 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
         assertTrue("binding is null", binding != null);
 
         try {
-            test.wsdl.echo.MyComplexType complexType = new test.wsdl.echo.MyComplexType();
-            test.wsdl.echo.holders.MyComplexTypeHolder complexTypeHolder =
-                    new test.wsdl.echo.holders.MyComplexTypeHolder(complexType);
+            MyComplexType complexType = new MyComplexType();
+            MyComplexTypeHolder complexTypeHolder =
+                    new MyComplexTypeHolder(complexType);
             binding.echo(complexTypeHolder);
             assertTrue(complexTypeHolder.value.getSimpleItem().equals("MY_SIMPLE_ITEM"));
         }
@@ -42,10 +53,10 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
     }
 
     public void test2ComplexEchoServiceEcho2() throws Exception {
-        test.wsdl.echo.ComplexEchoServiceSoapBindingStub binding;
+        ComplexEchoServiceSoapBindingStub binding;
         try {
-            binding = (test.wsdl.echo.ComplexEchoServiceSoapBindingStub)
-                    new test.wsdl.echo.ComplexEchoServiceLocator().getComplexEchoService();
+            binding = (ComplexEchoServiceSoapBindingStub)
+                    new ComplexEchoService_ServiceLocator().getComplexEchoService();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if (jre.getLinkedCause() != null)
@@ -55,28 +66,27 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
         assertNotNull("binding is null", binding);
         // Time out after a minute
         binding.setTimeout(60000);
-        test.wsdl.echo.MyComplexType2 request = new test.wsdl.echo.MyComplexType2();
+        MyComplexType2 request = new MyComplexType2();
         request.setUsername("xxx");
         request.setPassword("yyy");
         request.setOptions(new NamedValue[]{
             new NamedValue("dummy1", "dummy_val1"),
             new NamedValue("dummy2",
-                    new NamedValueSet (new NamedValue[]{
+                    new NamedValueSet(new ArrayOfNamedValue(new NamedValue[]{
                         new NamedValue("dummy2-1", "val2-1"),
                         new NamedValue("dummy2-2", new Integer(314))
-                    }))
+                    })))
         });
         // Test operation
-        test.wsdl.echo.NamedValue[] value = null;
-        value = binding.echo2(request);
+        MyElement2Response response = binding.echo2(request);
         // TBD - validate results
     }
 
     public void test2ComplexEchoServiceEcho21() throws Exception {
-        test.wsdl.echo.ComplexEchoServiceSoapBindingStub binding;
+        ComplexEchoServiceSoapBindingStub binding;
         try {
-            binding = (test.wsdl.echo.ComplexEchoServiceSoapBindingStub)
-                    new test.wsdl.echo.ComplexEchoServiceLocator().getComplexEchoService();
+            binding = (ComplexEchoServiceSoapBindingStub)
+                    new ComplexEchoService_ServiceLocator().getComplexEchoService();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if (jre.getLinkedCause() != null)
@@ -86,7 +96,7 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
         assertNotNull("binding is null", binding);
         // Time out after a minute
         binding.setTimeout(60000);
-        test.wsdl.echo.MyComplexType2 request = new test.wsdl.echo.MyComplexType2();
+        MyComplexType2 request = new MyComplexType2();
         request.setUsername("xxx");
         request.setPassword("yyy");
         request.setOptions(new NamedValue[]{
@@ -97,9 +107,9 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
             })
         });
         // Test operation
-        test.wsdl.echo.NamedValue[] value = null;
+        NamedValue[] value = null;
 
-        value = binding.echo2(request);
+        MyElement2Response response = binding.echo2(request);
         // TBD - validate results
     }
 }

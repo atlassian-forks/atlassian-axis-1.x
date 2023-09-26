@@ -14,7 +14,7 @@ public class AnyServiceServiceTestCase extends junit.framework.TestCase {
     public void test1AnyServiceRun() throws Exception {
         test.wsdl.anytype.AnyService binding;
         try {
-            binding = new test.wsdl.anytype.AnyServiceServiceLocator().getAnyService();
+            binding = new AnyServiceServiceLocator().getAnyService();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)

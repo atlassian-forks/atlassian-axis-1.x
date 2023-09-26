@@ -7,6 +7,13 @@
 
 package test.wsdl.datatypes;
 
+import test.wsdl.dataobjects.DataTypes.ArrayOfInt;
+import test.wsdl.dataobjects.DataTypes.ArrayOfOrder;
+import test.wsdl.dataobjects.DataTypes.DataTypes_PortType;
+import test.wsdl.dataobjects.DataTypes.DataTypes_ServiceLocator;
+import test.wsdl.dataobjects.DataTypes.Mode;
+import test.wsdl.dataobjects.DataTypes.Order;
+
 import javax.xml.namespace.QName;
 
 public class DataTypesTestCase extends junit.framework.TestCase {

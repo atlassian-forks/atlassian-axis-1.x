@@ -1,5 +1,9 @@
 package test.wsdl.arrays4;
 
+import test.wsdl.dataobjects.ArrayTest.ArrayTest4SOAPBindingStub;
+import test.wsdl.dataobjects.ArrayTest.ArrayTest4ServiceLocator;
+import test.wsdl.dataobjects.ArrayTest.StructureType;
+
 /**
  * StructureTypeTestCase
  * <p/>

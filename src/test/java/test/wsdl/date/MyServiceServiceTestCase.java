@@ -7,6 +7,10 @@
 
 package test.wsdl.date;
 
+import test.wsdl.dataobjects.testdate.MyBean;
+import test.wsdl.dataobjects.testdate.MyServiceServiceLocator;
+import test.wsdl.dataobjects.testdate.TestdateSoapBindingStub;
+
 public class MyServiceServiceTestCase extends junit.framework.TestCase {
     public MyServiceServiceTestCase(java.lang.String name) {
         super(name);
@@ -14,16 +18,16 @@ public class MyServiceServiceTestCase extends junit.framework.TestCase {
 
     public void testtestdateWSDL() throws Exception {
         javax.xml.rpc.ServiceFactory serviceFactory = javax.xml.rpc.ServiceFactory.newInstance();
-        java.net.URL url = new java.net.URL(new test.wsdl.date.MyServiceServiceLocator().gettestdateAddress() + "?WSDL");
-        javax.xml.rpc.Service service = serviceFactory.createService(url, new test.wsdl.date.MyServiceServiceLocator().getServiceName());
+        java.net.URL url = new java.net.URL(new MyServiceServiceLocator().gettestdateAddress() + "?WSDL");
+        javax.xml.rpc.Service service = serviceFactory.createService(url, new MyServiceServiceLocator().getServiceName());
         assertTrue(service != null);
     }
 
     public void test1testdateGetInfo() throws Exception {
-        test.wsdl.date.TestdateSoapBindingStub binding;
+        TestdateSoapBindingStub binding;
         try {
-            binding = (test.wsdl.date.TestdateSoapBindingStub)
-                          new test.wsdl.date.MyServiceServiceLocator().gettestdate();
+            binding = (TestdateSoapBindingStub)
+                          new MyServiceServiceLocator().gettestdate();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -36,7 +40,7 @@ public class MyServiceServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
-        test.wsdl.date.MyBean value = null;
+        MyBean value = null;
         value = binding.getInfo();
         // TBD - validate results
         System.out.println(value.getDate());

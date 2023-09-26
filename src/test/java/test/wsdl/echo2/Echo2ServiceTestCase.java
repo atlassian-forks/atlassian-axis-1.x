@@ -11,6 +11,9 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.SOAPBody;
+import test.wsdl.dataobjects.echo2.Echo2ServiceLocator;
+import test.wsdl.dataobjects.echo2.Echo2SoapBindingStub;
+import test.wsdl.dataobjects.echo2.MyBase64Bean;
 
 public class Echo2ServiceTestCase extends junit.framework.TestCase {
     public Echo2ServiceTestCase(java.lang.String name) {
@@ -21,16 +24,16 @@ public class Echo2ServiceTestCase extends junit.framework.TestCase {
         javax.xml.rpc.ServiceFactory serviceFactory = javax.xml.rpc.ServiceFactory
                 .newInstance();
         java.net.URL url = new java.net.URL(
-                new wsdl.echo2.Echo2ServiceLocator().getEcho2Address()
+                new Echo2ServiceLocator().getEcho2Address()
                         + "?WSDL");
         javax.xml.rpc.Service service = serviceFactory.createService(url,
-                new wsdl.echo2.Echo2ServiceLocator().getServiceName());
+                new Echo2ServiceLocator().getServiceName());
         assertTrue(service != null);
     }
 
     public void test1Echo2EchoMyBase64Bean() throws Exception {
-        wsdl.echo2.Echo2SoapBindingStub binding;
-        binding = (wsdl.echo2.Echo2SoapBindingStub) new wsdl.echo2.Echo2ServiceLocator()
+        Echo2SoapBindingStub binding;
+        binding = (Echo2SoapBindingStub) new Echo2ServiceLocator()
                 .getEcho2();
         assertNotNull("binding is null", binding);
         // Time out after a minute
@@ -39,7 +42,7 @@ public class Echo2ServiceTestCase extends junit.framework.TestCase {
         // message is more clear without multiref
         //binding._setProperty("sendMultiRefs", Boolean.FALSE);
         // Test operation
-        MyBase64Bean input = new MyBase64Bean();
+        test.wsdl.dataobjects.echo2.MyBase64Bean input = new test.wsdl.dataobjects.echo2.MyBase64Bean();
         fillMyBase64Bean(input);
         MyBase64Bean ret = binding.echoMyBase64Bean(input);
 
@@ -124,8 +127,8 @@ public class Echo2ServiceTestCase extends junit.framework.TestCase {
     }
 
     public void test1Echo2EchoArrayOfMyBase64Bean() throws Exception {
-        wsdl.echo2.Echo2SoapBindingStub binding;
-        binding = (wsdl.echo2.Echo2SoapBindingStub) new wsdl.echo2.Echo2ServiceLocator()
+        Echo2SoapBindingStub binding;
+        binding = (Echo2SoapBindingStub) new Echo2ServiceLocator()
                 .getEcho2();
         assertNotNull("binding is null", binding);
         // Time out after a minute
@@ -154,10 +157,10 @@ public class Echo2ServiceTestCase extends junit.framework.TestCase {
 
     public void test2Echo2EchoArrayOfString_MaxOccursUnbounded()
             throws Exception {
-        wsdl.echo2.Echo2SoapBindingStub binding;
-        Echo2ServiceLocator loc = new wsdl.echo2.Echo2ServiceLocator();
+        Echo2SoapBindingStub binding;
+        Echo2ServiceLocator loc = new Echo2ServiceLocator();
         try {
-            binding = (wsdl.echo2.Echo2SoapBindingStub)loc.getEcho2();
+            binding = (Echo2SoapBindingStub)loc.getEcho2();
         } catch (javax.xml.rpc.ServiceException jre) {
             if (jre.getLinkedCause() != null)
                 jre.getLinkedCause().printStackTrace();
@@ -202,9 +205,9 @@ public class Echo2ServiceTestCase extends junit.framework.TestCase {
     }
 
     public void test3Echo2EchoArrayOfString_SoapEncArray() throws Exception {
-        wsdl.echo2.Echo2SoapBindingStub binding;
+        Echo2SoapBindingStub binding;
         try {
-            binding = (wsdl.echo2.Echo2SoapBindingStub) new wsdl.echo2.Echo2ServiceLocator()
+            binding = (Echo2SoapBindingStub) new Echo2ServiceLocator()
                     .getEcho2();
         } catch (javax.xml.rpc.ServiceException jre) {
             if (jre.getLinkedCause() != null)

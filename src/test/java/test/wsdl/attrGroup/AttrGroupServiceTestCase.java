@@ -4,6 +4,9 @@
 
 package test.wsdl.attrGroup;
 
+import test.wsdl.dataobjects.AttrGroupService.Record1;
+import test.wsdl.dataobjects.AttrGroupService.Record2;
+
 public class AttrGroupServiceTestCase extends junit.framework.TestCase {
     public AttrGroupServiceTestCase(java.lang.String name) {
         super(name);
@@ -18,7 +21,7 @@ public class AttrGroupServiceTestCase extends junit.framework.TestCase {
         // so, basically, if this compiles, we are good to go
         // but running it won't hurt anything
 
-        test.wsdl.attrGroup.Record1 rec1 = new test.wsdl.attrGroup.Record1();
+        Record1 rec1 = new Record1();
 
         // an element defined within Record1
         rec1.setElem1(1);
@@ -36,7 +39,7 @@ public class AttrGroupServiceTestCase extends junit.framework.TestCase {
         rec1.setId(new org.apache.axis.types.Id("theId"));
         rec1.setHref(new org.apache.axis.types.URI("a", "b"));
 
-        test.wsdl.attrGroup.Record2 rec2 = new test.wsdl.attrGroup.Record2();
+        Record2 rec2 = new Record2();
 
         // an element defined within Record2
         rec2.setElem2("2");
@@ -50,18 +53,4 @@ public class AttrGroupServiceTestCase extends junit.framework.TestCase {
         // an attribute from a known 1.2 soap encoding schema
         rec2.setId(new org.apache.axis.types.Id("theId"));
     }
-
-    /*
-    public static void main(String[] args)
-    {
-        AttrGroupServiceTestCase test = new AttrGroupServiceTestCase("x");
-        try {
-            test.test1AttrGroupService();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-    */
 }

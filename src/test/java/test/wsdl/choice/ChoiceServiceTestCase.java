@@ -31,6 +31,13 @@ import org.apache.axis.message.Text;
 import org.apache.axis.utils.Options;
 import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
+import test.wsdl.dataobjects.ChoiceService.ChoiceServiceLocator;
+import test.wsdl.dataobjects.ChoiceService.ChoiceServiceSoap_PortType;
+import test.wsdl.dataobjects.ChoiceService.FaultPropertyType;
+import test.wsdl.dataobjects.ChoiceService.FaultType;
+import test.wsdl.dataobjects.ChoiceService.Record1;
+import test.wsdl.dataobjects.ChoiceService.Record2;
+import test.wsdl.dataobjects.ChoiceService.StagingFaultType;
 
 import javax.xml.namespace.QName;
 import java.io.FileInputStream;
@@ -45,7 +52,7 @@ public class ChoiceServiceTestCase extends TestCase {
     }
 
     public void testSerialization() throws Exception {
-        ChoiceServiceSoap binding;
+        ChoiceServiceSoap_PortType binding;
         try {
             ChoiceServiceLocator locator = new ChoiceServiceLocator();
             binding = locator.getChoiceServiceSoap();
@@ -122,7 +129,7 @@ public class ChoiceServiceTestCase extends TestCase {
     }
 
     public void testChoiceSerialization() throws Exception {
-        ChoiceServiceSoap binding;
+        ChoiceServiceSoap_PortType binding;
         try {
             ChoiceServiceLocator locator = new ChoiceServiceLocator();
             binding = locator.getChoiceServiceSoap();

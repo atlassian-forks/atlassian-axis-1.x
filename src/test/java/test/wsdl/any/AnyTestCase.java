@@ -1,6 +1,11 @@
 
 package test.wsdl.any;
 
+import test.wsdl.dataobjects.any.AnyServiceLocator;
+import test.wsdl.dataobjects.any.QueryResult;
+import test.wsdl.dataobjects.any.SObject;
+import test.wsdl.dataobjects.any.Soap_PortType;
+
 /**
  * @author Ashutosh Shahi
  *
@@ -15,7 +20,7 @@ public class AnyTestCase extends junit.framework.TestCase{
 
     public void testAny1() throws Exception{
     	AnyServiceLocator loc = new AnyServiceLocator();
-    	Soap svc = loc.getSoap();
+    	Soap_PortType svc = loc.getSoap();
 
     	QueryResult qr = svc.query("blah");
 

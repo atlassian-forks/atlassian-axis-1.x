@@ -11,6 +11,7 @@ import org.apache.axis.utils.XMLUtils;
 import org.w3c.dom.Element;
 
 public class TestServiceServiceTestCase extends junit.framework.TestCase {
+     private final String Service_address = "http://localhost:8080/axis/services/service";
     String xml = "<hello>world</hello>";
     public TestServiceServiceTestCase(java.lang.String name) {
         super(name);
@@ -18,16 +19,16 @@ public class TestServiceServiceTestCase extends junit.framework.TestCase {
 
     public void testDocumentTestWSDL() throws Exception {
         javax.xml.rpc.ServiceFactory serviceFactory = javax.xml.rpc.ServiceFactory.newInstance();
-        java.net.URL url = new java.net.URL(new test.wsdl.document.TestServiceServiceLocator().getDocumentTestAddress() + "?WSDL");
-        javax.xml.rpc.Service service = serviceFactory.createService(url, new test.wsdl.document.TestServiceServiceLocator().getServiceName());
+        java.net.URL url = new java.net.URL(Service_address);
+        javax.xml.rpc.Service service = serviceFactory.createService(url, "service");
         assertTrue(service != null);
     }
 
     public void test1DocumentTestGetElement() throws Exception {
-        test.wsdl.document.DocumentTestSoapBindingStub binding;
+        DocumentTestSoapBindingStub binding;
         try {
-            binding = (test.wsdl.document.DocumentTestSoapBindingStub)
-                          new test.wsdl.document.TestServiceServiceLocator().getDocumentTest();
+            binding = (DocumentTestSoapBindingStub)
+                          new TestServiceServiceLocator().getDocumentTest();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -48,10 +49,10 @@ public class TestServiceServiceTestCase extends junit.framework.TestCase {
     }
 
     public void test2DocumentTestGetDocument() throws Exception {
-        test.wsdl.document.DocumentTestSoapBindingStub binding;
+        DocumentTestSoapBindingStub binding;
         try {
-            binding = (test.wsdl.document.DocumentTestSoapBindingStub)
-                          new test.wsdl.document.TestServiceServiceLocator().getDocumentTest();
+            binding = (DocumentTestSoapBindingStub)
+                          new TestServiceServiceLocator().getDocumentTest();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
