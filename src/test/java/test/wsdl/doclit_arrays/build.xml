@@ -25,7 +25,7 @@ Build Instructions:
         ant run
 
 Author:
-  Matt Seibert mseibert@us.ibm.com
+  Generated for doclit_arrays Java2WSDL test
 
 Copyright:
   Copyright (c) 2002-2003 Apache Software Foundation.
@@ -34,14 +34,12 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
-<property name="componentName" value="test/wsdl/echo" />
+<property name="componentName" value="test/wsdl/doclit_arrays" />
         &properties;
         &paths;
         &taskdefs;
         &taskdefs_post_compile;
         &targets;
-
 
 <target name="clean">
     <echo message="Removing ${build.dir}/classes/${componentName} and ${build.dir}/work/${componentName}" />
@@ -52,32 +50,57 @@ Copyright:
 <target name="copy" depends="setenv"/>
 
 <target name="compile" depends="copy">
-  <echo message="Compiling test.wsdl.echo"/>
-    <!-- This tests holders for complextype Bug:10247 -->
-    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/echo/echo.wsdl"
+  <echo message="Compiling test.wsdl.doclit_arrays"/>
+    
+    <!-- Compile the test classes for Java2WSDL -->
+    <javac srcdir="${axis.home}/src/test/java" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
+           debug="${debug}">
+      <classpath refid="classpath" />
+      <include name="test/wsdl/doclit_arrays/*.java" />
+    </javac>
+
+    <!-- Create output directory for WSDL -->
+    <mkdir dir="${build.dir}/work/test/wsdl/doclit_arrays"/>
+
+    <!-- Generate WSDL from java -->
+    <java2wsdl output="${build.dir}/work/test/wsdl/doclit_arrays/ArrayService.wsdl"
+               className="test.wsdl.doclit_arrays.ArrayService"
+               namespace="http://doclit_arrays.wsdl.test/"
+               location="http://localhost:8080/axis/services/DocArrays"
+               style="DOCUMENT">
+        <mapping package="test.wsdl.doclit_arrays" namespace="http://doclit_arrays.wsdl.test/" />
+    </java2wsdl>
+
+    <!-- Generate client stubs from the generated WSDL -->
+    <wsdl2java url="${build.dir}/work/test/wsdl/doclit_arrays/ArrayService.wsdl"
                output="${build.dir}/work"
-               serverSide="yes"
+               serverSide="no"
                testcase="yes">
-        <mapping namespace="http://echo.services" package="test.wsdl.echo"/>
-        <mapping namespace="http://types.echo.services" package="test.wsdl.echo"/>
     </wsdl2java>
 
-    <copy todir="${build.dir}/work/test/wsdl/echo" overwrite="yes">
-      <fileset dir="${axis.home}/src/test/java/test/wsdl/echo">
+    <!-- Copy any additional test files -->
+    <copy todir="${build.dir}/work/test/wsdl/doclit_arrays" overwrite="yes">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/doclit_arrays">
         <include name="*TestCase.java"/>
-        <include name="*Impl.java"/>
       </fileset>
     </copy>
 
+    <!-- Compile all generated and test files -->
     <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
            debug="${debug}">
       <classpath refid="classpath" />
-      <include name="test/wsdl/echo/*.java" />
+      <include name="test/wsdl/doclit_arrays/*.java" />
     </javac>
+
 </target>
 
 <target name="run" depends="compile">
-  <antcall target="execute-Component" />
+  <!-- Run JUnit tests directly without server deployment -->
+  <junit printsummary="yes" haltonerror="yes" haltonfailure="yes">
+    <classpath refid="classpath" />
+    <formatter type="plain" />
+    <test name="test.wsdl.doclit_arrays.ArrayServiceTestCase" />
+  </junit>
 </target>
 
 </project>

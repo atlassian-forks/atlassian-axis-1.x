@@ -24,9 +24,6 @@ Build Instructions:
    To execute
         ant run
 
-Author:
-  Matt Seibert mseibert@us.ibm.com
-
 Copyright:
   Copyright (c) 2002-2003 Apache Software Foundation.
 </description>
@@ -35,7 +32,7 @@ Copyright:
 <project default="compile">
 
 <property name="axis.home" location="../../.." />
-<property name="componentName" value="test/wsdl/arrays4" />
+<property name="componentName" value="test/wsdl/anytype" />
         &properties;
         &paths;
         &taskdefs;
@@ -51,9 +48,33 @@ Copyright:
 <target name="copy" depends="setenv"/>
 
 <target name="compile" depends="copy">
-  <echo message="Compiling test.wsdl.arrays4"/>
-    <!-- ArrayTest Test -->
-    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/arrays4/ArrayTest.wsdl"
+  <echo message="Compiling test.wsdl.anytype"/>
+    
+    <!-- First, copy and compile the interface -->
+    <copy todir="${build.dir}/work/test/wsdl/anytype" overwrite="yes">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/anytype">
+        <include name="AnyService.java"/>
+      </fileset>
+    </copy>
+
+    <!-- Compile the interface first -->
+    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
+           debug="${debug}">
+      <classpath refid="classpath" />
+      <include name="test/wsdl/anytype/AnyService.java" />
+    </javac>
+
+    <!-- Generate WSDL from the interface -->
+    <java2wsdl output="${build.dir}/work/test/wsdl/anytype/AnyService.wsdl"
+               className="test.wsdl.anytype.AnyService"
+               namespace="http://anytype.wsdl.test"
+               location="http://localhost:8080/axis/services/AnyService">
+        <classpath refid="classpath" />
+        <classpath location="${build.dest}" />
+    </java2wsdl>
+
+    <!-- Generate Java classes from WSDL -->
+    <wsdl2java url="${build.dir}/work/test/wsdl/anytype/AnyService.wsdl"
                output="${build.dir}/work"
                deployscope="session"
                serverSide="yes"
@@ -61,20 +82,22 @@ Copyright:
                noimports="no"
                verbose="no"
                testcase="no">
-        <mapping namespace="urn:ArrayTest4" package="test.wsdl.arrays4"/>
+        <mapping namespace="http://anytype.wsdl.test" package="test.wsdl.anytype"/>
     </wsdl2java>
 
-    <copy todir="${build.dir}/work/test/wsdl/arrays4" overwrite="yes">
-      <fileset dir="${axis.home}/src/test/java/test/wsdl/arrays4">
+    <!-- Copy remaining source files, overwriting generated ones where needed -->
+    <copy todir="${build.dir}/work/test/wsdl/anytype" overwrite="yes">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/anytype">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
+    <!-- Compile all Java files -->
     <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
            debug="${debug}">
       <classpath refid="classpath" />
-      <include name="test/wsdl/arrays4/*.java" />
+      <include name="test/wsdl/anytype/*.java" />
     </javac>
 
 </target>

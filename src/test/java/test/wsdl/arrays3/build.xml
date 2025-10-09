@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -55,7 +55,7 @@ Copyright:
     <!-- arrays3 Test -->
     <!-- To test Java Value Types, copy over the base and subclasses -->
     <copy todir="${build.dir}/work/test/wsdl/arrays3" overwrite="yes">
-      <fileset dir="${test.dir}/wsdl/arrays3">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/arrays3">
         <include name="*.java"/>
       </fileset>
     </copy>
@@ -70,8 +70,8 @@ Copyright:
     <!-- Now create the wsdd and server-side java classes (helpers, ArrayOfPhones) -->
     <mkdir dir="${build.dir}/work/test/wsdl/arrays3/generated"/>
 
-    <java2wsdl output="${axis.home}/build/work/test/wsdl/arrays3/generated/arrays3.wsdl"
-               className= "test.test.wsdl.arrays3.AddrBookServiceImpl"
+    <java2wsdl output="${build.dir}/work/test/wsdl/arrays3/generated/arrays3.wsdl"
+               className= "test.wsdl.arrays3.AddrBookServiceImpl"
                useInheritedMethods="false"
                namespace="http://arrays3.test"
                location="http://localhost:8080/axis/services/arrays3"
@@ -88,15 +88,15 @@ Copyright:
     </copy>
 
     <!-- Generate java files of the client side from the new WSDL -->
-    <wsdl2java url="${axis.home}/build/work/test/wsdl/arrays3/generated/arrays3.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${build.dir}/work/test/wsdl/arrays3/generated/arrays3.wsdl"
+               output="${build.dir}/work"
                verbose="no"
                testcase="no">
         <mapping namespace="http://arrays3.test" package="test.wsdl.arrays3.testclient"/>
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/arrays3" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/arrays3">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/arrays3">
         <include name="*TestCase.java"/>
       </fileset>
     </copy>
@@ -110,7 +110,7 @@ Copyright:
   </javac>
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

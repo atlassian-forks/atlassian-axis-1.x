@@ -16,16 +16,16 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
 
     public void testAdaptiveWSDL() throws Exception {
         javax.xml.rpc.ServiceFactory serviceFactory = javax.xml.rpc.ServiceFactory.newInstance();
-        java.net.URL url = new java.net.URL(new wsdl.adaptive.AdaptiveServiceLocator().getAdaptiveAddress() + "?WSDL");
-        javax.xml.rpc.Service service = serviceFactory.createService(url, new wsdl.adaptive.AdaptiveServiceLocator().getServiceName());
+        java.net.URL url = new java.net.URL(new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptiveAddress() + "?WSDL");
+        javax.xml.rpc.Service service = serviceFactory.createService(url, new test.wsdl.adaptive.AdaptiveServiceLocator().getServiceName());
         assertTrue(service != null);
     }
 
     public void test1AdaptiveGetServiceDescription() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -44,10 +44,10 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
     }
 
     public void test2AdaptiveRankResources() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -60,8 +60,17 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
-        wsdl.adaptive.types.ResourceInfo[] value = null;
-        value = binding.rankResources(new wsdl.adaptive.types.ResourceInfo[0], new wsdl.adaptive.types.ApplicationInfo());
+        // Fix for test case error,
+        // faultString: java.io.IOException: java.io.IOException: Non nillable element &apos;dummy&apos; is null.
+        test.wsdl.adaptive.types.KeyValue dummy = new test.wsdl.adaptive.types.KeyValue();
+        dummy.setKey("someKey");
+        dummy.setValue("someValue");
+        test.wsdl.adaptive.types.ApplicationInfo appInfo = new test.wsdl.adaptive.types.ApplicationInfo();
+        appInfo.setDummy(dummy);
+        appInfo.setProperties(new test.wsdl.adaptive.types.internal.Vector());
+        appInfo.setId("app123");
+        test.wsdl.adaptive.types.ResourceInfo[] value = null;
+        value = binding.rankResources(new test.wsdl.adaptive.types.ResourceInfo[0], appInfo);
         // TBD - validate results
         assertTrue(value.length > 0);
         assertEquals(value[0].getId(), "Adaptive #1");
@@ -71,10 +80,10 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
     }
 
     public void test3AdaptiveEstimateTransferTime() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -87,16 +96,21 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
+        test.wsdl.adaptive.types.ResourceInfo resourceInfo = new test.wsdl.adaptive.types.ResourceInfo();
+        // Fix for test case error,
+        // faultString: java.io.IOException: java.io.IOException: Non nillable element &apos;properties&apos; is null.
+        resourceInfo.setProperties(new test.wsdl.adaptive.types.internal.Vector());
+        resourceInfo.setId("resource1");
         int[] value = null;
-        value = binding.estimateTransferTime(true, new wsdl.adaptive.types.ResourceInfo(), new wsdl.adaptive.types.ResourceInfo[0], 0, java.util.Calendar.getInstance());
+        value = binding.estimateTransferTime(true, resourceInfo, new test.wsdl.adaptive.types.ResourceInfo[0], 0, java.util.Calendar.getInstance());
         // TBD - validate results
     }
 
     public void test4AdaptiveLogDataTransfer() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -109,15 +123,23 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
-        binding.logDataTransfer(new wsdl.adaptive.types.ResourceInfo(), new wsdl.adaptive.types.ResourceInfo(), 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
+        test.wsdl.adaptive.types.ResourceInfo resourceInfo1 = new test.wsdl.adaptive.types.ResourceInfo();
+        // Fix for test case error,
+        // faultString: java.io.IOException: java.io.IOException: Non nillable element &apos;properties&apos; is null.
+        resourceInfo1.setProperties(new test.wsdl.adaptive.types.internal.Vector());
+        resourceInfo1.setId("resource1");
+        test.wsdl.adaptive.types.ResourceInfo resourceInfo2 = new test.wsdl.adaptive.types.ResourceInfo();
+        resourceInfo2.setProperties(new test.wsdl.adaptive.types.internal.Vector());
+        resourceInfo2.setId("resource2");
+        binding.logDataTransfer(resourceInfo1, resourceInfo2, 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
         // TBD - validate results
     }
 
     public void test5AdaptiveEstimateUsage() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -130,16 +152,21 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
+        test.wsdl.adaptive.types.ResourceInfo resourceInfo = new test.wsdl.adaptive.types.ResourceInfo();
+        // Fix for test case error,
+        // faultString: java.io.IOException: java.io.IOException: Non nillable element &apos;properties&apos; is null.
+        resourceInfo.setProperties(new test.wsdl.adaptive.types.internal.Vector());
+        resourceInfo.setId("resource1");
         java.lang.String value = null;
-        value = binding.estimateUsage(true, new wsdl.adaptive.types.ResourceInfo(), new java.lang.String(), 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
+        value = binding.estimateUsage(true, resourceInfo, new java.lang.String(), 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
         // TBD - validate results
     }
 
     public void test6AdaptiveEstimateMultipleUsage() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -153,15 +180,15 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
 
         // Test operation
         java.lang.String[][] value = null;
-        value = binding.estimateMultipleUsage(true, new wsdl.adaptive.types.ResourceInfo[0], new java.lang.String[0], 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
+        value = binding.estimateMultipleUsage(true, new test.wsdl.adaptive.types.ResourceInfo[0], new java.lang.String[0], 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
         // TBD - validate results
     }
 
     public void test7AdaptiveEstimateNetworkGraph() throws Exception {
-        wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
+        test.wsdl.adaptive.AdaptiveInterfaceBindingStub binding;
         try {
-            binding = (wsdl.adaptive.AdaptiveInterfaceBindingStub)
-                          new wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
+            binding = (test.wsdl.adaptive.AdaptiveInterfaceBindingStub)
+                          new test.wsdl.adaptive.AdaptiveServiceLocator().getAdaptive();
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)
@@ -175,7 +202,7 @@ public class AdaptiveServiceTestCase extends junit.framework.TestCase {
 
         // Test operation
         java.lang.String[][] value = null;
-        value = binding.estimateNetworkGraph(true, new wsdl.adaptive.types.ResourceInfo[0], 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
+        value = binding.estimateNetworkGraph(true, new test.wsdl.adaptive.types.ResourceInfo[0], 0, java.util.Calendar.getInstance(), java.util.Calendar.getInstance());
         // TBD - validate results
     }
 

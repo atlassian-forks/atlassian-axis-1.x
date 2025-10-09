@@ -15,8 +15,6 @@
  */
 package test.wsdl.anytype;
 
-public class AnyService {
-    public Object run() {
-	    return new String("hello");
-    }
+public interface AnyService extends java.rmi.Remote {
+    public Object run() throws java.rmi.RemoteException;
 }

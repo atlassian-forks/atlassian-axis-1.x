@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -53,16 +53,16 @@ Copyright:
 <target name="compile" depends="copy">
   <echo message="Compiling test.wsdl.extensibility"/>
     <!-- Extensibility Sample Test -->
-    <wsdl2java url="${axis.home}/test/wsdl/extensibility/QueryTypes.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/extensibility/QueryTypes.wsdl"
+               output="${build.dir}/work"
                deployscope="session"
                serverSide="no"
                skeletonDeploy="no"
                testcase="no">
         <mapping namespace="urn:QueryTypes" package="test.wsdl.extensibility"/>
     </wsdl2java>
-    <wsdl2java url="${axis.home}/test/wsdl/extensibility/ExtensibilityQuery.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/extensibility/ExtensibilityQuery.wsdl"
+               output="${build.dir}/work"
                deployscope="session"
                serverSide="yes"
                skeletonDeploy="no"
@@ -71,14 +71,14 @@ Copyright:
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/extensibility" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/extensibility">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/extensibility">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
     <copy todir="${build.dest}/test/wsdl/extensibility" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/extensibility">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/extensibility">
         <include name="server-deploy.wsdd"/>
       </fileset>
     </copy>
@@ -91,7 +91,7 @@ Copyright:
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

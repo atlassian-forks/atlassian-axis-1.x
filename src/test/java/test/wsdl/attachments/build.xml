@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -52,20 +52,21 @@ Copyright:
 
 <target name="compile" depends="copy" if="jimiAndAttachments.present">
   <echo message="Compiling test.wsdl.attachments"/>
-    <wsdl2java url="${axis.home}/test/wsdl/attachments/mime.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/attachments/mime.wsdl"
+               output="${build.dir}/work"
+               deployscope="session"
                serverSide="yes"
                skeletonDeploy="yes"
                testcase="yes">
     </wsdl2java>
-    
+
     <copy todir="${build.dir}/work/test/wsdl/attachments" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/attachments">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/attachments">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
-    
+
     <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
            debug="${debug}">
       <classpath refid="classpath" />
@@ -75,7 +76,7 @@ Copyright:
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

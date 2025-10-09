@@ -31,17 +31,17 @@ import java.net.URL;
  */
 public class Main {
     static String name1;
-    static test.wsdl.arrays3.Address addr1;
-    static test.wsdl.arrays3.Phone phone1;
+    static test.wsdl.addrNoImplSEI.Address addr1;
+    static test.wsdl.addrNoImplSEI.Phone phone1;
 
     static {
         name1 = "Purdue Boilermaker";
-        addr1 = new test.wsdl.arrays3.Address();
-        phone1 = new test.wsdl.arrays3.Phone();
+        addr1 = new test.wsdl.addrNoImplSEI.Address();
+        phone1 = new test.wsdl.addrNoImplSEI.Phone();
         addr1.setStreetNum(1);
         addr1.setStreetName("University Drive");
         addr1.setCity("West Lafayette");
-        addr1.setState(test.wsdl.arrays3.StateType.IN);
+        addr1.setState(test.wsdl.addrNoImplSEI.StateType.IN);
         addr1.setZip(47907);
         phone1.setAreaCode(765);
         phone1.setExchange("494");

@@ -289,15 +289,15 @@
                classname="org.apache.xalan.transformer.TransformerImpl" />
 <!--   apply the current proxy settings to the current JVM.
   This gives in-VM code network access through any firewall
- -->    
+ -->
     <echo level="verbose" message="-- Applying Network Settings ---"/>
     <!-- we cannot set proxyuser and proxypassword as these are only ant1.6 -->
-<!--     <setproxy 
+<!--     <setproxy
       proxyhost="${http.proxyHost}"
       proxyport="${http.proxyPort}"
       socksProxyHost="${socks.proxyHost}"
       socksProxyPort="${socks.proxyPort}"
-      />              
+      />
  -->
      <!-- these are conditions used for patternset
           configuration of which sets of tests to run.
@@ -306,14 +306,14 @@
     <condition property="test.functional.httpunit.jsp">
       <isset property="testserver.is.appserver"/>
     </condition>
-    <!-- set the flag for testing the admin servlet --> 
+    <!-- set the flag for testing the admin servlet -->
     <condition property="test.functional.httpunit.adminservlet">
       <isset property="testserver.is.appserver"/>
     </condition>
     <!-- set the online flag to true if offline is not set -->
      <condition property="test.functional.online">
       <not><isset property="offline"/></not>
-    </condition>       
+    </condition>
 
   </target>
 
@@ -412,9 +412,9 @@
 
  </target>
 
- 
+
   <!-- see if javadocs are needed by looking for the env.axis_nojavadocs flag -->
-  
+
   <target name="check-javadoc-needed"  depends="setenv" >
 
     <uptodate property="javadoc.notoutofdate"
@@ -446,7 +446,7 @@
   <!-- =================================================================== -->
   <target name="start-functional-test-tcp-server" if="junit.present">
     <echo message="Starting test tcp server."/>
-    <java classname="samples.transport.tcp.TCPListener" fork="yes" dir="${axis.home}/build">
+    <java classname="samples.transport.tcp.TCPListener" fork="yes" dir="${build.dir}">
       <arg line="-p ${test.functional.TCPListenerPort}" /> <!-- arbitrary port -->
       <classpath refid="classpath" />
     </java>
@@ -457,7 +457,7 @@
   <!-- =================================================================== -->
   <target name="start-functional-test-http-server" if="junit.present">
     <echo message="Starting test http server."/>
-    <java classname="org.apache.axis.transport.http.SimpleAxisServer" fork="yes" dir="${axis.home}/build">
+    <java classname="org.apache.axis.transport.http.SimpleAxisServer" fork="yes" dir="${build.dir}">
         <!-- Uncomment this to use Jikes instead of Javac for compiling JWS Files
         <jvmarg value="-Daxis.Compiler=org.apache.axis.components.compiler.Jikes"/>
         -->
@@ -474,7 +474,7 @@
   <!-- =================================================================== -->
   <target name="start-functional-test-http-server-secure" if="junit.present" depends="start-signature-signing-and-verification">
     <echo message="Starting test http server."/>
-    <java classname="org.apache.axis.transport.http.SimpleAxisServer" fork="yes" dir="${axis.home}/build">
+    <java classname="org.apache.axis.transport.http.SimpleAxisServer" fork="yes" dir="${build.dir}">
         <!-- Uncomment this to use Jikes instead of Javac for compiling JWS Files
         <jvmarg value="-Daxis.Compiler=org.apache.axis.components.compiler.Jikes"/>
         -->
@@ -551,11 +551,11 @@
   <target name="component-junit-functional-prepare" if="junit.present">
 
     <!-- first, put the JWS where the functional test can see it -->
-    <mkdir dir="${axis.home}/build/jws" />
-    <copy file="${axis.home}/samples/stock/StockQuoteService.jws" todir="${axis.home}/build/jws" />
-    <copy file="${axis.home}/test/functional/AltStockQuoteService.jws" todir="${axis.home}/build/jws" />
-    <copy file="${axis.home}/test/functional/GlobalTypeTest.jws" todir="${axis.home}/build/jws"/>
-    <copy file="${axis.home}/webapps/axis/EchoHeaders.jws" todir="${axis.home}/build/jws" />
+    <mkdir dir="${build.dir}/jws" />
+    <copy file="${axis.home}/samples/stock/StockQuoteService.jws" todir="${build.dir}/jws" />
+    <copy file="${axis.home}/src/test/java/test/functional/AltStockQuoteService.jws" todir="${build.dir}/jws" />
+    <copy file="${axis.home}/src/test/java/test/functional/GlobalTypeTest.jws" todir="${build.dir}/jws"/>
+    <copy file="${axis.home}/webapps/axis/EchoHeaders.jws" todir="${build.dir}/jws" />
 
           <path id="deploy.xml.files">
                 <fileset dir="${build.dir}">
@@ -610,7 +610,7 @@
            <include name="${componentName}/**/*TestCase.class" />
            <include name="${componentName}/**/PackageTests.class" />
            <!-- <include name="${componentName}/**/test/*TestSuite.class"/> -->
-           <excludesfile name="${axis.home}/junit-exclude-tests.txt" if="junit-exclude-tests.present"/> 
+           <excludesfile name="${axis.home}/junit-exclude-tests.txt" if="junit-exclude-tests.present"/>
         </fileset>
       </batchtest>
    </junit>
@@ -650,23 +650,23 @@
   </target>
 
   <target name="transport-layer" depends="setenv" >
-    <ant inheritAll="true" dir="${axis.home}/samples/transport" 
+    <ant inheritAll="true" dir="${axis.home}/samples/transport"
       antfile="build.xml" target="compile" />
   </target>
 
   <target name="clover-report" depends="setenv">
      <clover-report>
-        <current outfile="${axis.home}/build/clover-report" title="Axis Clover Report" span="60m">
-           <format type="html"/> 
-        </current>	 
+        <current outfile="${build.dir}/clover-report" title="Axis Clover Report" span="60m">
+           <format type="html"/>
+        </current>
      </clover-report>
   </target>
 
   <target name="axis-clover-setup" depends="axis-clover-setenv" if="clover.present">
      <echo message="Registering clover tasks" />
      <taskdef resource="clovertasks"/>
-     <clover-setup initString="${axis.home}/build/clover/axis_coverage.db"
-                   tmpdir="${axis.home}/build/clover"
+     <clover-setup initString="${build.dir}/clover/axis_coverage.db"
+                   tmpdir="${build.dir}/clover"
                    flushpolicy="interval"
                    flushinterval="1000">
        <files>

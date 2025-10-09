@@ -25,7 +25,7 @@ Build Instructions:
         ant run
 
 Author:
-  Matt Seibert mseibert@us.ibm.com
+  Ashutosh Shahi
 
 Copyright:
   Copyright (c) 2002-2003 Apache Software Foundation.
@@ -35,7 +35,7 @@ Copyright:
 <project default="compile">
 
 <property name="axis.home" location="../../.." />
-<property name="componentName" value="test/wsdl/arrays4" />
+<property name="componentName" value="test/wsdl/any" />
         &properties;
         &paths;
         &taskdefs;
@@ -51,9 +51,9 @@ Copyright:
 <target name="copy" depends="setenv"/>
 
 <target name="compile" depends="copy">
-  <echo message="Compiling test.wsdl.arrays4"/>
-    <!-- ArrayTest Test -->
-    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/arrays4/ArrayTest.wsdl"
+  <echo message="Compiling test.wsdl.any"/>
+    <!-- Any Test -->
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/any/any.wsdl"
                output="${build.dir}/work"
                deployscope="session"
                serverSide="yes"
@@ -61,11 +61,12 @@ Copyright:
                noimports="no"
                verbose="no"
                testcase="no">
-        <mapping namespace="urn:ArrayTest4" package="test.wsdl.arrays4"/>
+        <mapping namespace="urn:partner.soap.sforce.com" package="test.wsdl.any"/>
+        <mapping namespace="urn:sobject.partner.soap.sforce.com" package="test.wsdl.any"/>
     </wsdl2java>
 
-    <copy todir="${build.dir}/work/test/wsdl/arrays4" overwrite="yes">
-      <fileset dir="${axis.home}/src/test/java/test/wsdl/arrays4">
+    <copy todir="${build.dir}/work/test/wsdl/any" overwrite="yes">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/any">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
@@ -74,7 +75,7 @@ Copyright:
     <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
            debug="${debug}">
       <classpath refid="classpath" />
-      <include name="test/wsdl/arrays4/*.java" />
+      <include name="test/wsdl/any/*.java" />
     </javac>
 
 </target>

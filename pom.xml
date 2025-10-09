@@ -209,6 +209,16 @@
             <artifactId>httpunit</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.8.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>jimi</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <prerequisites>
@@ -228,6 +238,12 @@
     </pluginRepositories>
 
      <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -487,6 +503,25 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>tools</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.2</version>
@@ -529,4 +564,223 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>run-wsdl-ant-test</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <ant.target>run</ant.target>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-wsdl-ant-test</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!-- Create required directories for Ant build -->
+                                        <mkdir dir="${project.build.directory}/lib" />
+                                        <mkdir dir="${project.build.directory}/work" />
+
+                                        <!-- Create enhanced classpath with project classes -->
+                                        <path id="ant.classpath">
+                                            <path refid="maven.compile.classpath" />
+                                            <path refid="maven.test.classpath" />
+                                            <path refid="maven.runtime.classpath" />
+                                            <pathelement location="${project.build.outputDirectory}" />
+                                            <pathelement location="${project.build.testOutputDirectory}" />
+                                            <pathelement location="${project.build.directory}/work" />
+                                        </path>
+                                        <!-- Copy server config to build directory -->
+                                        <copy file="${project.basedir}/src/test/resources/server-config.wsdd"
+                                              tofile="${project.build.directory}/server-config.wsdd" />
+                                        <copy file="${project.basedir}/src/test/resources/client-config.wsdd"
+                                              tofile="${project.build.outputDirectory}/client-config.wsdd" />
+
+                                        <!-- Define common properties -->
+                                        <propertyset id="common.ant.properties">
+                                            <propertyref name="build.compiler"/>
+                                            <propertyref name="axis.home"/>
+                                            <propertyref name="build.dir"/>
+                                            <propertyref name="build.dest"/>
+                                            <propertyref name="lib.dir"/>
+                                            <propertyref name="test.functional.fail"/>
+                                        </propertyset>
+
+                                        <property name="build.compiler" value="extJavac"/>
+                                        <property name="axis.home" value="${project.basedir}" />
+                                        <property name="build.dir" value="${project.build.directory}" />
+                                        <property name="build.dest" value="${project.build.outputDirectory}" />
+                                        <property name="lib.dir" value="${project.build.directory}/lib" />
+                                        <property name="test.functional.fail" value="yes" />
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/arrays" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays2/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/arrays2" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays4/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/arrays4" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/_import/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/_import" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/adaptive/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/adaptive" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays3/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/arrays3" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/addrNoImplSEI/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/addrNoImplSEI" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/any/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/any" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/anytype/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/anytype" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/attachments/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/attachments" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/attrGroup/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/attrGroup" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/choice/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/choice" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/clash/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/clash" />
+                                            <property name="javac.fork" value="true" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/dataset/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/dataset" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/datatypes/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/datatypes" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/date/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/date" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/doclit_arrays/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/doclit_arrays" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/document/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/document" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/echo/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/echo" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/echo2/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/echo2" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/esr/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/esr" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extensibility/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/extensibility" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extension/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/extension" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extra/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/extra" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/faults/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/faults" />
+                                        </ant>
+
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/filegen/build.xml" target="${ant.target}">
+                                            <propertyset refid="common.ant.properties"/>
+                                            <property name="componentName" value="test/wsdl/filegen" />
+                                        </ant>
+
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-junit</artifactId>
+                                <version>1.8.4</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

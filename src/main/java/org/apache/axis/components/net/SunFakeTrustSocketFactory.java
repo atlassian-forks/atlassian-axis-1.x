@@ -21,9 +21,9 @@ import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.utils.Messages;
 import org.apache.commons.logging.Log;
 
-import com.sun.net.ssl.SSLContext;
-import com.sun.net.ssl.TrustManager;
-import com.sun.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * Hook for Axis sender, allowing unsigned server certs
@@ -84,13 +84,11 @@ public class SunFakeTrustSocketFactory extends SunJSSESocketFactory {
          *
          * @return
          */
-        public boolean isClientTrusted(java.security.cert
-                .X509Certificate[] chain) {
-
+        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
             if (log.isDebugEnabled()) {
                 log.debug(Messages.getMessage("ftsf03"));
             }
-            return true;
+            // Accept all client certificates
         }
 
         /**
@@ -100,13 +98,11 @@ public class SunFakeTrustSocketFactory extends SunJSSESocketFactory {
          *
          * @return
          */
-        public boolean isServerTrusted(java.security.cert
-                .X509Certificate[] chain) {
-
+        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
             if (log.isDebugEnabled()) {
                 log.debug(Messages.getMessage("ftsf04"));
             }
-            return true;
+            // Accept all server certificates
         }
 
         /**

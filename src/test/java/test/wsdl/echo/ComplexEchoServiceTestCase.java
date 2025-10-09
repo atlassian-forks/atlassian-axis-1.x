@@ -91,10 +91,11 @@ public class ComplexEchoServiceTestCase extends junit.framework.TestCase {
         request.setPassword("yyy");
         request.setOptions(new NamedValue[]{
             new NamedValue("dummy1", "dummy_val1"),
-            new NamedValue("dummy2", new NamedValue[]{
-                new NamedValue("dummy2-1", "val2-1"),
-                new NamedValue("dummy2-2", new Integer(314))
-            })
+            new NamedValue("dummy2",
+                    new NamedValueSet (new NamedValue[]{
+                        new NamedValue("dummy2-1", "val2-1"),
+                        new NamedValue("dummy2-2", new Integer(314))
+                    }))
         });
         // Test operation
         test.wsdl.echo.NamedValue[] value = null;
