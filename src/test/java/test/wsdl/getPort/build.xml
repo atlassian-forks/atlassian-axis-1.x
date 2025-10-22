@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/getPort" />
 
         &properties;
@@ -54,14 +53,14 @@ Copyright:
 <target name="compile" depends="copy">
   <echo message="Compiling test.wsdl.getPort"/>
     <!-- This tests the getPort method in generated services.  -->
-    <wsdl2java url="${axis.home}/test/wsdl/getPort/getPort.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/getPort/getPort.wsdl"
+               output="${build.dir}/work"
                serverSide="yes"
                testcase="no">
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/getPort" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/getPort">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/getPort">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
@@ -75,7 +74,7 @@ Copyright:
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

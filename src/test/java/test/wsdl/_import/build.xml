@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/_import" />
 <property name="extraServices" value="work/test/import2/**" />
 <property name="extraTestCases" value="test/import2/**" />

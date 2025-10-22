@@ -10,22 +10,22 @@
 
 # Group D
 #
-EmptySA=http://localhost:8080/axis/services/SoapInteropEmptySAPort
-Import1=http://localhost:8080/axis/services/SoapInteropImport1Port
-Import2=http://localhost:8080/axis/services/SoapInteropImport2Port
-Import3=http://localhost:8080/axis/services/SoapInteropImport3Port
-Compound1=http://localhost:8080/axis/services/SoapInteropCompound1Port
-Compound2=http://localhost:8080/axis/services/SoapInteropCompound2Port
-DocLit=http://localhost:8080/axis/services/WSDLInteropTestDocLitPort
-DocLitParam=http://localhost:8080/axis/services/WSDLInteropTestDocLitParamPort
-RpcEnc=http://localhost:8080/axis/services/WSDLInteropTestRpcEncPort
+EmptySA=http://localhost:8088/axis/services/SoapInteropEmptySAPort
+Import1=http://localhost:8088/axis/services/SoapInteropImport1Port
+Import2=http://localhost:8088/axis/services/SoapInteropImport2Port
+Import3=http://localhost:8088/axis/services/SoapInteropImport3Port
+Compound1=http://localhost:8088/axis/services/SoapInteropCompound1Port
+Compound2=http://localhost:8088/axis/services/SoapInteropCompound2Port
+DocLit=http://localhost:8088/axis/services/WSDLInteropTestDocLitPort
+DocLitParam=http://localhost:8088/axis/services/WSDLInteropTestDocLitParamPort
+RpcEnc=http://localhost:8088/axis/services/WSDLInteropTestRpcEncPort
 
 # Group E
 
 #
 # NOTE: this test takes the WSDL URL
 # Running the functional tests will deploy this service
-TestList=http://localhost:8080/axis/services/InteropTestList?WSDL
+TestList=http://localhost:8088/axis/services/InteropTestList?WSDL
 
 # we don't have this one yet
 TestHeaders=

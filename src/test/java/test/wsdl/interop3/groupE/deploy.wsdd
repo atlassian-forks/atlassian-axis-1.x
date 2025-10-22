@@ -13,7 +13,7 @@
   <!-- Services from InteropTestDocLitService WSDL service -->
 
   <service name="InteropTestDocLit" provider="java:RPC">
-      <parameter name="className" value="test.InteropTestDocLitImpl"/>
+      <parameter name="className" value="test.wsdl.interop3.groupE.InteropTestDocLitImpl"/>
       <parameter name="allowedMethods" value="echoString echoStringArray echoStruct echoVoid"/>
       <parameter name="scope" value="Session"/>
 
@@ -28,7 +28,7 @@
       <typeMapping
         xmlns:ns="http://soapinterop.org/xsd"
         qname="ns:SOAPStruct"
-        type="java:test.SOAPStruct"
+        type="java:test.wsdl.interop3.groupE.SOAPStruct"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -38,7 +38,7 @@
   <!-- Services from InteropTestRpcEncService WSDL service -->
 
   <service name="InteropTestRpcEnc" provider="java:RPC">
-      <parameter name="className" value="test.InteropTestRpcEncImpl"/>
+      <parameter name="className" value="test.wsdl.interop3.groupE.InteropTestRpcEncImpl"/>
       <parameter name="allowedMethods" value="echoString echoStringArray echoStruct echoVoid"/>
       <parameter name="scope" value="Session"/>
 
@@ -53,7 +53,7 @@
       <typeMapping
         xmlns:ns="http://soapinterop.org/xsd"
         qname="ns:SOAPStruct"
-        type="java:test.SOAPStruct"
+        type="java:test.wsdl.interop3.groupE.SOAPStruct"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -63,14 +63,14 @@
   <!-- Services from InteropTestListService WSDL service -->
 
   <service name="InteropTestList" provider="java:RPC">
-      <parameter name="className" value="test.InteropTestListImpl"/>
+      <parameter name="className" value="test.wsdl.interop3.groupE.InteropTestListImpl"/>
       <parameter name="allowedMethods" value="echoLinkedList"/>
       <parameter name="scope" value="Session"/>
 
       <typeMapping
         xmlns:ns="http://soapinterop.org/xsd"
         qname="ns:List"
-        type="java:test.List"
+        type="java:test.wsdl.interop3.groupE.List"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

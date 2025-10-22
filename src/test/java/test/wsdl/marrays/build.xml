@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -33,8 +33,6 @@ Copyright:
 ==================================================================== -->
 
 <project default="compile">
-
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/marrays" />
         &properties;
         &paths;
@@ -53,8 +51,8 @@ Copyright:
 <target name="compile" depends="copy">
   <echo message="Compiling test.wsdl.marrays"/>
     <!-- MArrayTests Test -->
-    <wsdl2java url="${axis.home}/test/wsdl/marrays/MArrayTest.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/marrays/MArrayTest.wsdl"
+               output="${build.dir}/work"
                deployscope="session"
                serverSide="yes"
                skeletonDeploy="yes"
@@ -63,20 +61,23 @@ Copyright:
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/marrays" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/marrays">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/marrays">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-           debug="${debug}">
-      <classpath refid="classpath" />
-      <include name="test/wsdl/marrays/*.java" />
+    <javac srcdir="${build.dir}/work/test/wsdl/marrays" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <include name="**/*.java"/>
     </javac>
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
+  <echo message="Running marrays test with componentName: ${componentName}" />
+  <echo message="Looking for test classes in: ${build.dest}/${componentName}" />
   <antcall target="execute-Component" />
 </target>
 

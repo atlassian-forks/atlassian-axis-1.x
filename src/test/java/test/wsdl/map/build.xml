@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -33,8 +33,6 @@ Copyright:
 ==================================================================== -->
 
 <project default="compile">
-
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/map" />
         &properties;
         &paths;
@@ -54,7 +52,7 @@ Copyright:
   <echo message="Compiling test.wsdl.map"/>
 
     <!-- Compile the test classes for Java2WSDL -->
-    <javac srcdir="${axis.home}/test/wsdl/map"
+    <javac srcdir="${axis.home}/src/test/java/test/wsdl/map"
            destdir="${build.dest}"
            nowarn="${nowarn}"
            fork="${javac.fork}"
@@ -68,7 +66,7 @@ Copyright:
 
     <!-- Generate WSDL from java -->
     <java2wsdl output="${build.dir}/work/test/wsdl/map/MapService.wsdl"
-               className= "test.test.wsdl.map.MapService"
+               className= "test.wsdl.map.MapService"
                namespace="http://test.com/MapService"
                location="http://localhost:8080/axis/services/MapService">
         <mapping package="test.wsdl.map" namespace="http://test.com/MapService" />
@@ -76,34 +74,37 @@ Copyright:
 
     <!-- Verify files generated based on everything in WSDL -->
     <wsdl2java url="${build.dir}/work/test/wsdl/map/MapService.wsdl"
-               output="${axis.home}/build/work"
+               output="${build.dir}/work"
                all="yes"
                verbose="no"
                serverside="yes"
                testcase="no">
         <mapping namespace="http://test.com/MapService" package="test.wsdl.map"/>
+        <mapping namespace="http://xml.apache.org/xml-soap" package="test.wsdl.map"/>
     </wsdl2java>
 
     <!-- Copy the test case -->
-    <copy file="MapServiceTestCase.java" overwrite="true"
-          todir="${build.dir}/work/test/wsdl/map"/>
-
-    <copy file="MapServiceSoapBindingImpl.java" overwrite="true"
-          todir="${build.dir}/work/test/wsdl/map"/>
+    <copy todir="${build.dir}/work/test/wsdl/map" overwrite="yes">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/map">
+        <include name="*TestCase.java"/>
+        <include name="*Impl.java"/>
+      </fileset>
+    </copy>
 
 	<!-- Clean up old classes -->
     <delete dir="${build.dir}/classes/test/wsdl/map" />
 
     <!-- Compile the test case -->
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-           debug="${debug}">
-      <classpath refid="classpath" />
-      <include name="test/wsdl/map/*.java" />
+    <javac srcdir="${build.dir}/work/test/wsdl/map" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <include name="**/*.java"/>
     </javac>
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

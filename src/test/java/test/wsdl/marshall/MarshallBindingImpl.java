@@ -9,16 +9,16 @@ package test.wsdl.marshall;
 
 import java.math.BigInteger;
 
-public class MarshallBindingImpl implements wsdl.marshall.MarshallPortType{
-    public wsdl.marshall.types.MyBean[] myBeanArray(wsdl.marshall.types.MyBean[] arrayOfMyBean_1) throws java.rmi.RemoteException {
+public class MarshallBindingImpl implements test.wsdl.marshall.MarshallPortType{
+    public test.wsdl.marshall.types.MyBean[] myBeanArray(test.wsdl.marshall.types.MyBean[] arrayOfMyBean_1) throws java.rmi.RemoteException {
         return null;
     }
 
-    public wsdl.marshall.types.MyBean[][] myBeanMultiArray(wsdl.marshall.types.MyBean[][] arrayOfarrayOfMyBean_1) throws java.rmi.RemoteException {
+    public test.wsdl.marshall.types.MyBean[][] myBeanMultiArray(test.wsdl.marshall.types.MyBean[][] arrayOfarrayOfMyBean_1) throws java.rmi.RemoteException {
         return null;
     }
 
-    public wsdl.marshall.types.MyBean myBean(wsdl.marshall.types.MyBean myBean_1) throws java.rmi.RemoteException {
+    public test.wsdl.marshall.types.MyBean myBean(test.wsdl.marshall.types.MyBean myBean_1) throws java.rmi.RemoteException {
         return null;
     }
 

@@ -16,7 +16,7 @@
       <parameter name="wsdlTargetNamespace" value="urn:rpcParams.wsdl.test"/>
       <parameter name="wsdlServiceElement" value="rpcParamsService"/>
       <parameter name="wsdlServicePort" value="RpcParams"/>
-      <parameter name="className" value="test.RpcParamsBindingImpl"/>
+      <parameter name="className" value="test.wsdl.rpcParams.RpcParamsBindingImpl"/>
       <parameter name="allowedMethods" value="echo"/>
 
       <!--

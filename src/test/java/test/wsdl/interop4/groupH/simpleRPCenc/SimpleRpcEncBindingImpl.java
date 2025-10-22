@@ -9,21 +9,21 @@
 
 package test.wsdl.interop4.groupH.simpleRPCenc;
 
-public class SimpleRpcEncBindingImpl implements wsdl.interop4.groupH.simpleRPCenc.SimpleRpcEncPortType{
-    public void echoEmptyFault() throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.EmptyFault {
+public class SimpleRpcEncBindingImpl implements test.wsdl.interop4.groupH.simpleRPCenc.SimpleRpcEncPortType{
+    public void echoEmptyFault() throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.EmptyFault {
         throw new EmptyFault();
     }
 
-    public void echoStringFault(java.lang.String param) throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.StringFault {
+    public void echoStringFault(java.lang.String param) throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.StringFault {
         StringFault fault = new StringFault(param);
         throw fault;
     }
 
-    public void echoIntArrayFault(int[] param) throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.IntArrayFault {
+    public void echoIntArrayFault(int[] param) throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.IntArrayFault {
         throw new IntArrayFault(param);
     }
 
-    public void echoMultipleFaults1(int whichFault, java.lang.String param1, float[] param2) throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.FloatArrayFault, wsdl.interop4.groupH.simpleRPCenc.StringFault, wsdl.interop4.groupH.simpleRPCenc.EmptyFault {
+    public void echoMultipleFaults1(int whichFault, java.lang.String param1, float[] param2) throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.FloatArrayFault, test.wsdl.interop4.groupH.simpleRPCenc.StringFault, test.wsdl.interop4.groupH.simpleRPCenc.EmptyFault {
         switch (whichFault) {
             case 2:
                 throw new StringFault(param1);
@@ -34,7 +34,7 @@ public class SimpleRpcEncBindingImpl implements wsdl.interop4.groupH.simpleRPCen
         }
     }
 
-    public void echoMultipleFaults2(int whichFault, java.lang.String param1, float param2, java.lang.String[] param3) throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.StringArrayFault, wsdl.interop4.groupH.simpleRPCenc.FloatFault, wsdl.interop4.groupH.simpleRPCenc.StringFault {
+    public void echoMultipleFaults2(int whichFault, java.lang.String param1, float param2, java.lang.String[] param3) throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.StringArrayFault, test.wsdl.interop4.groupH.simpleRPCenc.FloatFault, test.wsdl.interop4.groupH.simpleRPCenc.StringFault {
         switch (whichFault) {
             case 2:
                 throw new StringFault(param1);
@@ -45,7 +45,7 @@ public class SimpleRpcEncBindingImpl implements wsdl.interop4.groupH.simpleRPCen
         }
     }
 
-    public void echoMultipleFaults3(int whichFault, java.lang.String param1, java.lang.String param2) throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.String2Fault, wsdl.interop4.groupH.simpleRPCenc.StringFault {
+    public void echoMultipleFaults3(int whichFault, java.lang.String param1, java.lang.String param2) throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.String2Fault, test.wsdl.interop4.groupH.simpleRPCenc.StringFault {
         switch (whichFault) {
             case 2:
                 throw new String2Fault(param2);
@@ -54,7 +54,7 @@ public class SimpleRpcEncBindingImpl implements wsdl.interop4.groupH.simpleRPCen
         }
     }
 
-    public void echoMultipleFaults4(int whichFault, int param1, wsdl.interop4.groupH.simpleRPCenc.Enum param2) throws java.rmi.RemoteException, wsdl.interop4.groupH.simpleRPCenc.EnumFault, wsdl.interop4.groupH.simpleRPCenc.IntFault {
+    public void echoMultipleFaults4(int whichFault, int param1, test.wsdl.interop4.groupH.simpleRPCenc.Enum param2) throws java.rmi.RemoteException, test.wsdl.interop4.groupH.simpleRPCenc.EnumFault, test.wsdl.interop4.groupH.simpleRPCenc.IntFault {
         switch (whichFault) {
             case 2:
                 throw new EnumFault(param2);

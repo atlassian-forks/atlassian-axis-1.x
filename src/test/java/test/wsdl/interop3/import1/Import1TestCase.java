@@ -1,6 +1,7 @@
 package test.wsdl.interop3.import1;
 
 import test.wsdl.interop3.import1.definitions.SoapInteropImport1PortType;
+import test.wsdl.interop3.import1.Import1Locator;
 
 import java.net.URL;
 /*
@@ -33,14 +34,20 @@ public class Import1TestCase extends junit.framework.TestCase {
     public void testStep3() {
         SoapInteropImport1PortType binding;
         try {
-            if (url == null) {
-                binding = new Import1Locator().getSoapInteropImport1Port();
-            } else {
+            if (url != null) {
                 binding = new Import1Locator().getSoapInteropImport1Port(url);
+            } else {
+                // Check for local test endpoint via system property - use the SimpleAxisPort which is the actual server port
+                String simpleAxisPort = System.getProperty("test.functional.SimpleAxisPort", "8080");
+                String serviceUrl = "http://localhost:" + simpleAxisPort + "/axis/services/SoapInteropImport1Port";
+                binding = new Import1Locator().getSoapInteropImport1Port(new java.net.URL(serviceUrl));
             }
         }
         catch (javax.xml.rpc.ServiceException jre) {
             throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
+        }
+        catch (java.net.MalformedURLException mue) {
+            throw new junit.framework.AssertionFailedError("Malformed URL Exception caught: " + mue);
         }
         assertTrue("binding is null", binding != null);
 

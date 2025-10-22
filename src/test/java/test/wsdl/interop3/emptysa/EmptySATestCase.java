@@ -25,14 +25,17 @@ public class EmptySATestCase extends junit.framework.TestCase {
     public EmptySATestCase(java.lang.String name) throws Exception {
         super(name);
         if (url == null) {
-            url = new URL(new EmptySALocator().getSoapInteropEmptySAPortAddress());
+            // Check for local test endpoint via system property - use the SimpleAxisPort which is the actual server port
+            String simpleAxisPort = System.getProperty("test.functional.SimpleAxisPort", "8080");
+            String serviceUrl = "http://localhost:" + simpleAxisPort + "/axis/services/SoapInteropEmptySAPort";
+            url = new URL(serviceUrl);
         }
 
     }
     public void test1SoapInteropEmptySAPortEchoString() throws Exception {
         test.wsdl.interop3.emptysa.SoapInteropEmptySAPortType binding;
         try {
-            binding = new test.wsdl.interop3.emptysa.EmptySALocator().getSoapInteropEmptySAPort();
+            binding = new test.wsdl.interop3.emptysa.EmptySALocator().getSoapInteropEmptySAPort(url);
         }
         catch (javax.xml.rpc.ServiceException jre) {
             if(jre.getLinkedCause()!=null)

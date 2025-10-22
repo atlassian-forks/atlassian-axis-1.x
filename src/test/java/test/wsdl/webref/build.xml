@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -38,7 +38,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/webref" />
         &properties;
         &paths;
@@ -57,7 +56,7 @@ Copyright:
     <echo message="Compiling test.wsdl.webref"/>
 
     <!-- Compile the implementation class for Java2WSDL -->
-    <javac srcdir="${axis.home}/${componentName}"
+    <javac srcdir="${axis.home}/src/test/java/${componentName}"
            destdir="${build.dest}"
            fork="${javac.fork}"
            nowarn="${nowarn}"
@@ -71,7 +70,7 @@ Copyright:
 
     <!-- Generate WSDL from java -->
     <java2wsdl output="${build.dir}/work/${componentName}/DoubleBackService.wsdl"
-               className= "test.test.wsdl.webref.DoubleBack"
+               className= "test.wsdl.webref.DoubleBack"
                location="http://localhost:8080/axis/services/DoubleBackService"
                porttypename="DoubleBackPortType"
                style="DOCUMENT"
@@ -81,33 +80,34 @@ Copyright:
 
     <!-- Generate skeletons and stubs for client and server with custom implementation class -->
     <wsdl2java url="${build.dir}/work/${componentName}/DoubleBackService.wsdl"
-               output="${axis.home}/build/work"
+               output="${build.dir}/work"
                all="yes"
                serverside="yes"
                skeletondeploy="no"
                verbose="no"
-               testcase="no"
-               implementationClassName="test.test.wsdl.webref.DoubleBack">
+               testcase="yes"
+               implementationClassName="test.wsdl.webref.DoubleBack">
         <mapping namespace="http://webref.wsdl.test/DoubleBack" package="test.wsdl.webref"/>
     </wsdl2java>
 
     <copy todir="${build.dir}/work/${componentName}" overwrite="yes">
-      <fileset dir="${axis.home}/${componentName}">
+      <fileset dir="${axis.home}/src/test/java/${componentName}">
         <include name="DoubleBack.java"/>
         <include name="DoubleBackServiceTestCase.java"/>
       </fileset>
     </copy>
 
     <!-- Compile it all -->
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-           debug="${debug}">
-      <classpath refid="classpath" />
-      <include name="${componentName}/*.java" />
+    <javac srcdir="${build.dir}/work/${componentName}" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <include name="**/*.java"/>
     </javac>
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

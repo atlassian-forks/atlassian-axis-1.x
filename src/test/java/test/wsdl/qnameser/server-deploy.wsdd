@@ -16,7 +16,7 @@
       <parameter name="wsdlTargetNamespace" value="http://tempuri.org/"/>
       <parameter name="wsdlServiceElement" value="PlanWS"/>
       <parameter name="wsdlServicePort" value="PlanWSSoap"/>
-      <parameter name="className" value="test.PlanService"/>
+      <parameter name="className" value="test.wsdl.qnameser.PlanService"/>
       <parameter name="wsdlPortType" value="PlanWSSoap"/>
       <parameter name="allowedMethods" value="*"/>
 

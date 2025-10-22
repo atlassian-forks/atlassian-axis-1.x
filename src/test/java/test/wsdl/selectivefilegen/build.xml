@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/selectivefilegen" />
         &properties;
         &paths;
@@ -49,16 +48,21 @@ Copyright:
 </target>
 
 <target name="copy" depends="setenv">
-    <ant inheritAll="${ant.inheritAll}" 
-         inheritRefs="${ant.inheritRefs}" 
-         dir="${axis.home}/test/wsdl/filegen" 
-         antfile="build.xml" 
-         target="compile"/>
+    <ant inheritAll="${ant.inheritAll}"
+         inheritRefs="${ant.inheritRefs}"
+         dir="${axis.home}/src/test/java/test/wsdl/filegen"
+         antfile="build.xml"
+         target="compile">
+        <property name="axis.home" value="${axis.home}" />
+        <property name="lib.dir" value="${lib.dir}" />
+        <property name="build.dest" value="${build.dest}" />
+        <property name="javac.fork" value="true" />
+    </ant>
 </target>
 
 <target name="compile" depends="copy">
     <copy todir="${build.dir}/work/test/wsdl/selectivefilegen" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/selectivefilegen">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/selectivefilegen">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
         <include name="Bean1.java"/>
@@ -67,11 +71,11 @@ Copyright:
     </copy>
 
   <echo message="Compiling test.wsdl.selectivefilegen"/>
-    <!-- allnamespaces 
+    <!-- allnamespaces
     -->
     <echo message="all namespaces test"/>
-    <wsdl2java url="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
+               output="${build.dir}/work"
                testcase="yes"
                skeletonDeploy="true"
                serverSide="true">
@@ -83,11 +87,11 @@ Copyright:
                  package="test.wsdl.selectivefilegen.allnamespaces.bean2"/>
     </wsdl2java>
 
-    <!-- exluded bean 
+    <!-- exluded bean
     -->
     <echo message="exclude bean test"/>
-    <wsdl2java url="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
+               output="${build.dir}/work"
                testcase="yes"
                skeletonDeploy="true"
                serverSide="true">
@@ -102,12 +106,12 @@ Copyright:
                  package="test.wsdl.selectivefilegen.excludedbean.bean2"/>
         <nsexclude namespace="urn:bean1.selectivefilegen.wsdl.test"/>
     </wsdl2java>
-    
-    <!-- excluded service 
+
+    <!-- excluded service
                -->
     <echo message="exclude service test"/>
-    <wsdl2java url="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
+               output="${build.dir}/work"
                testcase="yes"
                skeletonDeploy="true"
                serverSide="true">
@@ -123,11 +127,11 @@ Copyright:
         <nsexclude namespace="urn:services.selectivefilegen.wsdl.test"/>
     </wsdl2java>
 
-    <!-- include bean 
+    <!-- include bean
     -->
     <echo message="include bean test"/>
-    <wsdl2java url="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
+               output="${build.dir}/work"
                testcase="yes"
                skeletonDeploy="true"
                serverSide="true">
@@ -140,12 +144,12 @@ Copyright:
         <nsinclude namespace="urn:bean1.selectivefilegen.wsdl.test"/>
         <nsinclude namespace="urn:bean2.selectivefilegen.wsdl.test"/>
     </wsdl2java>
-    
+
     <!-- included service
                  -->
     <echo message="include service test"/>
-    <wsdl2java url="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
+               output="${build.dir}/work"
                testcase="yes"
                skeletonDeploy="true"
                serverSide="true">
@@ -162,16 +166,17 @@ Copyright:
     <!-- cmd line exclude test -->
     <echo message="cmd line exclude test"/>
     <java classname="org.apache.axis.wsdl.WSDL2Java"
-	    fork="true">
+	    fork="true" failonerror="true">
          <classpath>
-             <fileset dir="${axis.home}/build/lib" includes="*.jar"/>
+             <pathelement path="${build.dest}"/>
+             <fileset dir="${lib.dir}" includes="*.jar"/>
              <fileset dir="${lib.dir}">
                 <include name="**/*.jar"/>
              </fileset>
          </classpath>
          <sysproperty key="log4j.configuration"
-                      value="${axis.home}/build/lib/log4j.properties"/>
-         <arg line="-o ${axis.home}/build/work"/>
+                      value="${lib.dir}/log4j.properties"/>
+         <arg line="-o ${build.dir}/work"/>
          <arg line="-t"/>
          <arg line="-S true"/>
          <arg value="--NStoPkg"/>
@@ -181,22 +186,23 @@ Copyright:
          <arg value="--NStoPkg"/>
          <arg value="urn:bean2.selectivefilegen.wsdl.test=test.wsdl.selectivefilegen.cmdlinex.bean2"/>
          <arg line="-x urn:bean1.selectivefilegen.wsdl.test"/>
-         <arg line="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"/>
+         <arg line="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"/>
     </java>
 
     <!-- cmd line include test -->
     <echo message="cmd line include test"/>
     <java classname="org.apache.axis.wsdl.WSDL2Java"
-	    fork="true">
+	    fork="true" failonerror="true">
          <classpath>
-             <fileset dir="${axis.home}/build/lib" includes="*.jar"/>
+             <pathelement path="${build.dest}"/>
+             <fileset dir="${lib.dir}" includes="*.jar"/>
              <fileset dir="${lib.dir}">
                 <include name="**/*.jar"/>
              </fileset>
          </classpath>
          <sysproperty key="log4j.configuration"
-                      value="${axis.home}/build/lib/log4j.properties"/>
-         <arg line="-o ${axis.home}/build/work"/>
+                      value="${lib.dir}/log4j.properties"/>
+         <arg line="-o ${build.dir}/work"/>
          <arg line="-t"/>
          <arg line="-S true"/>
          <arg value="--NStoPkg"/>
@@ -207,15 +213,15 @@ Copyright:
          <arg value="urn:bean2.selectivefilegen.wsdl.test=test.wsdl.selectivefilegen.cmdlinei"/>
          <arg line="-i urn:bean1.selectivefilegen.wsdl.test"/>
          <arg line="-i urn:bean2.selectivefilegen.wsdl.test"/>
-         <arg line="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"/>
+         <arg line="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"/>
     </java>
 
-    <!-- property test - just look at the factoryProp printout using a 
+    <!-- property test - just look at the factoryProp printout using a
          compile -verbose option until a better test can be created.
     -->
     <echo message="property test"/>
-    <wsdl2java url="${axis.home}/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/selectivefilegen/selectiveFileGen.wsdl"
+               output="${build.dir}/work"
                testcase="yes"
                skeletonDeploy="true"
                serverSide="true">
@@ -231,14 +237,15 @@ Copyright:
         <property name="prop3" value="value3"/>
     </wsdl2java>
 
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-           debug="${debug}">
-      <classpath refid="classpath" />
+    <javac srcdir="${build.dir}/work" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
       <include name="test/wsdl/selectivefilegen/**/*.java" />
     </javac>
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

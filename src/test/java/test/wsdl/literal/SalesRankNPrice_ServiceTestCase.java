@@ -11,9 +11,11 @@
 package test.wsdl.literal;
 
 import org.apache.axis.AxisFault;
+import org.apache.axis.client.AdminClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class SalesRankNPrice_ServiceTestCase extends junit.framework.TestCase {
@@ -94,8 +96,8 @@ public class SalesRankNPrice_ServiceTestCase extends junit.framework.TestCase {
     };
 
     public void testFileGen() throws IOException {
-        String rootDir = "build"+ File.separator + "work" + File.separator +
-                "test" + File.separator + "test" + File.separator + "literal";
+        String rootDir = "target"+ File.separator + "work" + File.separator +
+                "test" + File.separator + "wsdl" + File.separator + "literal";
         // open up the output directory and check what files exist.
         File outputDir = new File(rootDir);
 
@@ -117,42 +119,63 @@ public class SalesRankNPrice_ServiceTestCase extends junit.framework.TestCase {
         // "Building Web Services With Java" :)
         java.lang.String ISBN = "0672321815";
 
-        boolean debug = true;
-
-        SalesRankNPriceSoap binding;
         try {
-            if (url != null)
-                binding = new SalesRankNPriceLocator().getSalesRankNPriceSoap(url);
-            else
-                binding = new SalesRankNPriceLocator().getSalesRankNPriceSoap();
-        } catch (javax.xml.rpc.ServiceException jre) {
-            throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre );
-        }
+            // Deploy the service
+            doTestDeploy();
+            
+            SalesRankNPriceSoap binding;
+            try {
+                // Use local Axis server
+                URL localUrl = new URL("http://localhost:8080/axis/services/SalesRankNPriceSoap");
+                binding = new SalesRankNPriceLocator().getSalesRankNPriceSoap(localUrl);
+            } catch (javax.xml.rpc.ServiceException jre) {
+                throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre );
+            } catch (MalformedURLException mue) {
+                throw new junit.framework.AssertionFailedError("Malformed URL Exception caught: " + mue );
+            }
 
-        assertTrue("binding is null", binding != null);
+            assertTrue("binding is null", binding != null);
 
-        try {
-            printit(binding.getAmazonSalesRank(ISBN));
-            printit(binding.getAmazonUKSalesRank(ISBN));
-            //printit(binding.getBNSalesRank(ISBN));
-            printit(binding.getAmazonPrice(ISBN));
-            printit(binding.getAmazonUKPrice(ISBN));
-            printit(binding.getBNPrice(ISBN));
-            printit(binding.getAmazonSalesRankNPrice(ISBN));
-            printit(binding.getBNSalesRankNPrice(ISBN));
-            printit(binding.getAmazonAndBNSalesRank(ISBN));
-            printit(binding.getAmazonAndBNPrice(ISBN));
-            printit(binding.getAll(ISBN));
-        } catch (java.rmi.RemoteException re) {
-            if (!(re instanceof AxisFault &&
-                  ((((AxisFault) re).detail instanceof java.net.ConnectException)||
-                   (((AxisFault) re).getFaultCode().getLocalPart().equals("HTTP"))))) {
-                throw new junit.framework.AssertionFailedError("Remote Exception caught: " + re );
-            } else {
-                // A connection exception has been detected so report this and make the test succeed.
-                printit("Connect failure caused some of SalesRankNPrice_ServiceTestCase to be skipped.");
+            try {
+                printit(binding.getAmazonSalesRank(ISBN));
+                printit(binding.getAmazonUKSalesRank(ISBN));
+                //printit(binding.getBNSalesRank(ISBN));
+                printit(binding.getAmazonPrice(ISBN));
+                printit(binding.getAmazonUKPrice(ISBN));
+                printit(binding.getBNPrice(ISBN));
+                printit(binding.getBNSalesRankNPrice(ISBN));
+                printit(binding.getAmazonAndBNSalesRank(ISBN));
+                printit(binding.getAmazonAndBNPrice(ISBN));
+                printit(binding.getAll(ISBN));
+            } catch (java.rmi.RemoteException re) {
+                if (!(re instanceof AxisFault &&
+                      ((((AxisFault) re).detail instanceof java.net.ConnectException)||
+                       (((AxisFault) re).getFaultCode().getLocalPart().equals("HTTP"))))) {
+                    throw new junit.framework.AssertionFailedError("Remote Exception caught: " + re );
+                } else {
+                    // A connection exception has been detected so report this and make the test succeed.
+                    printit("Connect failure caused some of SalesRankNPrice_ServiceTestCase to be skipped.");
+                }
+            }
+        } catch (Exception e) {
+            throw new junit.framework.AssertionFailedError("Exception during test setup: " + e);
+        } finally {
+            try {
+                doTestUndeploy();
+            } catch (Exception e) {
+                // Ignore undeploy failures
             }
         }
+    }
+
+    public void doTestDeploy() throws Exception {
+        String[] args = { "target/work/test/wsdl/literal/deploy.wsdd" };
+        AdminClient.main(args);
+    }
+
+    public void doTestUndeploy() throws Exception {
+        String[] args = { "target/work/test/wsdl/literal/undeploy.wsdd" };
+        AdminClient.main(args);
     }
 
     public static void main(String[] args) {

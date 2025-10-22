@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -33,8 +33,6 @@ Copyright:
 ==================================================================== -->
 
 <project default="compile">
-
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/multithread" />
 <property name="extraServices" value="work/samples/addr" />
 
@@ -61,22 +59,24 @@ Copyright:
 
     <!-- Multithread Test -->
     <copy todir="${build.dir}/work/test/wsdl/multithread" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/multithread">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/multithread">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
-  <javac srcdir="${build.dir}/work" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}">
+  <javac srcdir="${build.dir}/work/test/wsdl/multithread" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
     <classpath>
         <path refid="classpath"/>
     </classpath>
-    <include name="test/wsdl/multithread/*.java"/>
+    <include name="**/*.java"/>
   </javac>
 </target>
 
-<target name="run" >
-	<antcall target="execute-Component"/>
+<target name="run" depends="compile">
+  <echo message="Running multithread test with componentName: ${componentName}" />
+  <echo message="Looking for test classes in: ${build.dest}/${componentName}" />
+  <antcall target="execute-Component"/>
 </target>
 
 </project>

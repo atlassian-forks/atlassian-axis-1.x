@@ -7,7 +7,7 @@
    targetNamespace="http://tempuri.org/"
    xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <s:schema elementFormDefault="qualified" 
+    <s:schema elementFormDefault="qualified"
        targetNamespace="http://tempuri.org/">
       <s:import namespace="http://www.w3.org/2001/XMLSchema" />
 
@@ -20,11 +20,11 @@
   </s:simpleType>
 
   <s:simpleType name="FooOpenEnum">
-   <s:union memberTypes="s0:FooEnum s:anyURI" /> 
+   <s:union memberTypes="s0:FooEnum s:anyURI" />
   </s:simpleType>
- 
- <s:simpleType name="DateOrDateTimeType"> 
-   <s:union memberTypes="s:boolean s:int s:date s:dateTime"/> 
+
+ <s:simpleType name="DateOrDateTimeType">
+   <s:union memberTypes="s:boolean s:int s:date s:dateTime"/>
  </s:simpleType>
 
       <s:element name="Record1">

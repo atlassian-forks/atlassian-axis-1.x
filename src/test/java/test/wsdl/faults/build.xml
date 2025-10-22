@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/faults" />
         &properties;
         &paths;

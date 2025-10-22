@@ -2,7 +2,7 @@
     xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
   <service name="jaxrpchandler">
     <handlerInfoChain>
-       <handlerInfo classname="test.ClientHandler">
+       <handlerInfo classname="test.wsdl.jaxrpchandler.ClientHandler">
        <parameter name="param1" value="value1"/>
        <parameter name="param4" value="value4"/>
        <parameter name="param3" value="value3"/>

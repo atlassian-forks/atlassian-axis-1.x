@@ -5,7 +5,7 @@
 <property name="ant.home" value="env.ANT_HOME" />
 
 <!-- set axis home up -->
-<property name="axis.home" location="."/>
+<property name="axis.home" location="${basedir}"/>
 
 <!-- Give user a chance to override without editing this file
      (and without typing -D each time it compiles it) -->
@@ -39,7 +39,7 @@
 
 <!-- we resolve the lib dir twice, to ensure that any
   paths from Gump are absolute -->
-<property name="axis.lib.dir" location="${axis.home}/lib"/>
+<property name="axis.lib.dir" location="${axis.home}/target/lib"/>
 <property name="lib.dir" location="${axis.lib.dir}"/>
 
 <!-- jar files -->
@@ -71,7 +71,7 @@
 <property name="build.file" value="build.xml" />
 <!-- directories for output -->
 
-<property name="build.dir" location="${axis.home}/build"/>
+<property name="build.dir" location="${axis.home}/target"/>
 <property name="build.dest" location="${build.dir}/classes"/>
 <property name="build.lib" location="${build.dir}/lib"/>
 <property name="build.samples" location="${build.dir}/classes/samples"/>
@@ -120,6 +120,7 @@
 <property name="socks.proxyHost" value=""/>
 <property name="socks.proxyPort" value="1080"/>
 
+<property name="build.compiler" value="extJavac"/>
 <property name="javac.fork" value="no"/>
 <property name="foreach.fork" value="no"/>
 <property name="ant.inheritAll" value="false"/>

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -51,8 +51,8 @@ Copyright:
         <property name="testname" value="simpleRPCenc"/>
 
         <!-- generate skeletons -->
-        <wsdl2java url="${axis.home}/test/wsdl/interop4/groupH/simpleRPCenc/simple-rpc-encoded.wsdl"
-            output="${root.dir}/build/work" skeletonDeploy="no"
+        <wsdl2java url="${axis.home}/src/test/java/test/wsdl/interop4/groupH/simpleRPCenc/simple-rpc-encoded.wsdl"
+            output="${build.dir}/work" skeletonDeploy="no"
             serverSide="yes">
             <mapping namespace="http://soapinterop.org/types" package="test.wsdl.interop4.groupH.simpleRPCenc"/>
             <mapping namespace="http://soapinterop.org/wsdl" package="test.wsdl.interop4.groupH.simpleRPCenc"/>
@@ -61,9 +61,9 @@ Copyright:
         <mkdir dir="${build.dest}"/>
 
         <copy file="SimpleRpcEncBindingImpl.java" overwrite="true"
-              todir="${root.dir}/build/work/test/wsdl/interop4/groupH/${testname}"/>
+              todir="${build.dir}/work/test/wsdl/interop4/groupH/${testname}"/>
         <copy file="SimpleRpcEncServiceTestCase.java"
-            todir="${root.dir}/build/work/test/wsdl/interop4/groupH/${testname}"/>
+            todir="${build.dir}/work/test/wsdl/interop4/groupH/${testname}"/>
 
         <!-- compile the code -->
         <javac srcdir="${build.dir}/work"
@@ -72,7 +72,7 @@ Copyright:
             <include name="test/wsdl/interop4/groupH/simpleRPCenc/*.java" />
         </javac>
     </target>
-    <target name="run" >
+    <target name="run" depends="compile">
         <antcall target="execute-Component" />
     </target>
 

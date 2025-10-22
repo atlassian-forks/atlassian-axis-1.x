@@ -47,9 +47,23 @@ public class OnewayTestCase extends TestCase {
 
         try {
             ((Stub) binding)._setProperty(Stub.SESSION_MAINTAIN_PROPERTY, new Boolean(true));
-            binding.addEntry("hi", new Address());
-            Address address = binding.getAddressFromName("hi");
-            assertTrue("session doesn't work on oneway operations, address should have been null", address == null);
+            
+            // Create a properly initialized Address object
+            Address address = new Address();
+            Phone phone = new Phone();
+            address.setStreetNum(123);
+            address.setStreetName("Main Street");
+            address.setCity("Austin");
+            address.setState(StateType.TX);
+            address.setZip(78701);
+            phone.setAreaCode(512);
+            phone.setExchange("555");
+            phone.setNumber("1234");
+            address.setPhoneNumber(phone);
+            
+            binding.addEntry("hi", address);
+            Address retrievedAddress = binding.getAddressFromName("hi");
+            assertTrue("session doesn't work on oneway operations, address should have been null", retrievedAddress == null);
         }
         catch (RemoteException re) {
             throw new AssertionFailedError("Remote Exception caught: " + re);

@@ -47,8 +47,8 @@ public class IncludeServiceTestCase extends FileGenTestCase {
     }
 
     protected String rootDir() {
-        return "build" + File.separator + "work" + File.separator +
-                "test" + File.separator + "test" + File.separator +
+        return "target" + File.separator + "work" + File.separator +
+                "test" + File.separator + "wsdl" + File.separator +
                 "selectivefilegen" + File.separator +
                 "includedsvc";
     }

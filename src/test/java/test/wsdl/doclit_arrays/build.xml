@@ -57,6 +57,7 @@ Copyright:
            debug="${debug}">
       <classpath refid="classpath" />
       <include name="test/wsdl/doclit_arrays/*.java" />
+      <exclude name="test/wsdl/doclit_arrays/*TestCase.java" />
     </javac>
 
     <!-- Create output directory for WSDL -->
@@ -96,9 +97,9 @@ Copyright:
 
 <target name="run" depends="compile">
   <!-- Run JUnit tests directly without server deployment -->
-  <junit printsummary="yes" haltonerror="yes" haltonfailure="yes">
+  <junit printsummary="yes" haltonerror="yes" haltonfailure="yes" dir="${axis.home}">
     <classpath refid="classpath" />
-    <formatter type="plain" />
+    <formatter type="plain" usefile="false" />
     <test name="test.wsdl.doclit_arrays.ArrayServiceTestCase" />
   </junit>
 </target>
