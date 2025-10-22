@@ -567,8 +567,12 @@
     <profiles>
         <profile>
             <id>run-wsdl-ant-test</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
             <properties>
-                <maven.test.skip>true</maven.test.skip>
                 <ant.target>run</ant.target>
             </properties>
             <build>
