@@ -61,7 +61,7 @@ Copyright:
 
     <!-- generate skeletons -->
     <!-- <wsdl2java url="http://www.whitemesa.com/r3/${testname}.wsdl" -->
-    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/interop3/${testname}/${testname}.wsdl"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/interop3/${testname}/Compound2.wsdl"
                output="${build.dir}/work" skeletonDeploy="no"
                serverSide="yes" namespaceMappingFile="${axis.home}/src/test/java/test/wsdl/interop3/${testname}/NStoPkg.properties"/>
 
