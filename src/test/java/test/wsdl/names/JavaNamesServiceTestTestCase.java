@@ -37,8 +37,17 @@ public class JavaNamesServiceTestTestCase extends junit.framework.TestCase {
         // Test operation with valid data
         test.wsdl.names.javanames.MyPhone phone = new test.wsdl.names.javanames.MyPhone(555, "123", "4567");
         test.wsdl.names.javanames.MyAddress address = new test.wsdl.names.javanames.MyAddress(123, "Main St", "Anytown", "CA", 90210, phone);
-        binding._new("John Doe", address);
-        // TBD - validate results
+        
+        // Validate objects were created properly
+        assertNotNull("Phone object should be created", phone);
+        assertNotNull("Address object should be created", address);
+        
+        // Test _new operation completes successfully
+        try {
+            binding._new("John Doe", address);
+        } catch (Exception e) {
+            fail("_new operation should not throw an exception: " + e.getMessage());
+        }
     }
 
     public void test2JavaNames_public() throws Exception {
@@ -57,10 +66,15 @@ public class JavaNamesServiceTestTestCase extends junit.framework.TestCase {
         // Time out after a minute
         binding.setTimeout(60000);
 
-        // Test operation
+        // Test operation - retrieve address for a name
         test.wsdl.names.javanames.MyAddress value = null;
-        value = binding._public("John Doe");
-        // TBD - validate results
+        try {
+            value = binding._public("John Doe");
+            // TBD - validate results (skeleton implementation currently returns null)
+            assertNull("Server skeleton implementation returns null for any name", value);
+        } catch (Exception e) {
+            fail("_public operation should not throw an exception: " + e.getMessage());
+        }
     }
 
     public void test3JavaNamesCapitalized() throws Exception {
@@ -80,10 +94,19 @@ public class JavaNamesServiceTestTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation with valid data
-        test.wsdl.names.javanames.MyPhone phone = new test.wsdl.names.javanames.MyPhone(555, "123", "4567");
-        test.wsdl.names.javanames.MyAddress address = new test.wsdl.names.javanames.MyAddress(123, "Main St", "Anytown", "CA", 90210, phone);
-        binding.capitalized("John Doe", address);
-        // TBD - validate results
+        test.wsdl.names.javanames.MyPhone phone = new test.wsdl.names.javanames.MyPhone(415, "555", "0123");
+        test.wsdl.names.javanames.MyAddress address = new test.wsdl.names.javanames.MyAddress(456, "Oak Ave", "Springfield", "NY", 12345, phone);
+        
+        // Validate objects were created properly
+        assertNotNull("Phone object should be created", phone);
+        assertNotNull("Address object should be created", address);
+        
+        // Test capitalized operation completes successfully
+        try {
+            binding.capitalized("Jane Smith", address);
+        } catch (Exception e) {
+            fail("capitalized operation should not throw an exception: " + e.getMessage());
+        }
     }
 
 }

@@ -15,16 +15,12 @@ public class SequenceTestSoapBindingImpl implements test.wsdl.sequence.SequenceT
             return false;
         }
         
-        // The real test: validate that the SequenceInfo bean was properly deserialized
-        // from XML that maintained the sequence order defined in the WSDL schema.
+        // The real test: validate that the SequenceInfo bean maintains the correct
+        // sequence order as defined in the WSDL schema through Axis TypeDesc metadata
         
-        // We can check that the bean has the expected structure and that
-        // all fields are accessible (indicating proper sequence-based deserialization)
         try {
+            // Check field presence first
             Field[] fields = info.getClass().getDeclaredFields();
-            
-            // The WSDL defines 6 elements in sequence: zero, one, two, three, four, five
-            // If deserialization worked correctly, we should have these fields
             String[] expectedFields = {"zero", "one", "two", "three", "four", "five"};
             
             for (String expectedField : expectedFields) {
@@ -40,8 +36,34 @@ public class SequenceTestSoapBindingImpl implements test.wsdl.sequence.SequenceT
                 }
             }
             
-            // If we got here, the SequenceInfo was properly deserialized with all expected fields
-            // This indicates that the XML sequence was correctly maintained
+            // Now verify the sequence order through Axis TypeDesc metadata
+            // This is how Axis maintains XML element ordering during serialization
+            org.apache.axis.description.TypeDesc typeDesc = 
+                test.wsdl.sequence.SequenceInfo.getTypeDesc();
+            
+            if (typeDesc == null) {
+                return false;
+            }
+            
+            // Get the field descriptors which maintain the WSDL sequence order
+            org.apache.axis.description.FieldDesc[] fieldDescs = typeDesc.getFields();
+            
+            if (fieldDescs == null || fieldDescs.length != expectedFields.length) {
+                return false;
+            }
+            
+            // Verify that the TypeDesc maintains fields in the expected sequence order
+            for (int i = 0; i < expectedFields.length; i++) {
+                String expectedFieldName = expectedFields[i];
+                String actualFieldName = fieldDescs[i].getFieldName();
+                
+                if (!expectedFieldName.equals(actualFieldName)) {
+                    return false; // Field order doesn't match WSDL sequence
+                }
+            }
+            
+            // If we got here, both field presence and sequence order are correct
+            // This verifies that Axis properly maintains the WSDL-defined sequence
             return true;
             
         } catch (Exception e) {
