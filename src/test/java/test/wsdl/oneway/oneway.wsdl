@@ -83,6 +83,11 @@
                    namespace="urn:oneway.wsdl.test"
                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
       </input>
+      <output>
+        <soap:body use="encoded"
+                   namespace="urn:oneway.wsdl.test"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
     </operation>
     <operation name="getAddressFromName">
       <soap:operation soapAction=""/>

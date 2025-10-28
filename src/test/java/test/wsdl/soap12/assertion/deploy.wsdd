@@ -1,0 +1,225 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from WhiteMesaSoap12TestSvc WSDL service -->
+
+  <service name="Soap12TestDocPort" provider="java:RPC" style="document" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://whitemesa.net/wsdl/soap12-test"/>
+      <parameter name="wsdlServiceElement" value="WhiteMesaSoap12TestSvc"/>
+      <parameter name="schemaQualified" value="http://example.org/ts-tests"/>
+      <parameter name="schemaUnqualified" value="http://example.org/ts-tests/xsd"/>
+      <parameter name="wsdlServicePort" value="Soap12TestDocPort"/>
+      <parameter name="className" value="test.wsdl.soap12.assertion.Soap12TestDocBindingImpl"/>
+      <parameter name="wsdlPortType" value="Soap12TestPortTypeDoc"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="emptyBody" qname="emptyBody" soapAction="" >
+      </operation>
+      <operation name="echoOk" qname="echoOk" returnQName="retNS:responseOk" xmlns:retNS="http://example.org/ts-tests" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" returnHeader="true" >
+        <parameter qname="pns:echoOk" xmlns:pns="http://example.org/ts-tests" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" inHeader="true"/>
+      </operation>
+      <parameter name="allowedMethods" value="emptyBody echoOk"/>
+      <parameter name="role" value="http://www.w3.org/2003/05/soap-envelope/role/next,http://example.org/ts-tests/C"/>
+
+      <typeMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:SOAPStructStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPStructStruct"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOfstring"
+        type="java:java.lang.String[]"
+        innerType="cmp-ns:string" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:SOAPArrayStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPArrayStruct"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <typeMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:SOAPStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPStruct"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle=""
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOffloat"
+        type="java:float[]"
+        innerType="cmp-ns:float" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle=""
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOfSOAPStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPStruct[]"
+        innerType="cmp-ns:SOAPStruct" xmlns:cmp-ns="http://example.org/ts-tests/xsd"
+        encodingStyle=""
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOfint"
+        type="java:int[]"
+        innerType="cmp-ns:int" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle=""
+      />
+  </service>
+  <service name="Soap12TestRpcPort" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="http://whitemesa.net/wsdl/soap12-test"/>
+      <parameter name="wsdlServiceElement" value="WhiteMesaSoap12TestSvc"/>
+      <parameter name="schemaQualified" value="http://example.org/ts-tests"/>
+      <parameter name="schemaUnqualified" value="http://example.org/ts-tests/xsd"/>
+      <parameter name="wsdlServicePort" value="Soap12TestRpcPort"/>
+      <parameter name="className" value="test.wsdl.soap12.assertion.Soap12TestRpcBindingImpl"/>
+      <parameter name="wsdlPortType" value="Soap12TestPortTypeRpc"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="returnVoid" qname="operNS:returnVoid" xmlns:operNS="http://example.org/ts-tests" soapAction="" >
+      </operation>
+      <operation name="echoStruct" qname="operNS:echoStruct" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:SOAPStruct" xmlns:rtns="http://example.org/ts-tests/xsd" soapAction="" >
+        <parameter qname="inputStruct" type="tns:SOAPStruct" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoStructArray" qname="operNS:echoStructArray" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:ArrayOfSOAPStruct" xmlns:rtns="http://example.org/ts-tests/xsd" returnItemType="tns2:SOAPStruct" xmlns:tns2="http://example.org/ts-tests/xsd" soapAction="" >
+        <parameter qname="inputStructArray" type="tns:ArrayOfSOAPStruct" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoStructAsSimpleTypes" qname="operNS:echoStructAsSimpleTypes" xmlns:operNS="http://example.org/ts-tests" soapAction="" >
+        <parameter qname="inputStruct" type="tns:SOAPStruct" xmlns:tns="http://example.org/ts-tests/xsd"/>
+        <parameter qname="outputString" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" mode="OUT"/>
+        <parameter qname="outputInteger" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema" mode="OUT"/>
+        <parameter qname="outputFloat" type="tns:float" xmlns:tns="http://www.w3.org/2001/XMLSchema" mode="OUT"/>
+      </operation>
+      <operation name="echoSimpleTypesAsStruct" qname="operNS:echoSimpleTypesAsStruct" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:SOAPStruct" xmlns:rtns="http://example.org/ts-tests/xsd" soapAction="" >
+        <parameter qname="inputString" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="inputInteger" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="inputFloat" type="tns:float" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="echoNestedStruct" qname="operNS:echoNestedStruct" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:SOAPStructStruct" xmlns:rtns="http://example.org/ts-tests/xsd" soapAction="" >
+        <parameter qname="inputStruct" type="tns:SOAPStructStruct" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoNestedArray" qname="operNS:echoNestedArray" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:SOAPArrayStruct" xmlns:rtns="http://example.org/ts-tests/xsd" soapAction="" >
+        <parameter qname="inputStruct" type="tns:SOAPArrayStruct" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoFloatArray" qname="operNS:echoFloatArray" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:ArrayOffloat" xmlns:rtns="http://example.org/ts-tests/xsd" returnItemType="tns2:float" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputFloatArray" type="tns:ArrayOffloat" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoStringArray" qname="operNS:echoStringArray" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:ArrayOfstring" xmlns:rtns="http://example.org/ts-tests/xsd" returnItemType="tns2:string" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputStringArray" type="tns:ArrayOfstring" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoIntegerArray" qname="operNS:echoIntegerArray" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:ArrayOfint" xmlns:rtns="http://example.org/ts-tests/xsd" returnItemType="tns2:int" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputIntegerArray" type="tns:ArrayOfint" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="echoBase64" qname="operNS:echoBase64" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:base64Binary" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputBase64" type="tns:base64Binary" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="echoBoolean" qname="operNS:echoBoolean" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputBoolean" type="tns:boolean" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="echoDate" qname="operNS:echoDate" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:dateTime" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputDate" type="tns:dateTime" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="echoDecimal" qname="operNS:echoDecimal" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:decimal" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputDecimal" type="tns:decimal" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="echoFloat" qname="operNS:echoFloat" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:float" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputFloat" type="tns:float" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="echoString" qname="operNS:echoString" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputString" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="countItems" qname="operNS:countItems" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputStringArray" type="tns:ArrayOfstring" xmlns:tns="http://example.org/ts-tests/xsd"/>
+      </operation>
+      <operation name="isNil" qname="operNS:isNil" xmlns:operNS="http://example.org/ts-tests" returnQName="return" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="inputString" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="echoStruct echoIntegerArray echoFloat echoBoolean echoDate countItems echoFloatArray echoString returnVoid echoStringArray echoStructAsSimpleTypes echoStructArray echoNestedArray echoSimpleTypesAsStruct echoNestedStruct echoDecimal isNil echoBase64"/>
+
+      <typeMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:SOAPStructStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPStructStruct"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOfstring"
+        type="java:java.lang.String[]"
+        innerType="cmp-ns:string" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+      <typeMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:SOAPArrayStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPArrayStruct"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+      <typeMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:SOAPStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPStruct"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOffloat"
+        type="java:float[]"
+        innerType="cmp-ns:float" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOfSOAPStruct"
+        type="java:test.wsdl.soap12.assertion.xsd.SOAPStruct[]"
+        innerType="cmp-ns:SOAPStruct" xmlns:cmp-ns="http://example.org/ts-tests/xsd"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+      <arrayMapping
+        xmlns:ns="http://example.org/ts-tests/xsd"
+        qname="ns:ArrayOfint"
+        type="java:int[]"
+        innerType="cmp-ns:int" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://www.w3.org/2003/05/soap-encoding"
+      />
+  </service>
+  
+  <!-- SOAP 1.2 Intermediary Service -->
+  <service name="Soap12TestIntermediaryPort" provider="java:RPC" style="document" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://whitemesa.net/wsdl/soap12-test"/>
+      <parameter name="wsdlServiceElement" value="WhiteMesaSoap12TestSvc"/>
+      <parameter name="schemaQualified" value="http://example.org/ts-tests"/>
+      <parameter name="schemaUnqualified" value="http://example.org/ts-tests/xsd"/>
+      <parameter name="wsdlServicePort" value="Soap12TestIntermediaryPort"/>
+      <parameter name="className" value="test.wsdl.soap12.assertion.Soap12TestIntermediaryBindingImpl"/>
+      <parameter name="wsdlPortType" value="Soap12TestPortTypeDoc"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="emptyBody" qname="emptyBody" soapAction="" >
+      </operation>
+      <operation name="echoOk" qname="echoOk" returnQName="retNS:responseOk" xmlns:retNS="http://example.org/ts-tests" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" returnHeader="true" >
+        <parameter qname="pns:echoOk" xmlns:pns="http://example.org/ts-tests" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema" inHeader="true"/>
+      </operation>
+      <parameter name="allowedMethods" value="emptyBody echoOk"/>
+  </service>
+</deployment>
