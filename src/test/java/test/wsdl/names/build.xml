@@ -55,15 +55,13 @@ Copyright:
     <!-- Check to make sure we map XML names that are illegal Java correctly -->
     <wsdl2java url="${axis.home}/src/test/java/test/wsdl/names/JavaNames.wsdl"
                output="${build.dir}/work"
-               deployscope="none"
                serverSide="yes"
-               noimports="no"
-               verbose="no"
+               skeletonDeploy="yes"
                testcase="no">
         <mapping namespace="http://test.com/reference" package="test.filegen"/>
     </wsdl2java>
 
-    <copy todir="${build.dir}/work/test/wsdl/names" overwrite="yes">
+    <copy todir="${build.dir}/work/test/wsdl/names/javanames" overwrite="yes">
       <fileset dir="${axis.home}/src/test/java/test/wsdl/names">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>

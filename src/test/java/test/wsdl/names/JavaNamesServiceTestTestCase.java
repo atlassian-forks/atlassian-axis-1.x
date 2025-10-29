@@ -37,17 +37,27 @@ public class JavaNamesServiceTestTestCase extends junit.framework.TestCase {
         // Test operation with valid data
         test.wsdl.names.javanames.MyPhone phone = new test.wsdl.names.javanames.MyPhone(555, "123", "4567");
         test.wsdl.names.javanames.MyAddress address = new test.wsdl.names.javanames.MyAddress(123, "Main St", "Anytown", "CA", 90210, phone);
-        
-        // Validate objects were created properly
-        assertNotNull("Phone object should be created", phone);
-        assertNotNull("Address object should be created", address);
-        
-        // Test _new operation completes successfully
-        try {
-            binding._new("John Doe", address);
-        } catch (Exception e) {
-            fail("_new operation should not throw an exception: " + e.getMessage());
-        }
+
+        binding._new("John Doe", address);
+
+        // Add a small delay to ensure the capitalized call completes
+        Thread.sleep(100);
+
+        // Verify the address was stored by retrieving it
+        test.wsdl.names.javanames.MyAddress retrievedAddress = binding._public("John Doe");
+        assertNotNull("Address should be retrievable after storing via capitalized", retrievedAddress);
+        assertEquals("Street name should match", address.getStreetName(), retrievedAddress.getStreetName());
+        assertEquals("Street number should match", address.getStreetNum(), retrievedAddress.getStreetNum());
+        assertEquals("City should match", address.getCity(), retrievedAddress.getCity());
+        assertEquals("State should match", address.getState(), retrievedAddress.getState());
+        assertEquals("Zip should match", address.getZip(), retrievedAddress.getZip());
+
+        // Verify the nested phone object round-trip
+        test.wsdl.names.javanames.MyPhone retrievedPhone = retrievedAddress.getPhoneNumber();
+        assertNotNull("Phone should be retrievable from address", retrievedPhone);
+        assertEquals("Area code should match", phone.getAreaCode(), retrievedPhone.getAreaCode());
+        assertEquals("Exchange should match", phone.getExchange(), retrievedPhone.getExchange());
+        assertEquals("Number should match", phone.getNumber(), retrievedPhone.getNumber());
     }
 
     public void test2JavaNames_public() throws Exception {
@@ -66,15 +76,9 @@ public class JavaNamesServiceTestTestCase extends junit.framework.TestCase {
         // Time out after a minute
         binding.setTimeout(60000);
 
-        // Test operation - retrieve address for a name
-        test.wsdl.names.javanames.MyAddress value = null;
-        try {
-            value = binding._public("John Doe");
-            // TBD - validate results (skeleton implementation currently returns null)
-            assertNull("Server skeleton implementation returns null for any name", value);
-        } catch (Exception e) {
-            fail("_public operation should not throw an exception: " + e.getMessage());
-        }
+        // Test _public operation - verify it returns null for unknown names
+        test.wsdl.names.javanames.MyAddress value = binding._public("Unknown Person");
+        assertNull("Should return null for unknown names", value);
     }
 
     public void test3JavaNamesCapitalized() throws Exception {
@@ -96,17 +100,27 @@ public class JavaNamesServiceTestTestCase extends junit.framework.TestCase {
         // Test operation with valid data
         test.wsdl.names.javanames.MyPhone phone = new test.wsdl.names.javanames.MyPhone(415, "555", "0123");
         test.wsdl.names.javanames.MyAddress address = new test.wsdl.names.javanames.MyAddress(456, "Oak Ave", "Springfield", "NY", 12345, phone);
-        
-        // Validate objects were created properly
-        assertNotNull("Phone object should be created", phone);
-        assertNotNull("Address object should be created", address);
-        
-        // Test capitalized operation completes successfully
-        try {
-            binding.capitalized("Jane Smith", address);
-        } catch (Exception e) {
-            fail("capitalized operation should not throw an exception: " + e.getMessage());
-        }
+
+        binding.capitalized("Jane Smith", address);
+
+        // Add a small delay to ensure the capitalized call completes
+        Thread.sleep(100);
+
+        // Verify the address was stored by retrieving it
+        test.wsdl.names.javanames.MyAddress retrievedAddress = binding._public("Jane Smith");
+        assertNotNull("Address should be retrievable after storing via capitalized", retrievedAddress);
+        assertEquals("Street name should match", address.getStreetName(), retrievedAddress.getStreetName());
+        assertEquals("Street number should match", address.getStreetNum(), retrievedAddress.getStreetNum());
+        assertEquals("City should match", address.getCity(), retrievedAddress.getCity());
+        assertEquals("State should match", address.getState(), retrievedAddress.getState());
+        assertEquals("Zip should match", address.getZip(), retrievedAddress.getZip());
+
+        // Verify the nested phone object
+        test.wsdl.names.javanames.MyPhone retrievedPhone = retrievedAddress.getPhoneNumber();
+        assertNotNull("Phone should be retrievable from address", retrievedPhone);
+        assertEquals("Area code should match", phone.getAreaCode(), retrievedPhone.getAreaCode());
+        assertEquals("Exchange should match", phone.getExchange(), retrievedPhone.getExchange());
+        assertEquals("Number should match", phone.getNumber(), retrievedPhone.getNumber());
     }
 
 }

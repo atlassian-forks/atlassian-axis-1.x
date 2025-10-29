@@ -94,6 +94,9 @@ public class IncludeTestTestCase extends junit.framework.TestCase {
         // Add the test entry
         binding.addEntry("Test User", testAddress);
 
+        // Add a small delay to ensure the addEntry call completes
+        Thread.sleep(100);
+
         // Retrieve and validate
         test.wsdl.include.Address retrievedAddress = binding.getAddressFromName("Test User");
 
