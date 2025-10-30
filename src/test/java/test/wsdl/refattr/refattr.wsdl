@@ -141,6 +141,23 @@
       <output message="tns:empty"/>
     </operation>
   </portType>
+  
+  <!-- Dummy portType to force mangling of the 'mangle' type/element collision.
+       This is needed because JavaGeneratorFactory.resolveNameClashes() (lines 1141-1151)
+       only triggers Type mangling when there are PortType/Service/Binding entries in the 
+       collision vector, not just Type/Element collisions. Without this dummy portType,
+       the 'mangle' complexType would generate as 'Mangle' instead of 'Mangle_Type',
+       causing the refattr test to fail.
+       
+       Note: The element suffix was changed from "_ElemType" (Axis classic) to "_Element" 
+       (JAX-RPC 1.1 standard) as documented in JavaGeneratorFactory.java line 89.
+       This test expects both 'Mangle_Type' and 'Mangle_Element' classes to be generated. -->
+  <portType name="mangle">
+    <operation name="dummy">
+      <input message="tns:empty"/>
+      <output message="tns:empty"/>
+    </operation>
+  </portType>
 
   <!-- binding declns -->
   <binding name="RefTestBinding" type="tns:RefTest">

@@ -17,7 +17,7 @@
         <parameter name="wsdlTargetNamespace" value="urn:ExtensibilityQuery"/>
         <parameter name="wsdlServiceElement" value="ExtensibilityQuery"/>
         <parameter name="wsdlServicePort" value="ExtensibilityQueryPort"/>
-        <parameter name="className" value="test.ExtensibilityQueryBindingImpl"/>
+        <parameter name="className" value="test.wsdl.extensibility.ExtensibilityQueryBindingImpl"/>
         <parameter name="wsdlPortType" value="ExtensibilityQueryPortType"/>
         <operation name="query" qname="operNS:query" xmlns:operNS="urn:ExtensibilityQuery" returnQName="retNS:queryResult" xmlns:retNS="urn:ExtensibilityQuery" returnType="rtns:ExtensibilityType" xmlns:rtns="urn:ExtensibilityQuery" >
           <parameter qname="pns:queryExpression" xmlns:pns="urn:ExtensibilityQuery" type="tns:ExtensibilityType" xmlns:tns="urn:ExtensibilityQuery"/>

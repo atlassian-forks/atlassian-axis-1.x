@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -33,8 +33,6 @@ Copyright:
 ==================================================================== -->
 
 <project default="compile">
-
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/names" />
         &properties;
         &paths;
@@ -55,32 +53,31 @@ Copyright:
 <target name="compile" depends="copy">
   <echo message="Compiling test.wsdl.names"/>
     <!-- Check to make sure we map XML names that are illegal Java correctly -->
-    <wsdl2java url="${axis.home}/test/wsdl/names/JavaNames.wsdl"
-               output="${axis.home}/build/work"
-               deployscope="none"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/names/JavaNames.wsdl"
+               output="${build.dir}/work"
                serverSide="yes"
-               noimports="no"
-               verbose="no"
-               testcase="yes">
+               skeletonDeploy="yes"
+               testcase="no">
         <mapping namespace="http://test.com/reference" package="test.filegen"/>
     </wsdl2java>
 
-    <copy todir="${build.dir}/work/test/wsdl/names" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/names">
+    <copy todir="${build.dir}/work/test/wsdl/names/javanames" overwrite="yes">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/names">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-           debug="${debug}">
-      <classpath refid="classpath" />
-      <include name="test/wsdl/names/**/*.java" />
+    <javac srcdir="${build.dir}/work/test/wsdl/names" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <include name="**/*.java"/>
     </javac>
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

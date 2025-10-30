@@ -41,17 +41,23 @@ public class Compound1TestCase extends junit.framework.TestCase {
             if (url != null) {
                 binding = new Compound1Locator().getSoapInteropCompound1Port(url);
             } else {
-                binding = new Compound1Locator().getSoapInteropCompound1Port();
+                // Check for local test endpoint via system property - use the SimpleAxisPort which is the actual server port
+                String simpleAxisPort = System.getProperty("test.functional.SimpleAxisPort", "8080");
+                String serviceUrl = "http://localhost:" + simpleAxisPort + "/axis/services/SoapInteropCompound1Port";
+                binding = new Compound1Locator().getSoapInteropCompound1Port(new java.net.URL(serviceUrl));
             }
         }
         catch (javax.xml.rpc.ServiceException jre) {
             throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
         }
+        catch (java.net.MalformedURLException mue) {
+            throw new junit.framework.AssertionFailedError("Malformed URL Exception caught: " + mue);
+        }
         assertTrue("binding is null", binding != null);
 
         try {
             Document doc = new Document();
-            doc.setValue("some value");
+            doc.set_value("some value");
             doc.setID("myID");
             Document newDoc = binding.echoDocument(doc);
 
@@ -84,7 +90,7 @@ public class Compound1TestCase extends junit.framework.TestCase {
 
         try {
             Document doc = new Document();
-            doc.setValue("some value");
+            doc.set_value("some value");
             doc.setID("myID");
             Document newDoc = binding.echoDocument(doc);
 

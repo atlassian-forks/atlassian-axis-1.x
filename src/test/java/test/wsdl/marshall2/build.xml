@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -33,8 +33,6 @@ Copyright:
 ==================================================================== -->
 
 <project default="compile">
-
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/marshall2" />
         &properties;
         &paths;
@@ -53,8 +51,8 @@ Copyright:
 <target name="compile" depends="copy">
   <echo message="Compiling test.wsdl.marshall2"/>
     <!-- marshall2 Sample Test -->
-    <wsdl2java url="${axis.home}/test/wsdl/marshall2/marshall2.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/marshall2/marshall2.wsdl"
+               output="${build.dir}/work"
                deployscope="session"
                serverSide="yes"
                typeMappingVersion="1.3"
@@ -63,21 +61,22 @@ Copyright:
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/marshall2" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/marshall2">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/marshall2">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-           debug="${debug}">
-      <classpath refid="classpath" />
-      <include name="test/wsdl/marshall2/*.java" />
+    <javac srcdir="${build.dir}/work/test/wsdl/marshall2" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <include name="**/*.java"/>
     </javac>
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

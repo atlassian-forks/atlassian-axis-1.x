@@ -9,6 +9,7 @@ package test.wsdl.soap12.assertion;
 
 import org.apache.axis.message.SOAPHeaderElement;
 import org.apache.axis.message.SOAPEnvelope;
+import org.apache.axis.message.Text;
 import org.apache.axis.Constants;
 import org.apache.axis.MessageContext;
 import org.apache.axis.AxisFault;
@@ -17,6 +18,9 @@ import org.apache.axis.constants.Style;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 
+import javax.xml.namespace.QName;
+
+import java.net.URL;
 import java.util.Arrays;
 import java.util.TimeZone;
 import java.util.Calendar;
@@ -25,8 +29,10 @@ import java.util.Iterator;
 
 public class WhiteMesaSoap12TestSvcTestCase extends junit.framework.TestCase {
     public final String TEST_NS = "http://example.org/ts-tests";
-    public final String DOC_ENDPOINT = "http://www.whitemesa.net/soap12/test-doc";
-    public final String INTERMEDIARY_ENDPOINT = "http://www.whitemesa.net/soap12/test-intermediary";
+    public final String BASE_URL = "http://localhost:8080";
+    public final String RPC_ENDPOINT = BASE_URL + "/axis/services/Soap12TestRpcPort";
+    public final String DOC_ENDPOINT = BASE_URL + "/axis/services/Soap12TestDocPort";
+    public final String INTERMEDIARY_ENDPOINT = BASE_URL + "/axis/services/Soap12TestIntermediaryPort";
     public final String ROLE_A = "http://example.org/ts-tests/A";
     public final String ROLE_B = "http://example.org/ts-tests/B";
     public final String ROLE_C = "http://example.org/ts-tests/C";
@@ -569,10 +575,18 @@ public class WhiteMesaSoap12TestSvcTestCase extends junit.framework.TestCase {
         header.setObjectValue("this is a test");
         binding.setHeader(header);
         binding.emptyBody();
-        // Get the response header
-        SOAPHeaderElement respHeader =
-                binding.getHeader(TEST_NS,
-                                    "responseOk");
+        // Get the response header by iterating through all headers like the working tests
+        org.apache.axis.message.SOAPHeaderElement[] allHeaders = binding.getResponseHeaders();
+        SOAPHeaderElement respHeader = null;
+        if (allHeaders != null) {
+            for (int i = 0; i < allHeaders.length; i++) {
+                if ("responseOk".equals(allHeaders[i].getName()) &&
+                    TEST_NS.equals(allHeaders[i].getNamespaceURI())) {
+                    respHeader = allHeaders[i];
+                    break;
+                }
+            }
+        }
         assertNotNull("Missing response header", respHeader);
         assertEquals("this is a test", respHeader.getValue());
     }
@@ -663,7 +677,8 @@ public class WhiteMesaSoap12TestSvcTestCase extends junit.framework.TestCase {
         call.setSOAPVersion(SOAPConstants.SOAP12_CONSTANTS);
         SOAPEnvelope reqEnv = new SOAPEnvelope(SOAPConstants.SOAP12_CONSTANTS);
         SOAPHeaderElement header = new SOAPHeaderElement(TEST_NS, "Unknown");
-        header.setObjectValue("test header");
+        header.appendChild(new Text("test header"));
+        header.setRole(Constants.URI_SOAP12_ULTIMATE_ROLE);
         header.setMustUnderstand(true);
         reqEnv.addHeader(header);
         try {

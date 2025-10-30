@@ -7,7 +7,7 @@
     xmlns:b1="urn:uddi-org:inquiry_v2"
     >
     <import
-        location="http://uddi.org/wsdl/inquire_v2.wsdl"
+        location="inquire_v2.wsdl"
         namespace="urn:uddi-org:inquiry_v2">
     </import>
     <service name="InquiryService">

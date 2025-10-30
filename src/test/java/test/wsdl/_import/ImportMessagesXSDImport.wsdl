@@ -16,11 +16,11 @@
       schemaLocation="Phone.xsd"
       namespace="urn:types.import.test">
     </import>
-    
+
     <!-- Test that we ignore the SOAP encoding schema -->
-    <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" 
-                schemaLocation="http://schemas.xmlsoap.org/soap/encoding/"/>
-                
+    <xsd:import namespace="https://schemas.xmlsoap.org/soap/encoding/"
+                schemaLocation="https://schemas.xmlsoap.org/soap/encoding/"/>
+
     <!-- Test that we can handle importing a URL schema from a file -->
 
     <!-- commented out Oct 20, 2002 by Glen - the schema has disappeared and
@@ -31,7 +31,7 @@
          <xsd:import namespace="http://tempuri.org/fileToHttp/"
                 schemaLocation="http://www.xml.org/xml/schema/9bffaafc/p2rLib.xsd"/>
      -->
-    
+
     <complexType name="Address">
       <all>
         <element name="streetNum" type="int"/>

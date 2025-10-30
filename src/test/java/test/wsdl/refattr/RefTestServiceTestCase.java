@@ -32,10 +32,35 @@ public class RefTestServiceTestCase extends junit.framework.TestCase {
         info.setEnum(enumElement);
         Forward forward  = new Forward();
         NoMangle noMangle  = new NoMangle();
+        
 
         // The following code ensures that mangling occurred for the Mangle class
         Mangle_Type mangle_type = new Mangle_Type();
-        Mangle_ElemType mangle_elem_type = new Mangle_ElemType();
+        mangle_type.setOne("mangle type value");
+        Mangle_Element mangle_elem_type = new Mangle_Element();
+        mangle_elem_type.setTwo("mangle element value");
+        
+        // Set required fields on nested objects
+        forward.setAddress("test address");
+        noMangle.setAddress("noMangle address");
+        phone.setAreaCode(555);
+        phone.setExchange("TEST");
+        phone.setNumber(new PhoneNumber("1234"));
+        
+        // Set required fields on info object
+        info.setPhone(new Phone[]{phone});
+        info.setForward(forward);
+        info.setNoMangle2(noMangle);
+        info.setMangle(mangle_elem_type);
+        info.setMangle2(new Mangle_Type[]{mangle_type});
+        OptionType optionType = new OptionType();
+        optionType.setName("option name");
+        optionType.setValue("option value");
+        info.setOption(new OptionType[]{optionType});
+        Example example = new Example();
+        example.setAddress("example address");
+        example.setNumber(new ExampleNumber("5678"));
+        info.setNoMangle(example);
         try {
             Class cls = ClassUtils.forName("test.wsdl.refattr.Mangle");
             assertTrue("Found unmangled class test.wsdl.refattr.Mangle", false);

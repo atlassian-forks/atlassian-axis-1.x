@@ -1,7 +1,7 @@
 package test.wsdl.interop3.docLitParam;
 
 
-import test.wsdl.interop3.docLitParam.xsd.ArrayOfstring_Literal;
+import test.wsdl.interop3.docLitParam.xsd.ArrayOfstring_literal;
 import test.wsdl.interop3.docLitParam.xsd.SOAPStruct;
 
 import java.net.URL;
@@ -42,17 +42,23 @@ public class DocLitParamTestCase extends junit.framework.TestCase {
             if (url != null) {
                 binding = new WSDLInteropTestDocLitServiceLocator().getWSDLInteropTestDocLitParamPort(url);
             } else {
-                binding = new WSDLInteropTestDocLitServiceLocator().getWSDLInteropTestDocLitParamPort();
+                // Check for local test endpoint via system property - use the SimpleAxisPort which is the actual server port
+                String simpleAxisPort = System.getProperty("test.functional.SimpleAxisPort", "8080");
+                String serviceUrl = "http://localhost:" + simpleAxisPort + "/axis/services/WSDLInteropTestDocLitParamPort";
+                binding = new WSDLInteropTestDocLitServiceLocator().getWSDLInteropTestDocLitParamPort(new java.net.URL(serviceUrl));
             }
         }
         catch (javax.xml.rpc.ServiceException jre) {
             throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
         }
+        catch (java.net.MalformedURLException mue) {
+            throw new junit.framework.AssertionFailedError("Malformed URL Exception caught: " + mue);
+        }
         assertNotNull("binding is null", binding);
 
         String str = "Hello there!";
         String [] strArray = new String [] { "1", "two", "trois" };
-        ArrayOfstring_Literal param = new ArrayOfstring_Literal();
+        ArrayOfstring_literal param = new ArrayOfstring_literal();
         param.setString(strArray);
 
         assertEquals("echoString results differ", binding.echoString(str), str);

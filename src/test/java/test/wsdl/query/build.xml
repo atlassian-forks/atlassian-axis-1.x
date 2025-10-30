@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-    <property name="axis.home" location="../../.."/>
     <property name="componentName" value="test/wsdl/query"/>
     &properties;
     &paths;
@@ -48,43 +47,46 @@ Copyright:
         <delete dir="${build.dir}/work/${componentName}"/>
     </target>
 
-    <target name="compile">
+    <target name="copy" depends="setenv"/>
+
+    <target name="compile" depends="copy">
         <echo message="Compiling test.wsdl.query"/>
         <!-- QueryTest Test -->
-        <wsdl2java url="${axis.home}/test/wsdl/query/QueryTest.wsdl"
-            output="${axis.home}/build/work"
+        <wsdl2java url="${axis.home}/src/test/java/test/wsdl/query/QueryTest.wsdl"
+            output="${build.dir}/work"
             deployscope="session"
             serverSide="yes"
             skeletonDeploy="no"
             verbose="no"
-            testcase="no">
+            testcase="yes">
             <mapping namespace="urn:QueryTest" package="test.wsdl.query"/>
             <mapping namespace="http://rpc.xml.coldfusion" package="test.wsdl.query"/>
         </wsdl2java>
 
         <copy todir="${build.dir}/work/test/wsdl/query" overwrite="yes">
-            <fileset dir="${axis.home}/test/wsdl/query">
+            <fileset dir="${axis.home}/src/test/java/test/wsdl/query">
                 <include name="QueryBean.java"/>
-                <include name="*TestCase.java"/>
+                <include name="FileGenWrappedTestCase.java"/>
                 <include name="*Impl.java"/>
             </fileset>
         </copy>
         <copy todir="${build.dir}/work/test/" overwrite="yes">
-            <fileset dir="${axis.home}/test/">
+            <fileset dir="${axis.home}/src/test/java/test/">
                 <include name="*.java"/>
             </fileset>
         </copy>
 
-        <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}"
-            debug="${debug}">
-            <classpath refid="classpath"/>
+        <javac srcdir="${build.dir}/work" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
  		    <include name="test/*.java" />
             <include name="test/wsdl/query/*.java"/>
         </javac>
 
     </target>
 
-    <target name="run">
+    <target name="run" depends="compile">
         <antcall target="execute-Component"/>
     </target>
 

@@ -1,0 +1,5 @@
+.idea/
+/target
+/test-reports
+client-config.wsdd
+axis.log

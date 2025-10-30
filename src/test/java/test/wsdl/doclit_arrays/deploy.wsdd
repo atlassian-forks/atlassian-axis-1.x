@@ -4,8 +4,8 @@
         xmlns:ns="http://doclit_arrays.wsdl.test/">
         <namespace>http://doclit_arrays.wsdl.test/</namespace>
         <parameter name="allowedMethods" value="*"/>
-        <parameter name="className" value="test.ArrayService"/>
-        <beanMapping type="java:test.ArrayService$Bean"
+        <parameter name="className" value="test.wsdl.doclit_arrays.ArrayService"/>
+        <beanMapping type="java:test.wsdl.doclit_arrays.ArrayService$Bean"
             qname="ns:Bean"/>
     </service>
 </deployment>

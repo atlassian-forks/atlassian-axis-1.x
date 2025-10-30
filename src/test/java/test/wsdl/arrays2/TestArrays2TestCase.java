@@ -9,6 +9,7 @@ import org.apache.axis.message.RPCElement;
 import org.apache.axis.message.RPCParam;
 import org.apache.axis.message.SOAPEnvelope;
 import org.apache.axis.server.AxisServer;
+import org.apache.axis.configuration.BasicServerConfig;
 
 import test.wsdl.arrays2.data.*;
 import test.wsdl.arrays2.data.inner.*;
@@ -20,7 +21,7 @@ public class TestArrays2TestCase extends junit.framework.TestCase {
         super(name);
     }
 
-    private static AxisServer server = new AxisServer();
+    private static AxisServer server;
 
     private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<env:Envelope xmlns:env=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
@@ -76,6 +77,10 @@ public class TestArrays2TestCase extends junit.framework.TestCase {
             "</env:Envelope>";
 
     public void testBug22213() throws Exception {
+        if (server == null) {
+            BasicServerConfig config = new BasicServerConfig();
+            server = new AxisServer(config);
+        }
         TypeMappingRegistry tmr = server.getTypeMappingRegistry();
         TypeMapping tm = (TypeMapping) tmr.createTypeMapping();
         tm.setSupportedEncodings(new String[]{Constants.URI_DEFAULT_SOAP_ENC});

@@ -78,8 +78,10 @@ public class DynamicProxyTestCase extends TestCase {
 
     private TypeTest getProxyWithWSDL() {
         try {
+            // Use absolute path to WSDL file
+            String wsdlPath = System.getProperty("basedir", ".") + "/target/test/wsdl/types/ComprehensiveTypes.wsdl";
             Service service = ServiceFactory.newInstance().createService(
-                new URL("file", "", "test/wsdl/types/ComprehensiveTypes.wsdl"),
+                new URL("file", "", wsdlPath),
                 new QName("urn:comprehensive-service.types.wsdl.test",
                         "TypeTestService"));
             return (TypeTest) service.getPort(

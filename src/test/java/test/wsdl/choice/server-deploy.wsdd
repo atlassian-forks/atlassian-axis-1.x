@@ -16,7 +16,7 @@
       <parameter name="wsdlTargetNamespace" value="http://tempuri.org/"/>
       <parameter name="wsdlServiceElement" value="ChoiceService"/>
       <parameter name="wsdlServicePort" value="ChoiceServiceSoap"/>
-      <parameter name="className" value="test.ChoiceServiceSoapImpl"/>
+      <parameter name="className" value="test.wsdl.choice.ChoiceServiceSoapImpl"/>
       <parameter name="wsdlPortType" value="ChoiceServiceSoap"/>
       <operation name="get" qname="get" returnQName="retNS:Record2" xmlns:retNS="http://tempuri.org/" returnType="rtns:>Record2" xmlns:rtns="http://tempuri.org/" soapAction="http://tempuri.org/get" >
         <parameter qname="pns:Record1" xmlns:pns="http://tempuri.org/" type="tns:>Record1" xmlns:tns="http://tempuri.org/"/>

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -51,7 +51,6 @@ Copyright:
 -->
 
 <project name="Interop3GroupE" default="Interop3GroupE.main">
-<property name="axis.home" location="../../../.." />
 <property name="componentName" value="test/wsdl/interop3/groupE" />
         &properties;
         &paths;
@@ -95,7 +94,7 @@ Copyright:
 
         <!-- Copy files to work directory -->
         <copy todir="${build.dir}/work/test/wsdl/interop3/groupE" overwrite="yes">
-            <fileset dir="${test.dir}/wsdl/interop3/groupE">
+            <fileset dir="${axis.home}/src/test/java/test/wsdl/interop3/groupE">
                 <include name="**.java"/>
                 <include name="**.wsdd"/>
             </fileset>
@@ -103,7 +102,7 @@ Copyright:
 
         <!-- Compile Java -->
         <javac srcdir="${build.dir}/work" destdir="${build.dest}" nowarn="${nowarn}" source="${source}"
-               debug="${debug}">
+               debug="${debug}" fork="${javac.fork}">
             <classpath refid="test-classpath" />
             <include name="test/wsdl/interop3/groupE/**.java" />
             <exclude name="test/wsdl/interop3/groupE/*TestCase.java" />
@@ -112,23 +111,23 @@ Copyright:
         </javac>
 
         <!-- Now create WSDL files from the Java classes -->
-        <echo message="${axis.home}/test/wsdl/interop3/groupE/InteropTestDocLit is rpc/enc and should be doc/lit"/>
-        <java2wsdl output="${axis.home}/build/work/test/wsdl/interop3/groupE/InteropTestDocLit.wsdl"
-            className="test.test.wsdl.interop3.groupE.InteropTestDocLit"
+        <echo message="${axis.home}/src/test/java/test/wsdl/interop3/groupE/InteropTestDocLit is rpc/enc and should be doc/lit"/>
+        <java2wsdl output="${build.dir}/work/test/wsdl/interop3/groupE/InteropTestDocLit.wsdl"
+            className="test.wsdl.interop3.groupE.InteropTestDocLit"
             namespace="http://soapinterop.org/WSDLInteropTestDocLit"
             location="http://localhost:8080/axis/services/InteropTestDocLit">
             <mapping namespace="http://soapinterop.org/xsd"
                      package="test.wsdl.interop3.groupE"/>
         </java2wsdl>
-        <java2wsdl output="${axis.home}/build/work/test/wsdl/interop3/groupE/InteropTestRpcEnc.wsdl"
-            className="test.test.wsdl.interop3.groupE.InteropTestRpcEnc"
+        <java2wsdl output="${build.dir}/work/test/wsdl/interop3/groupE/InteropTestRpcEnc.wsdl"
+            className="test.wsdl.interop3.groupE.InteropTestRpcEnc"
             namespace="http://soapinterop.org/WSDLInteropTestRpcEnc"
             location="http://localhost:8080/axis/services/InteropTestRpcEnc">
             <mapping namespace="http://soapinterop.org/xsd"
                      package="test.wsdl.interop3.groupE"/>
         </java2wsdl>
-        <java2wsdl output="${axis.home}/build/work/test/wsdl/interop3/groupE/InteropTestList.wsdl"
-            className="test.test.wsdl.interop3.groupE.InteropTestList"
+        <java2wsdl output="${build.dir}/work/test/wsdl/interop3/groupE/InteropTestList.wsdl"
+            className="test.wsdl.interop3.groupE.InteropTestList"
             namespace="http://soapinterop.org/WSDLInteropTestList"
             location="http://localhost:8080/axis/services/InteropTestList">
             <mapping namespace="http://soapinterop.org/xsd"
@@ -136,8 +135,8 @@ Copyright:
         </java2wsdl>
 
         <!-- Create Java files from the WSDL -->
-        <wsdl2java url="${axis.home}/build/work/test/wsdl/interop3/groupE/InteropTestDocLit.wsdl"
-                   output="${axis.home}/build/work"
+        <wsdl2java url="${build.dir}/work/test/wsdl/interop3/groupE/InteropTestDocLit.wsdl"
+                   output="${build.dir}/work"
                    deployscope="session"
                    noimports="no"
                    verbose="no"
@@ -147,8 +146,8 @@ Copyright:
             <mapping namespace="http://soapinterop.org/xsd"
                      package="test.wsdl.interop3.groupE.client"/>
         </wsdl2java>
-        <wsdl2java url="${axis.home}/build/work/test/wsdl/interop3/groupE/InteropTestRpcEnc.wsdl"
-                   output="${axis.home}/build/work"
+        <wsdl2java url="${build.dir}/work/test/wsdl/interop3/groupE/InteropTestRpcEnc.wsdl"
+                   output="${build.dir}/work"
                    deployscope="session"
                    noimports="no"
                    verbose="no"
@@ -158,8 +157,8 @@ Copyright:
             <mapping namespace="http://soapinterop.org/xsd"
                      package="test.wsdl.interop3.groupE.client"/>
         </wsdl2java>
-        <wsdl2java url="${axis.home}/build/work/test/wsdl/interop3/groupE/InteropTestList.wsdl"
-                   output="${axis.home}/build/work"
+        <wsdl2java url="${build.dir}/work/test/wsdl/interop3/groupE/InteropTestList.wsdl"
+                   output="${build.dir}/work"
                    deployscope="session"
                    noimports="no"
                    verbose="no"
@@ -172,13 +171,13 @@ Copyright:
 
         <!-- Copy files to work directory -->
         <copy todir="${build.dir}/work/test/wsdl/interop3/groupE/client" overwrite="yes">
-            <fileset dir="${test.dir}/wsdl/interop3/groupE/client">
+            <fileset dir="${axis.home}/src/test/java/test/wsdl/interop3/groupE/client">
                 <include name="**.java"/>
             </fileset>
         </copy>
 
         <!-- Compile Java -->
-        <javac srcdir="${build.dir}/work" destdir="${build.dest}" debug="${debug}" source="${source}" nowarn="${nowarn}">
+        <javac srcdir="${build.dir}/work" destdir="${build.dest}" debug="${debug}" source="${source}" nowarn="${nowarn}" fork="${javac.fork}">
             <classpath refid="test-classpath" />
             <include name="test/wsdl/interop3/groupE/**.java" />
             <include name="test/wsdl/interop3/groupE/client/**.java" />

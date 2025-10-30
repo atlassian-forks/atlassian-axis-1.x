@@ -23,7 +23,7 @@ import java.security.KeyStore;
 import java.security.Security;
 import java.util.Hashtable;
 
-import com.sun.net.ssl.SSLContext;
+import javax.net.ssl.SSLContext;
 
 /**
  * SSL socket factory. It _requires_ a valid RSA key and
@@ -76,7 +76,7 @@ public class SunJSSESocketFactory extends JSSESocketFactory implements SecureSoc
 
         try {
             Security.addProvider(new sun.security.provider.Sun());
-            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            // Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider()); // Deprecated - provider loaded automatically
 
             //Configuration specified in wsdd.
             SSLContext context = getContext();
@@ -99,7 +99,7 @@ public class SunJSSESocketFactory extends JSSESocketFactory implements SecureSoc
         
         if(attributes == null) {
             SSLContext context =
-                    com.sun.net.ssl.SSLContext.getInstance("SSL");    // SSL
+                    SSLContext.getInstance("SSL");    // SSL
             // init context with the key managers
             context.init(null, null, null);
             return context;
@@ -147,17 +147,17 @@ public class SunJSSESocketFactory extends JSSESocketFactory implements SecureSoc
         KeyStore kstore = initKeyStore(keystoreFile, keystorePass);
 
         // Key manager will extract the server key
-        com.sun.net.ssl.KeyManagerFactory kmf =
-                com.sun.net.ssl.KeyManagerFactory.getInstance(algorithm);
+        javax.net.ssl.KeyManagerFactory kmf =
+                javax.net.ssl.KeyManagerFactory.getInstance(algorithm);
 
         kmf.init(kstore, keyPass.toCharArray());
 
         // If client authentication is needed, set up TrustManager
-        com.sun.net.ssl.TrustManager[] tm = null;
+        javax.net.ssl.TrustManager[] tm = null;
 
         if (clientAuth) {
-            com.sun.net.ssl.TrustManagerFactory tmf =
-                    com.sun.net.ssl.TrustManagerFactory.getInstance("SunX509");
+            javax.net.ssl.TrustManagerFactory tmf =
+                    javax.net.ssl.TrustManagerFactory.getInstance("SunX509");
 
             tmf.init(kstore);
             tm = tmf.getTrustManagers();
@@ -166,7 +166,7 @@ public class SunJSSESocketFactory extends JSSESocketFactory implements SecureSoc
         // Create a SSLContext ( to create the ssl factory )
         // This is the only way to use server sockets with JSSE 1.0.1
         SSLContext context =
-                com.sun.net.ssl.SSLContext.getInstance(protocol);    // SSL
+                SSLContext.getInstance(protocol);    // SSL
 
         // init context with the key managers
         context.init(kmf.getKeyManagers(), tm,

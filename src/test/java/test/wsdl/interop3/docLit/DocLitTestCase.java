@@ -42,11 +42,17 @@ public class DocLitTestCase extends junit.framework.TestCase {
             if (url != null) {
                 binding = new WSDLInteropTestDocLitServiceLocator().getWSDLInteropTestDocLitPort(url);
             } else {
-                binding = new WSDLInteropTestDocLitServiceLocator().getWSDLInteropTestDocLitPort();
+                // Check for local test endpoint via system property - use the SimpleAxisPort which is the actual server port
+                String simpleAxisPort = System.getProperty("test.functional.SimpleAxisPort", "8080");
+                String serviceUrl = "http://localhost:" + simpleAxisPort + "/axis/services/WSDLInteropTestDocLitPort";
+                binding = new WSDLInteropTestDocLitServiceLocator().getWSDLInteropTestDocLitPort(new java.net.URL(serviceUrl));
             }
         }
         catch (javax.xml.rpc.ServiceException jre) {
             throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
+        }
+        catch (java.net.MalformedURLException mue) {
+            throw new junit.framework.AssertionFailedError("Malformed URL Exception caught: " + mue);
         }
         assertNotNull("binding is null", binding);
 

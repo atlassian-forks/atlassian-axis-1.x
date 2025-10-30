@@ -52,6 +52,11 @@ public class JAXRPCHandlerTestCase extends TestCase {
 		Options opts = new Options( args );
 		args = opts.getRemainingArgs();
 
+		// Use default URL if none provided
+		String urlString = opts.getURL();
+		if (urlString == null || urlString.trim().isEmpty()) {
+			opts.setDefaultURL("http://localhost:8080/axis/services/jaxrpchandler");
+		}
 		URL url = new URL(opts.getURL());
 		String user = opts.getUser();
 		String passwd = opts.getPassword();
@@ -74,6 +79,12 @@ public class JAXRPCHandlerTestCase extends TestCase {
 	public void goFail(String[] args) throws Exception {
 		Options opts = new Options( args );
 		args = opts.getRemainingArgs();
+
+        // Use default URL if none provided
+        String urlString = opts.getURL();
+        if (urlString == null || urlString.trim().isEmpty()) {
+            opts.setDefaultURL("http://localhost:8080/axis/services/jaxrpchandler");
+        }
 
 		URL url = new URL(opts.getURL());
 		String user = opts.getUser();
@@ -146,19 +157,19 @@ public class JAXRPCHandlerTestCase extends TestCase {
 	}
 
 	public void doTestClientUndeploy() throws Exception {
-		String[] args1 = {"test", "test/wsdl/jaxrpchandler/undeploy.wsdd"};
+		String[] args1 = {"client", "src/test/java/test/wsdl/jaxrpchandler/undeploy.wsdd"};
 		Admin.main(args1);
 	}
 
 	public void doTestServerUndeploy() throws Exception {
-		String[] args = { "test/wsdl/jaxrpchandler/undeploy.wsdd"};
+		String[] args = { "src/test/java/test/wsdl/jaxrpchandler/undeploy.wsdd"};
 		AdminClient.main(args);
 	}
 
 	public void doTestDeploy() throws Exception {
-		String[] args = { "test/wsdl/jaxrpchandler/server_deploy.wsdd"};
+		String[] args = { "src/test/java/test/wsdl/jaxrpchandler/server_deploy.wsdd"};
 		AdminClient.main(args);
-		String[] args1 = {"test", "test/wsdl/jaxrpchandler/client_deploy.wsdd"};
+		String[] args1 = {"client", "src/test/java/test/wsdl/jaxrpchandler/client_deploy.wsdd"};
 		Admin.main(args1);
 	}
 

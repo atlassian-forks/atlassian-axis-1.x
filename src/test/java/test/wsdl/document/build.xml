@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/document" />
         &properties;
         &paths;
@@ -55,7 +54,7 @@ Copyright:
     <!-- document Test -->
     <!-- To test Java Value Types, copy over the base and subclasses -->
     <copy todir="${build.dir}/work/test/wsdl/document" overwrite="yes">
-      <fileset dir="${test.dir}/wsdl/document">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/document">
         <include name="TestService.java"/>
       </fileset>
     </copy>
@@ -68,9 +67,12 @@ Copyright:
       <exclude name="test/wsdl/document/*Impl.java" />
     </javac>
 
+    <!-- Create output directory for WSDL -->
+    <mkdir dir="${build.dir}/work/test/wsdl/document"/>
+
     <!-- Now create the real WSDL file -->
-    <java2wsdl output="${axis.home}/build/work/test/wsdl/document/document.wsdl"
-               className= "test.test.wsdl.document.TestService"
+    <java2wsdl output="${build.dir}/work/test/wsdl/document/document.wsdl"
+               className= "test.wsdl.document.TestService"
                useInheritedMethods="false"
                namespace="http://document.wsdl.test"
                location="http://localhost:8080/axis/services/DocumentTest">
@@ -81,8 +83,8 @@ Copyright:
     <delete dir="${build.dir}/classes/test/wsdl/document"/>
 
     <!-- Recreate Java files from the new WSDL -->
-    <wsdl2java url="${axis.home}/build/work/test/wsdl/document/document.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${build.dir}/work/test/wsdl/document/document.wsdl"
+               output="${build.dir}/work"
                deployscope="session"
                serverSide="yes"
                skeletonDeploy="no"
@@ -93,7 +95,7 @@ Copyright:
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/document" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/document">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/document">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
@@ -108,7 +110,7 @@ Copyright:
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

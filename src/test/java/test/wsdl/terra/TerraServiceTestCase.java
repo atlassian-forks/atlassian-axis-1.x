@@ -20,6 +20,9 @@ public class TerraServiceTestCase extends junit.framework.TestCase {
         TerraServiceSoap binding;
         try {
             binding = new TerraServiceLocator().getTerraServiceSoap();
+            // Set the endpoint to use local Axis server instead of external service
+            ((javax.xml.rpc.Stub)binding)._setProperty(javax.xml.rpc.Stub.ENDPOINT_ADDRESS_PROPERTY, 
+                "http://localhost:8080/axis/services/TerraServiceSoap");
         }
         catch (javax.xml.rpc.ServiceException jre) {
             throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
@@ -43,14 +46,6 @@ public class TerraServiceTestCase extends junit.framework.TestCase {
             }
         }
         catch (java.rmi.RemoteException re) {
-            if (re instanceof AxisFault) {
-                AxisFault fault = (AxisFault) re;
-                if (fault.detail instanceof ConnectException ||
-                    fault.getFaultCode().getLocalPart().equals("HTTP")) {
-                    System.err.println("TerraService HTTP error: " + fault);
-                    return;
-                }
-            }
             throw new junit.framework.AssertionFailedError("Remote Exception caught: " + re);
         }
     }

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
+]>
+
+<project name="Round4" default="interop4">
+<property name="componentName" value="test/wsdl/interop4" />
+<property name="build.dir" location="../../../../../../target" />
+<property name="axis.home" location="../../../../../.." />
+        &properties;
+        &paths;
+        &taskdefs;
+        &taskdefs_post_compile;
+        &targets;
+
+    <target name="run">
+        <!-- Run all interop4 sub-tests -->
+        <!-- Group H tests -->
+        <ant antfile="build.xml" target="run" dir="groupH/simpleDocLit"/>
+        <ant antfile="build.xml" target="run" dir="groupH/complexRPCenc"/>
+        <ant antfile="build.xml" target="run" dir="groupH/complexDocLit"/>
+        <ant antfile="build.xml" target="run" dir="groupH/simpleRPCenc"/>
+
+        <!-- Group I tests -->
+        <ant antfile="build.xml" target="run" dir="groupi"/>
+
+        <!-- Group G tests -->
+        <ant antfile="build.xml" target="run" dir="groupG/mime/rpc"/>
+        <ant antfile="build.xml" target="run" dir="groupG/mime/doc"/>
+        <ant antfile="build.xml" target="run" dir="groupG/dime/rpc"/>
+        <ant antfile="build.xml" target="run" dir="groupG/dime/doc"/>
+    </target>
+
+    <target name="interop4" depends="run">
+        <!-- Alias for backward compatibility -->
+    </target>
+
+</project>

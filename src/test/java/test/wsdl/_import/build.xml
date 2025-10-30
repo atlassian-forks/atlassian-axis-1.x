@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/_import" />
 <property name="extraServices" value="work/test/import2/**" />
 <property name="extraTestCases" value="test/import2/**" />
@@ -58,7 +57,7 @@ Copyright:
 
 <target name="copy" depends="setenv">
     <copy todir="${build.dir}/classes" overwrite="yes">
-      <fileset dir="${test.dir}/wsdl/_import">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/_import">
         <include name="NStoPkg.properties"/>
       </fileset>
     </copy>
@@ -76,8 +75,8 @@ Copyright:
     <!-- Import Test 1:  some namespace->package mappings from the -->
     <!--                 command line, some generated, some from   -->
     <!--                 NStoPkg.properties.                       -->
-    <wsdl2java url="${axis.home}/test/wsdl/_import/Import.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/_import/Import.wsdl"
+               output="${build.dir}/work"
                deployscope="none"
                serverSide="yes"
                skeletonDeploy="yes"
@@ -90,8 +89,8 @@ Copyright:
     </wsdl2java>
     <!-- Import Test 2:  all namespace->package mappings from the -->
     <!--                 command line.                            -->
-    <wsdl2java url="${axis.home}/test/wsdl/_import/Import.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/_import/Import.wsdl"
+               output="${build.dir}/work"
                deployscope="none"
                serverSide="yes"
                skeletonDeploy="yes"
@@ -110,8 +109,8 @@ Copyright:
     <!--                 command line.  Make sure an xsd:import   -->
     <!--                 statement inside a schema inside a type  -->
     <!--                 works properly.                          -->
-    <wsdl2java url="${axis.home}/test/wsdl/_import/ImportMessagesXSDImport.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/_import/ImportMessagesXSDImport.wsdl"
+               output="${build.dir}/work"
                noimports="no">
         <mapping namespace="urn:types.import.test" package="test.import.test3"/>
     </wsdl2java>
@@ -127,7 +126,7 @@ Copyright:
 
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 

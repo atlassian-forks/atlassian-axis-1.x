@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -34,7 +34,6 @@ Copyright:
 
 <project default="compile">
 
-<property name="axis.home" location="../../.." />
 <property name="componentName" value="test/wsdl/ram" />
         &properties;
         &paths;
@@ -53,8 +52,8 @@ Copyright:
 <target name="compile" depends="copy">
   <echo message="Compiling test.wsdl.ram"/>
     <!-- This tests Bug 9642 -  Java Date not deserialize properly.  -->
-    <wsdl2java url="${axis.home}/test/wsdl/ram/ram.wsdl"
-               output="${axis.home}/build/work"
+    <wsdl2java url="${axis.home}/src/test/java/test/wsdl/ram/ram.wsdl"
+               output="${build.dir}/work"
                serverSide="yes"
                testcase="yes">
         <mapping namespace="urn:ram" package="test.wsdl.ram"/>
@@ -62,19 +61,21 @@ Copyright:
     </wsdl2java>
 
     <copy todir="${build.dir}/work/test/wsdl/ram" overwrite="yes">
-      <fileset dir="${axis.home}/test/wsdl/ram">
+      <fileset dir="${axis.home}/src/test/java/test/wsdl/ram">
         <include name="*TestCase.java"/>
         <include name="*Impl.java"/>
       </fileset>
     </copy>
 
-    <javac srcdir="${build.dir}/work" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}">
-      <classpath refid="classpath" />
-      <include name="test/wsdl/ram/*.java" />
+    <javac srcdir="${build.dir}/work/test/wsdl/ram" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}" verbose="true">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <include name="**/*.java"/>
     </javac>
 </target>
 
-<target name="run" >
+<target name="run" depends="compile">
   <antcall target="execute-Component" />
 </target>
 
