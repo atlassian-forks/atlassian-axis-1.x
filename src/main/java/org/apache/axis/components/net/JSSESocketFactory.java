@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,7 +54,7 @@ import org.apache.axis.utils.XMLUtils;
 /**
  * SSL socket factory. It _requires_ a valid RSA key and
  * JSSE. (borrowed code from tomcat)
- * 
+ *
  * THIS CODE STILL HAS DEPENDENCIES ON sun.* and com.sun.*
  *
  * @author Davanum Srinivas (dims@yahoo.com)
@@ -80,11 +80,11 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
     /**
      * Initialize the SSLSocketFactory
      * @throws IOException
-     */ 
+     */
     protected void initFactory() throws IOException {
         sslFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
     }
-    
+
     /**
      * creates a secure socket
      *
@@ -262,22 +262,26 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
      */
     private static void verifyHostName(final String host, X509Certificate cert)
             throws SSLException {
-        String[] cns = getCNs(cert);
-        String[] subjectAlts = getDNSSubjectAlts(cert);
+        List/*<String>*/ cns = getCNs(cert);
+        List/*<String>*/ subjectAlts = getDNSSubjectAlts(cert);
         verifyHostName(host, cns, subjectAlts);
     }
 
     /**
      * Extract DNS subject alternatives from certificate
      */
-    private static String[] getDNSSubjectAlts(X509Certificate cert) {
-        LinkedList subjectAltList = new LinkedList();
-        Collection c = null;
+    private static List/*<String>*/ getDNSSubjectAlts(X509Certificate cert) {
+        LinkedList/*<String>*/ subjectAltList = new LinkedList/*<String>*/();
+        Collection/*<List>*/ c = null;
         try {
             c = cert.getSubjectAlternativeNames();
         } catch (CertificateParsingException cpe) {
-            // Should probably log.debug() this?
-            cpe.printStackTrace();
+            // SubjectAlternativeNames are optional, so we can continue without them
+            if (log.isDebugEnabled()) {
+                log.debug("Failed to parse SubjectAlternativeNames from certificate: " + cpe.getMessage());
+            }
+            // Return empty list to indicate no DNS subject alternatives found
+            return subjectAltList;
         }
         if (c != null) {
             Iterator it = c.iterator();
@@ -291,32 +295,24 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
                 }
             }
         }
-        if (!subjectAltList.isEmpty()) {
-            String[] subjectAlts = new String[subjectAltList.size()];
-            subjectAltList.toArray(subjectAlts);
-            return subjectAlts;
-        } else {
-            return null;
-        }
+        return subjectAltList;
     }
 
     /**
      * Verify hostname against CN and subject alternatives
      */
-    private static void verifyHostName(final String host, String[] cns, String[] subjectAlts)
+    private static void verifyHostName(final String host, List/*<String>*/ cns, List/*<String>*/ subjectAlts)
             throws SSLException {
         // Build the list of names we're going to check.  Our DEFAULT and
         // STRICT implementations of the HostnameVerifier only use the
         // first CN provided.  All other CNs are ignored.
         // (Firefox, wget, curl, Sun Java 1.4, 5, 6 all work this way).
-        LinkedList names = new LinkedList();
-        if (cns != null && cns.length > 0 && cns[0] != null) {
-            names.add(cns[0]);
+        LinkedList/*<String>*/ names = new LinkedList/*<String>*/();
+        if (cns != null && cns.size() > 0 && cns.get(0) != null) {
+            names.add(cns.get(0));
         }
         if (subjectAlts != null) {
-            for (int i = 0; i < subjectAlts.length; i++) {
-                names.add(subjectAlts[i]);
-            }
+            names.addAll(subjectAlts);
         }
 
         if (names.isEmpty()) {
@@ -344,13 +340,7 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
                 buf.append(" OR");
             }
 
-            // The CN better have at least two dots if it wants wildcard
-            // action.  It also can't be [*.co.uk] or [*.co.jp] or
-            // [*.org.uk], etc...
-            boolean doWildcard = cn.startsWith("*.") &&
-                               cn.lastIndexOf('.') >= 0 &&
-                               !isIPAddress(host) &&
-                               acceptableCountryWildcard(cn);
+            boolean doWildcard = !isIPAddress(host) && isAcceptableWildCard(cn);
 
             if (doWildcard) {
                 match = matchesWildCard(cn, hostName);
@@ -366,7 +356,7 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
         }
     }
 
-    private static boolean doWildCard(String cn) {
+    private static boolean isAcceptableWildCard(String cn) {
         // The CN better have at least two dots if it wants wildcard
         // action.  It also can't be [*.co.uk] or [*.co.jp] or
         // [*.org.uk], etc...
@@ -375,13 +365,13 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
                acceptableCountryWildcard(cn);
     }
 
-    private final static Pattern IPV4_PATTERN = 
+    private final static Pattern IPV4_PATTERN =
         Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
 
-    private final static Pattern IPV6_STD_PATTERN = 
+    private final static Pattern IPV6_STD_PATTERN =
         Pattern.compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
 
-    private final static Pattern IPV6_HEX_COMPRESSED_PATTERN = 
+    private final static Pattern IPV6_HEX_COMPRESSED_PATTERN =
         Pattern.compile("^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
 
     private static boolean isIPAddress(final String hostname) {
@@ -425,17 +415,9 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
         return match;
     }
 
-    private static int countDots(final String data) {
-        int dots = 0;
-        for (int i = 0; i < data.length(); i++) {
-            if (data.charAt(i) == '.') {
-                dots += 1;
-            }
-        }
-        return dots;
-    }
 
-    private static String[] getCNs(X509Certificate cert) {
+
+    private static List/*<String>*/ getCNs(X509Certificate cert) {
         // Note:  toString() seems to do a better job than getName()
         //
         // For example, getName() gives me this:
@@ -448,8 +430,8 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
         return getCNs(subjectPrincipal);
     }
 
-    private static String[] getCNs(String subjectPrincipal) {
-        List cnList = new LinkedList();
+    private static List/*<String>*/ getCNs(String subjectPrincipal) {
+        List/*<String>*/ cnList = new LinkedList/*<String>*/();
         /*
         Sebastian Hauer's original StrictSSLProtocolSocketFactory used
         getName() and had the following comment:
@@ -476,7 +458,7 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
 
         try {
             LdapName ldapDN = new LdapName(subjectPrincipal);
-            List rdns = ldapDN.getRdns();
+            List/*<Rdn>*/ rdns = ldapDN.getRdns();
             for (int i = rdns.size() - 1; i >= 0; i--) {
                 Rdn rdn = (Rdn) rdns.get(i);
                 Attributes attributes = rdn.toAttributes();
@@ -487,18 +469,18 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
                         if (val != null) {
                             cnList.add(val.toString());
                         }
-                    } catch (NamingException ignore) {
+                    } catch (NamingException e) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Failed to get CN attribute value: " + e.getMessage());
+                        }
                     }
                 }
             }
-        } catch (InvalidNameException ignore) {
+        } catch (InvalidNameException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Failed to parse certificate subject DN as LDAP name: " + e.getMessage());
+            }
         }
-        if (!cnList.isEmpty()) {
-            String[] cns = new String[cnList.size()];
-            cnList.toArray(cns);
-            return cns;
-        } else {
-            return null;
-        }
+        return cnList;
     }
 }
