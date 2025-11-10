@@ -61,7 +61,7 @@ import org.apache.axis.utils.XMLUtils;
  */
 public class JSSESocketFactory extends DefaultSocketFactory implements SecureSocketFactory {
 
-    private final static String[] BAD_COUNTRY_2LDS =
+    static final String[] BAD_COUNTRY_2LDS =
         {"ac", "co", "com", "ed", "edu", "go", "gouv", "gov", "info",
          "lg", "ne", "net", "or", "org"};
 
@@ -356,7 +356,7 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
         }
     }
 
-    private static boolean isAcceptableWildCard(String cn) {
+    static boolean isAcceptableWildCard(String cn) {
         // The CN better have at least two dots if it wants wildcard
         // action.  It also can't be [*.co.uk] or [*.co.jp] or
         // [*.org.uk], etc...
@@ -382,18 +382,24 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
     }
 
     private static boolean acceptableCountryWildcard(final String cn) {
-        int cnLen = cn.length();
-        if (cnLen >= 7 && cnLen <= 9) {
-            // Look for the '*.XX' pattern:
-            if (cn.charAt(cnLen - 3) == '.') {
-                // Trim off the [*.] and the [.XX].
-                String s = cn.substring(2, cnLen - 3);
-                // And test against the sorted array of bad 2lds:
-                int x = Arrays.binarySearch(BAD_COUNTRY_2LDS, s);
-                return x < 0;
-            }
+        // Find the last dot, should be before country code like .uk, .jp
+        int lastDot = cn.lastIndexOf('.');
+        if (lastDot < 3) {
+            return true; // Too short to contain *.bad.xx pattern (min: *.x.y at position 3)
         }
-        return true;
+
+        // Find the second-to-last dot (should be before second level domain like .co, .org)
+        int secondLastDot = cn.lastIndexOf('.', lastDot - 1);
+        if (secondLastDot < 1) {
+            return true; // Not enough space for *.prefix before second level domain
+        }
+
+        // Extract the second level domain
+        String secondLevelDomain = cn.substring(secondLastDot + 1, lastDot);
+
+        // Check if it's in list of bad second level domains
+        int x = Arrays.binarySearch(BAD_COUNTRY_2LDS, secondLevelDomain);
+        return x < 0;
     }
 
     private static boolean matchesWildCard(final String cn,
