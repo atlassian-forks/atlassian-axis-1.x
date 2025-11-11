@@ -1,6 +1,7 @@
 package org.apache.axis.components.net;
 
 import junit.framework.TestCase;
+import java.util.Arrays;
 
 /**
  * Test case for JSSESocketFactory.
@@ -63,6 +64,11 @@ public class TestJSSESocketFactory extends TestCase {
      */
     public void testAllKnownBadSecondLevelDomains() {
         String[] badSecondLevelDomains = JSSESocketFactory.BAD_COUNTRY_2LDS;
+
+        // Verify that array is sorted (required for Arrays.binarySearch)
+        String[] sortedCopy = badSecondLevelDomains.clone();
+        Arrays.sort(sortedCopy);
+        assertTrue("BAD_COUNTRY_2LDS array must be sorted", Arrays.equals(badSecondLevelDomains, sortedCopy));
 
         // Test each bad second level domain in wildcard format *.bad.xx
         for (String badDomain : badSecondLevelDomains) {
