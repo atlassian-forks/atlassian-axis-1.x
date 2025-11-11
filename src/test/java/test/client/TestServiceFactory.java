@@ -37,6 +37,19 @@ public class TestServiceFactory extends TestCase {
         return new TestSuite(TestServiceFactory.class);
     }
 
+    protected void setUp() throws Exception {
+        super.setUp();
+        // Set the mock JNDI context factory
+        System.setProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY, MockInitialContextFactory.class.getName());
+        MockInitialContextFactory.reinit();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        System.clearProperty(javax.naming.Context.INITIAL_CONTEXT_FACTORY);
+        super.tearDown();
+    }
+
     /**
      * Tests the security fix for CVE-2023-51441 which validates JNDI names
      * and blocks dangerous protocols (LDAP, RMI, JMS, JMX, JRMP, JAVA, DNS, IIOP, CORBANAME).
@@ -66,15 +79,17 @@ public class TestServiceFactory extends TestCase {
             Service result = ServiceFactory.getService(environment);
             assertNull("Service should be null for dangerous JNDI name: " + dangerousJndiNames[i], result);
         }
+    }
 
+    public void testSafeJndiName() {
         // Safe JNDI names should not be blocked by security check and should not return null
         String[] safeJndiNames = {
-            "http://localhost:8080/myservice",          // HTTP (not blocked)
-            "https://localhost:8443/service",           // HTTPS (not blocked)
-            "file:///var/services/axis",                // File protocol (not blocked)
-            "local/axis/service",                       // Local namespace
-            "comp/env/datasource",                      // Tomcat-like namespace
-            "axisServiceName",                          // Default safe name
+                "http://localhost:8080/myservice",          // HTTP (not blocked)
+                "https://localhost:8443/service",           // HTTPS (not blocked)
+                "file:///var/services/axis",                // File protocol (not blocked)
+                "local/axis/service",                       // Local namespace
+                "comp/env/datasource",                      // Tomcat-like namespace
+                "axisServiceName",                          // Default safe name
         };
 
         for (int i = 0; i < safeJndiNames.length; i++) {
@@ -83,7 +98,21 @@ public class TestServiceFactory extends TestCase {
             Service result = ServiceFactory.getService(environment);
             assertNotNull("Service should not be null for safe JNDI name: " + safeJndiNames[i], result);
         }
+    }
 
+    public void testInvalidJndiName() {
+        // Invalid JNDI names should result in a null service
+        for (String invalidName : MockInitialContextFactory.INVALID_JNDI_NAMES) {
+            Map environment = new HashMap();
+            environment.put("jndiName", invalidName);
+
+            // The ServiceFactory should handle the NamingException and return null
+            Service result = ServiceFactory.getService(environment);
+            assertNull("Service should be null for invalid JNDI name: " + invalidName, result);
+        }
+    }
+
+    public void testNullJndiName() {
         // Null jndiName should not throw NullPointerException
         Map environment = new HashMap();
         try {
@@ -91,9 +120,11 @@ public class TestServiceFactory extends TestCase {
         } catch (NullPointerException e) {
             fail("getService should not throw NullPointerException when jndiName is null: " + e.getMessage());
         }
+    }
 
+    public void testEmptyEnvironmentMap() {
         // Empty environment map should not throw exception
-        environment = new HashMap();
+        Map environment = new HashMap();
         try {
             ServiceFactory.getService(environment);
         } catch (Exception e) {

@@ -138,7 +138,6 @@ public class ServiceFactory extends javax.xml.rpc.ServiceFactory
                 try {
                     context.bind(name, service);
                 } catch (NamingException e1) {
-                    // !!! Couldn't do it, what should we do here?
                     return null;
                 }
             }
