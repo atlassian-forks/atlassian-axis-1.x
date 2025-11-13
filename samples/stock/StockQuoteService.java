@@ -31,43 +31,22 @@ import java.net.URL;
  * @author Doug Davis (dug@us.ibm.com)
  */
 public class StockQuoteService {
+  private HashMap map = new HashMap();
   public String test() {
     return( "Just a test" );
   }
 
   public float getQuote (String symbol) throws Exception {
-    // get a real (delayed by 20min) stockquote from
-    // http://services.xmethods.net/axis/. The IP addr
-    // below came from the host that the above form posts to ..
-
     if ( symbol.equals("XXX") ) return( (float) 55.25 );
 
-    URL          url = new URL( "http://services.xmethods.net/axis/getQuote?s="
-                                + symbol );
-
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    DocumentBuilder        db  = dbf.newDocumentBuilder();
-
-    Document doc  = db.parse( url.toExternalForm() );
-    Element  elem = doc.getDocumentElement();
-    NodeList list = elem.getElementsByTagName( "stock_quote" );
-
-    if ( list != null && list.getLength() != 0 ) {
-      elem = (Element) list.item(0);
-      list = elem.getElementsByTagName( "price" );
-      elem = (Element) list.item(0);
-      String quoteStr = elem.getAttribute("value");
-      try {
-        return Float.valueOf(quoteStr).floatValue();
-      } catch (NumberFormatException e1) {
-        // maybe its an int?
-        try {
-          return Integer.valueOf(quoteStr).intValue() * 1.0F;
-        } catch (NumberFormatException e2) {
-          return -1.0F;
-        }
-      }
+    Float price = (Float) map.get(symbol);
+    if(price != null){
+      return price.floatValue();
     }
-    return( 0 );
+    return 42.00;
+  }
+
+  public void update(String symbol, float price) {
+    map.put(symbol, new Float(price));
   }
 }
