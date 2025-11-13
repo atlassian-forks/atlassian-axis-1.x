@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,12 +15,6 @@
  */
 package org.apache.axis.components.net;
 
-import org.apache.axis.utils.Messages;
-import org.apache.axis.utils.XMLUtils;
-import org.apache.axis.utils.StringUtils;
-
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,18 +22,48 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateParsingException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+import javax.naming.InvalidNameException;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import org.apache.axis.utils.Messages;
+import org.apache.axis.utils.StringUtils;
+import org.apache.axis.utils.XMLUtils;
 
 
 /**
  * SSL socket factory. It _requires_ a valid RSA key and
  * JSSE. (borrowed code from tomcat)
- * 
+ *
  * THIS CODE STILL HAS DEPENDENCIES ON sun.* and com.sun.*
  *
  * @author Davanum Srinivas (dims@yahoo.com)
  */
 public class JSSESocketFactory extends DefaultSocketFactory implements SecureSocketFactory {
+
+    static final String[] BAD_COUNTRY_2LDS =
+        {"ac", "co", "com", "ed", "edu", "go", "gouv", "gov", "info",
+         "lg", "ne", "net", "or", "org"};
 
     /** Field sslFactory           */
     protected SSLSocketFactory sslFactory = null;
@@ -56,11 +80,11 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
     /**
      * Initialize the SSLSocketFactory
      * @throws IOException
-     */ 
+     */
     protected void initFactory() throws IOException {
         sslFactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
     }
-    
+
     /**
      * creates a secure socket
      *
@@ -187,6 +211,282 @@ public class JSSESocketFactory extends DefaultSocketFactory implements SecureSoc
         if (log.isDebugEnabled()) {
             log.debug(Messages.getMessage("createdSSL00"));
         }
+        verifyHostName(host, (SSLSocket) sslSocket);
         return sslSocket;
+    }
+
+    /**
+     * Verify hostname against certificate
+     */
+    private static void verifyHostName(String host, SSLSocket ssl)
+            throws IOException {
+        if (host == null) {
+            throw new IllegalArgumentException("host to verify is null");
+        }
+
+        SSLSession session = ssl.getSession();
+        if (session == null) {
+            // In our experience this only happens under IBM 1.4.x when
+            // spurious (unrelated) certificates show up in the server's
+            // chain.  Hopefully this will unearth the real problem:
+            InputStream in = ssl.getInputStream();
+            in.available();
+            /*
+                 If you're looking at the 2 lines of code above because you're
+                 running into a problem, you probably have two options:
+
+                    #1.  Clean up the certificate chain that your server
+                         is presenting (e.g. edit "/etc/apache2/server.crt" or
+                         wherever it is your server's certificate chain is
+                         defined).
+
+                                           OR
+
+                    #2.   Disable certificate validation by setting this property:
+                         -Daxis.socketSecureFactory=
+                         org.apache.axis.components.net.DefaultCommonsHTTPClientSocketFactory
+
+                 There is unfortunately no 3rd option for misconfigured
+                 certificate chains.
+                 */
+            session = ssl.getSession();
+        }
+
+        Certificate[] certs = session.getPeerCertificates();
+        verifyHostName(host.trim().toLowerCase(Locale.US),
+                      (X509Certificate) certs[0]);
+    }
+
+    /**
+     * Extract CN from X509 certificate and verify against hostname
+     */
+    private static void verifyHostName(final String host, X509Certificate cert)
+            throws SSLException {
+        List/*<String>*/ cns = getCNs(cert);
+        List/*<String>*/ subjectAlts = getDNSSubjectAlts(cert);
+        verifyHostName(host, cns, subjectAlts);
+    }
+
+    /**
+     * Extract DNS subject alternatives from certificate
+     */
+    private static List/*<String>*/ getDNSSubjectAlts(X509Certificate cert) {
+        LinkedList/*<String>*/ subjectAltList = new LinkedList/*<String>*/();
+        Collection/*<List>*/ c = null;
+        try {
+            c = cert.getSubjectAlternativeNames();
+        } catch (CertificateParsingException cpe) {
+            // SubjectAlternativeNames are optional, so we can continue without them
+            if (log.isDebugEnabled()) {
+                log.debug("Failed to parse SubjectAlternativeNames from certificate: " + cpe.getMessage());
+            }
+            // Return empty list to indicate no DNS subject alternatives found
+            return subjectAltList;
+        }
+        if (c != null) {
+            Iterator it = c.iterator();
+            while (it.hasNext()) {
+                List list = (List) it.next();
+                int type = ((Integer) list.get(0)).intValue();
+                // If type is 2, then we've got a dNSName
+                if (type == 2) {
+                    String s = (String) list.get(1);
+                    subjectAltList.add(s);
+                }
+            }
+        }
+        return subjectAltList;
+    }
+
+    /**
+     * Verify hostname against CN and subject alternatives
+     */
+    private static void verifyHostName(final String host, List/*<String>*/ cns, List/*<String>*/ subjectAlts)
+            throws SSLException {
+        // Build the list of names we're going to check.  Our DEFAULT and
+        // STRICT implementations of the HostnameVerifier only use the
+        // first CN provided.  All other CNs are ignored.
+        // (Firefox, wget, curl, Sun Java 1.4, 5, 6 all work this way).
+        LinkedList/*<String>*/ names = new LinkedList/*<String>*/();
+        if (cns != null && cns.size() > 0 && cns.get(0) != null) {
+            names.add(cns.get(0));
+        }
+        if (subjectAlts != null) {
+            names.addAll(subjectAlts);
+        }
+
+        if (names.isEmpty()) {
+            String msg = "Certificate for <" + host + "> doesn't contain CN or DNS subjectAlt";
+            throw new SSLException(msg);
+        }
+
+        // StringBuilder for building the error message.
+        StringBuffer buf = new StringBuffer();
+
+        // We're can be case-insensitive when comparing the host we used to
+        // establish the socket to the hostname in the certificate.
+        String hostName = host.trim().toLowerCase(Locale.US);
+        boolean match = false;
+        for (Iterator it = names.iterator(); it.hasNext();) {
+            // Don't trim the CN, though!
+            String cn = (String) it.next();
+            cn = cn.toLowerCase(Locale.US);
+
+            // Store CN in StringBuffer in case we need to report an error.
+            buf.append(" <");
+            buf.append(cn);
+            buf.append('>');
+            if (it.hasNext()) {
+                buf.append(" OR");
+            }
+
+            boolean doWildcard = !isIPAddress(host) && isAcceptableWildCard(cn);
+
+            if (doWildcard) {
+                match = matchesWildCard(cn, hostName);
+            } else {
+                match = hostName.equals(cn);
+            }
+            if (match) {
+                break;
+            }
+        }
+        if (!match) {
+            throw new SSLException("hostname in certificate didn't match: <" + host + "> !=" + buf);
+        }
+    }
+
+    static boolean isAcceptableWildCard(String cn) {
+        // The CN better have at least two dots if it wants wildcard
+        // action.  It also can't be [*.co.uk] or [*.co.jp] or
+        // [*.org.uk], etc...
+        return cn.startsWith("*.") &&
+               cn.indexOf('.', 2) != -1 &&
+               acceptableCountryWildcard(cn);
+    }
+
+    private final static Pattern IPV4_PATTERN =
+        Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+
+    private final static Pattern IPV6_STD_PATTERN =
+        Pattern.compile("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$");
+
+    private final static Pattern IPV6_HEX_COMPRESSED_PATTERN =
+        Pattern.compile("^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
+
+    private static boolean isIPAddress(final String hostname) {
+        return hostname != null &&
+               (IPV4_PATTERN.matcher(hostname).matches() ||
+                IPV6_STD_PATTERN.matcher(hostname).matches() ||
+                IPV6_HEX_COMPRESSED_PATTERN.matcher(hostname).matches());
+    }
+
+    private static boolean acceptableCountryWildcard(final String cn) {
+        // Find the last dot, should be before country code like .uk, .jp
+        int lastDot = cn.lastIndexOf('.');
+        if (lastDot < 3) {
+            return true; // Too short to contain *.bad.xx pattern (min: *.x.y at position 3)
+        }
+
+        // Find the second-to-last dot (should be before second level domain like .co, .org)
+        int secondLastDot = cn.lastIndexOf('.', lastDot - 1);
+        if (secondLastDot < 1) {
+            return true; // Not enough space for *.prefix before second level domain
+        }
+
+        // Extract the second level domain
+        String secondLevelDomain = cn.substring(secondLastDot + 1, lastDot);
+
+        // Check if it's in list of bad second level domains
+        int x = Arrays.binarySearch(BAD_COUNTRY_2LDS, secondLevelDomain);
+        return x < 0;
+    }
+
+    private static boolean matchesWildCard(final String cn,
+                                          final String hostName) {
+        int wildCardIdx = cn.indexOf("*.");
+        if (wildCardIdx == -1) {
+            return cn.equals(hostName);
+        }
+        boolean match = false;
+        String firstpart = cn.substring(0, wildCardIdx);
+        String tailpart = cn.substring(wildCardIdx + 1);
+
+        if (hostName.length() > tailpart.length()) {
+            String beforetail = hostName.substring(0,
+                                                   hostName.length() - tailpart.length());
+            String tail = hostName.substring(hostName.length() - tailpart.length());
+            match = beforetail.startsWith(firstpart) && tail.equals(tailpart);
+        }
+        return match;
+    }
+
+
+
+    private static List/*<String>*/ getCNs(X509Certificate cert) {
+        // Note:  toString() seems to do a better job than getName()
+        //
+        // For example, getName() gives me this:
+        // 1.2.840.113549.1.9.1=#16166a756c6975732e6461766965734063756362632e636f6d
+        //
+        // whereas toString() gives me this:
+        // EMAILADDRESS=julius.davies@cucbc.com, CN=juliusdavies, OU=Java Unit
+        //
+        String subjectPrincipal = cert.getSubjectX500Principal().toString();
+        return getCNs(subjectPrincipal);
+    }
+
+    private static List/*<String>*/ getCNs(String subjectPrincipal) {
+        List/*<String>*/ cnList = new LinkedList/*<String>*/();
+        /*
+        Sebastian Hauer's original StrictSSLProtocolSocketFactory used
+        getName() and had the following comment:
+
+              Parses a X.500 distinguished name for the value of the
+              "Common Name" field.  This is done a bit sloppy right
+              now and should probably be done a bit more according to
+              <code>RFC 2253</code>.
+
+         I've noticed that toString() seems to do a better job than
+         getName() on these X500Principal objects, so I'm hoping that
+         addresses Sebastian's concern.
+
+         For example, getName() gives me this:
+         1.2.840.113549.1.9.1=#16166a756c6975732e6461766965734063756362632e636f6d
+
+         whereas toString() gives me this:
+         EMAILADDRESS=julius.davies@cucbc.com, CN=juliusdavies, OU=Java Unit
+
+         Looks like toString() causes the X500Principal to throw up in
+         RFC 2253 format, followed by a reverse lookup for some of the
+         OIDs (e.g. EMAILADDRESS, CN, OU, etc).
+        */
+
+        try {
+            LdapName ldapDN = new LdapName(subjectPrincipal);
+            List/*<Rdn>*/ rdns = ldapDN.getRdns();
+            for (int i = rdns.size() - 1; i >= 0; i--) {
+                Rdn rdn = (Rdn) rdns.get(i);
+                Attributes attributes = rdn.toAttributes();
+                Attribute cn = attributes.get("cn");
+                if (cn != null) {
+                    try {
+                        Object val = cn.get();
+                        if (val != null) {
+                            cnList.add(val.toString());
+                        }
+                    } catch (NamingException e) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Failed to get CN attribute value: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        } catch (InvalidNameException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Failed to parse certificate subject DN as LDAP name: " + e.getMessage());
+            }
+        }
+        return cnList;
     }
 }
