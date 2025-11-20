@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import test.GlobalBean;
+import test.functional.GlobalBean;
 
 /**
  * This is a JWS which demonstrates that indeed, global type mappings work

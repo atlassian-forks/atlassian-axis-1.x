@@ -16,13 +16,9 @@
 
 package samples.stock;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.net.URL;
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import javax.xml.namespace.QName;
 
 /**
  * See \samples\stock\readme for info.
@@ -35,39 +31,14 @@ public class StockQuoteService {
     return( "Just a test" );
   }
 
+  /**
+   * This method originally called an external stock quote endpoint.
+   * Since that endpoint is no longer available, we now return mock values
+   * directly for functional tests.
+   */
   public float getQuote (String symbol) throws Exception {
-    // get a real (delayed by 20min) stockquote from
-    // http://services.xmethods.net/axis/. The IP addr
-    // below came from the host that the above form posts to ..
-
-    if ( symbol.equals("XXX") ) return( (float) 55.25 );
-
-    URL          url = new URL( "http://services.xmethods.net/axis/getQuote?s="
-                                + symbol );
-
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    DocumentBuilder        db  = dbf.newDocumentBuilder();
-
-    Document doc  = db.parse( url.toExternalForm() );
-    Element  elem = doc.getDocumentElement();
-    NodeList list = elem.getElementsByTagName( "stock_quote" );
-
-    if ( list != null && list.getLength() != 0 ) {
-      elem = (Element) list.item(0);
-      list = elem.getElementsByTagName( "price" );
-      elem = (Element) list.item(0);
-      String quoteStr = elem.getAttribute("value");
-      try {
-        return Float.valueOf(quoteStr).floatValue();
-      } catch (NumberFormatException e1) {
-        // maybe its an int?
-        try {
-          return Integer.valueOf(quoteStr).intValue() * 1.0F;
-        } catch (NumberFormatException e2) {
-          return -1.0F;
-        }
-      }
-    }
-    return( 0 );
+    if ("XXX".equals(symbol)) return 55.25f;
+    // Add other mock values as needed
+    return 0.0f;
   }
 }

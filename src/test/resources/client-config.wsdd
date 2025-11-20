@@ -8,5 +8,6 @@
  <transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
  <transport name="local" pivot="java:org.apache.axis.transport.local.LocalSender"/>
  <transport name="java" pivot="java:org.apache.axis.transport.java.JavaSender"/>
+ <transport name="tcp" pivot="java:samples.transport.tcp.TCPSender"/>
 </deployment>
 

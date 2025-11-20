@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../../../../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../../../../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../../../../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../../../../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../../../../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -72,15 +72,15 @@ Copyright:
         <echo message="Running WSDL2Java and Java2WSDL Emitters"/>
 
         <!-- WidgetPrice Java to WSDL Samples -->
-        <java2wsdl output="${axis.home}/build/work/samples/userguide/example6/WidgetPrice.wsdl"
+        <java2wsdl output="${build.dir}/work/samples/userguide/example6/WidgetPrice.wsdl"
             className="samples.userguide.example6.WidgetPrice"
             namespace="urn:Example6"
             location="http://localhost:8080/axis/services/WidgetPrice">
             <mapping namespace="urn:Example6" package="samples.userguide.example6"/>
         </java2wsdl>
 
-        <wsdl2java url="${axis.home}/build/work/samples/userguide/example6/WidgetPrice.wsdl"
-            output="${axis.home}/build/work"
+        <wsdl2java url="${build.dir}/work/samples/userguide/example6/WidgetPrice.wsdl"
+            output="${build.dir}/work"
             deployscope="session"
             serverSide="yes"
             skeletonDeploy="yes"

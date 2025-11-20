@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 import org.apache.axis.client.AdminClient;
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
-import test.functional.samples.echo.TestClient;
+//import test.functional.samples.echo.TestClient;
 
 
 /** Test the stock sample code.
