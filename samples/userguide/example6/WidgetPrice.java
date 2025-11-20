@@ -19,8 +19,7 @@ package samples.userguide.example6;
 /** 
  * Interface describing a web service to set and get Widget prices.
  **/
-public interface WidgetPrice
-{ 
-    public void setWidgetPrice(String widgetName, String price);
-    public String getWidgetPrice(String widgetName);
+public interface WidgetPrice extends java.rmi.Remote {
+    public void setWidgetPrice(String widgetName, String price) throws java.rmi.RemoteException;
+    public String getWidgetPrice(String widgetName) throws java.rmi.RemoteException;
 }
