@@ -35,7 +35,7 @@ public class TestJWSGlobalTypes extends TestCase {
             "<deployment xmlns=\"" + WSDDConstants.URI_WSDD + "\" " +
                         "xmlns:java=\"" + WSDDConstants.URI_WSDD_JAVA + "\" " +
                         "xmlns:ns=\"http://globalTypeTest\">\n" +
-            "  <beanMapping type=\"java:test.GlobalBean\" " +
+            "  <beanMapping type=\"java:test.functional.GlobalBean\" " +
                         "qname=\"ns:GlobalType\"/>\n" +
             "</deployment>";
 

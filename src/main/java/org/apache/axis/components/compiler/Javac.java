@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -92,7 +92,7 @@ public class Javac extends AbstractCompiler
                 }
             }
         }
-        
+
         return cl;
     }
 
@@ -107,7 +107,7 @@ public class Javac extends AbstractCompiler
 
         try {
             // Create an instance of the compiler, redirecting output to err
-            Class c = ClassUtils.forName(modern ? MODERN_CLASS : CLASSIC_CLASS, 
+            Class c = ClassUtils.forName(modern ? MODERN_CLASS : CLASSIC_CLASS,
                                          true,
                                          getClassLoader());
 
@@ -115,10 +115,10 @@ public class Javac extends AbstractCompiler
             Object compiler;
             if (modern) {
                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(err));
-                cons = 
+                cons =
                     c.getConstructor(new Class[] { String.class,
                                                    PrintWriter.class});
-       
+
                 compiler = cons.newInstance(new Object[] { "javac", pw });
             }
             else {
@@ -126,29 +126,37 @@ public class Javac extends AbstractCompiler
                     c.getConstructor(new Class[] { OutputStream.class,
                                                    String.class });
                 compiler = cons.newInstance(new Object[] { err, "javac" });
-        
+
             }
-              
+
             // Call the compile() method
             Method compile = c.getMethod("compile",
                                          new Class [] { String[].class });
 
             if (modern) {
-                int compilationResult = 
-                    ((Integer)compile.invoke(compiler, new Object[] 
-                        {
-                            toStringArray(fillArguments
-                                          (new ArrayList()))})).intValue();
-
-                result = (compilationResult == 0);        
-                log.debug("Compilation Returned: " 
-                          + Integer.toString(compilationResult));
-            }
-            else {
-                Boolean ok = 
-                    (Boolean)compile.invoke(compiler, new Object[] 
+                // Patch: JDK 8+ returns com.sun.tools.javac.main.Main$Result, not Integer
+                Object compileResult = compile.invoke(compiler, new Object[] {
+                    toStringArray(fillArguments(new ArrayList()))
+                });
+                int compilationResult;
+                if (compileResult instanceof Integer) {
+                    // Legacy JDKs: returns Integer
+                    compilationResult = ((Integer) compileResult).intValue();
+                } else if (compileResult != null && compileResult.getClass().getName().equals("com.sun.tools.javac.main.Main$Result")) {
+                    // JDK 8+: returns Main$Result enum (OK, ERROR, CMDERR, SYSERR, ABNORMAL)
+                    // Only OK means success
+                    String resName = compileResult.toString();
+                    compilationResult = "OK".equals(resName) ? 0 : 1;
+                } else {
+                    // Unknown return type, treat as error
+                    compilationResult = 1;
+                }
+                result = (compilationResult == 0);
+            } else {
+                Boolean ok =
+                    (Boolean)compile.invoke(compiler, new Object[]
                         {toStringArray(fillArguments(new ArrayList()))});
-        
+
                 result = ok.booleanValue();
             }
         } catch (Exception cnfe){

@@ -81,6 +81,8 @@ public class FunctionalTests extends TestCase
 
         suite.addTestSuite(TestAutoTypes.class);
 
+        suite.addTestSuite(TestXss.class);
+
         return suite;
     }
 }

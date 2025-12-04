@@ -2,8 +2,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import test.SimpleBean;
-import test.NestedBean;
+import test.functional.SimpleBean;
+import test.functional.NestedBean;
 
 /* based upon GlobalTypesTest.jws */
 public class AutoTypesTest {

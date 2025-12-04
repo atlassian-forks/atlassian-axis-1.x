@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE project [
-        <!ENTITY properties SYSTEM "file:../../xmls/properties.xml">
-        <!ENTITY paths  SYSTEM "file:../../xmls/path_refs.xml">
-        <!ENTITY taskdefs SYSTEM "file:../../xmls/taskdefs.xml">
-        <!ENTITY taskdefs_post_compile SYSTEM "file:../../xmls/taskdefs_post_compile.xml">
-        <!ENTITY targets SYSTEM "file:../../xmls/targets.xml">
+        <!ENTITY properties SYSTEM "../../../../../xmls/properties.xml">
+        <!ENTITY paths  SYSTEM "../../../../../xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../../../../../xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../../../../../xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../../../../../xmls/targets.xml">
 ]>
 
 <!-- ===================================================================
@@ -32,9 +32,8 @@ Copyright:
 </description>
 ==================================================================== -->
 
-<project default="compile">
+<project default="compile" basedir=".">
 
-<property name="axis.home" location="../.." />
 <property name="componentName" value="test/functional" />
         &properties;
         &paths;
@@ -46,27 +45,45 @@ Copyright:
 
 <target name="copy" depends="setenv">
     <ant inheritAll="${ant.inheritAll}" inheritRefs="${ant.inheritRefs}" dir="${axis.home}" antfile="buildSamples.xml" target="compile"/>
+    <!-- Compile test.rpc first since functional tests depend on it -->
+    <ant inheritAll="true" inheritRefs="true" dir="${axis.home}" antfile="src/test/java/test/rpc/build.xml" target="compile"/>
 </target>
 
 <target name="compile" depends="copy">
   <echo message="Compiling test.functional"/>
-  <javac srcdir="${axis.home}" destdir="${build.dest}" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="${javac.fork}">
+  <javac srcdir="${axis.home}/src/test/java/test/functional" destdir="${build.dir}/work" debug="${debug}" nowarn="${nowarn}" source="${source}" fork="yes">
     <classpath>
         <path refid="classpath"/>
     </classpath>
-    <include name="test/functional/*.java"/>
+    <include name="**/*.java"/>
   </javac>
   <!-- first, put the JWS where the functional test can see it -->
-  <mkdir dir="${axis.home}/build/jws" />
-  <copy file="${axis.home}/test/functional/AltStockQuoteService.jws" todir="${axis.home}/build/jws" />
-  <copy file="${axis.home}/test/functional/GlobalTypeTest.jws" todir="${axis.home}/build/jws"/>
-  <copy file="${axis.home}/test/functional/FaultTest.jws" todir="${axis.home}/build/jws"/>
-  <copy file="${axis.home}/test/functional/AutoTypesTest.jws" todir="${axis.home}/build/jws" />
-  <copy file="${axis.home}/webapps/axis/EchoHeaders.jws" todir="${axis.home}/build/jws" />
+  <mkdir dir="${build.dir}/jws" />
+  <copy file="${axis.home}/src/test/java/test/functional/AltStockQuoteService.jws" todir="${build.dir}/jws" />
+  <copy file="${axis.home}/src/test/java/test/functional/GlobalTypeTest.jws" todir="${build.dir}/jws"/>
+  <copy file="${axis.home}/src/test/java/test/functional/FaultTest.jws" todir="${build.dir}/jws"/>
+  <copy file="${axis.home}/src/test/java/test/functional/AutoTypesTest.jws" todir="${build.dir}/jws" />
+  <copy file="${axis.home}/src/test/java/test/functional/DelayedQuote.jws" todir="${build.dir}/jws" />
+  <copy file="${axis.home}/webapps/axis/EchoHeaders.jws" todir="${build.dir}/jws" />
+  <!-- copy compiled test classes to webapps so they're available to the HTTP server -->
+  <copy todir="${build.webapp}/WEB-INF/classes">
+    <fileset dir="${build.dir}/work">
+      <include name="test/**/*.class"/>
+    </fileset>
+  </copy>
+  <!-- copy WSDL files to work directory so tests can find them -->
+  <copy todir="${build.dir}/work/test/functional" overwrite="yes">
+    <fileset dir="${axis.home}/src/test/java/test/functional">
+      <include name="*.wsdd"/>
+      <include name="*.xml"/>
+    </fileset>
+  </copy>
 </target>
 
 <target name="junit-functional-prepare" if="junit.present">
    <mkdir dir="${test.functional.reportdir}" />
+   <copy file="${axis.home}/src/test/resources/server-config.wsdd" todir="${build.dir}/work" />
+   <copy file="${axis.home}/src/test/resources/client-config.wsdd" todir="${build.dir}/work" />
    <path id="deploy.xml.files">
        <fileset dir="${build.dir}">
           <include name="work/samples/**/deploy.wsdd"/>
@@ -91,11 +108,15 @@ Copyright:
       <arg line="${deploy.xml.property}"/>
     </java>
 
-   <junit dir="${axis.home}" printsummary="yes" haltonfailure="${test.functional.fail}" fork="yes">
-      <classpath refid="classpath" />
+   <junit dir="${build.dir}/work" printsummary="yes" haltonfailure="${test.functional.fail}" fork="yes">
+      <classpath>
+         <path refid="classpath" />
+         <pathelement location="${build.dir}/work" />
+      </classpath>
+      <sysproperty key="test.functional.webapp.url" value="http://localhost:8080/axis"/>
       <formatter type="xml" usefile="${test.functional.usefile}"/>
       <batchtest todir="${test.functional.reportdir}">
-        <fileset dir="${build.dest}" excludesfile="${axis.home}/junit-exclude-tests.txt">
+        <fileset dir="${build.dir}/work" excludesfile="${axis.home}/junit-exclude-tests.txt">
            <include name="${componentName}/FunctionalTests.class" />
         </fileset>
       </batchtest>
@@ -107,7 +128,7 @@ Copyright:
     </java>
 </target>
 
-<target name="run"  depends="setenv" >
+<target name="run"  depends="setenv,compile" >
     <runaxisfunctionaltests
       url="http://localhost:8088"
       tcpServerTarget="start-functional-test-tcp-server"

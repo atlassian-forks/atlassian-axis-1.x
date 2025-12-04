@@ -566,6 +566,63 @@
 
     <profiles>
         <profile>
+            <id>run-functional-tests</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies-for-functional-tests</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-functional-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!-- Create required directories for Ant build -->
+                                        <mkdir dir="${project.build.directory}/lib" />
+                                        <mkdir dir="${project.build.directory}/work" />
+
+                                        <!-- Run functional tests using the functional build.xml -->
+                                        <!-- Need to use relative path from basedir so entity includes resolve correctly -->
+                                        <ant antfile="src/test/java/test/functional/build.xml" target="run"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-junit</artifactId>
+                                <version>1.8.4</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>run-wsdl-ant-test</id>
             <activation>
                 <property>
@@ -597,7 +654,7 @@
                         <executions>
                             <execution>
                                 <id>run-wsdl-ant-test</id>
-                                <phase>test</phase>
+                                <phase>integration-test</phase>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
