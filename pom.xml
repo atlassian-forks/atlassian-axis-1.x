@@ -12,7 +12,7 @@
 
     <groupId>axis</groupId>
     <artifactId>axis</artifactId>
-    <version>1.2.1-atlassian-1-SNAPSHOT</version>
+    <version>1.2.1-atlassian-1-m01-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
