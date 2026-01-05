@@ -4,7 +4,7 @@
 
     <groupId>axis</groupId>
     <artifactId>axis</artifactId>
-    <version>1.2.1-atlassian-1</version>
+    <version>1.2.1-atlassian-2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -25,7 +25,7 @@
         <connection>scm:git:git@github.com:atlassian-forks/atlassian-axis-1.x.git</connection>
         <developerConnection>scm:git:git@github.com:atlassian-forks/atlassian-axis-1.x.git</developerConnection>
         <url>https://github.com/atlassian-forks/atlassian-axis-1.x.git</url>
-        <tag>axis-1.2.1-atlassian-1</tag>
+        <tag>HEAD</tag>
     </scm>
     <licenses>
         <license>
