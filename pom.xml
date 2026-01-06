@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>axis</groupId>
     <artifactId>axis</artifactId>
-    <version>1.2.1-atlassian-1-SNAPSHOT</version>
+    <version>1.2.1-atlassian-2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -671,7 +669,7 @@
 
                                         <!-- Run functional tests using the functional build.xml -->
                                         <!-- Need to use relative path from basedir so entity includes resolve correctly -->
-                                        <ant antfile="src/test/java/test/functional/build.xml" target="run"/>
+                                        <ant antfile="src/test/java/test/functional/build.xml" target="run" />
                                     </target>
                                 </configuration>
                             </execution>
@@ -739,100 +737,98 @@
                                             <pathelement location="${project.build.directory}/work" />
                                         </path>
                                         <!-- Copy server config to build directory -->
-                                        <copy file="${project.basedir}/src/test/resources/server-config.wsdd"
-                                              tofile="${project.build.directory}/server-config.wsdd" />
-                                        <copy file="${project.basedir}/src/test/resources/client-config.wsdd"
-                                              tofile="${project.build.outputDirectory}/client-config.wsdd" />
+                                        <copy file="${project.basedir}/src/test/resources/server-config.wsdd" tofile="${project.build.directory}/server-config.wsdd" />
+                                        <copy file="${project.basedir}/src/test/resources/client-config.wsdd" tofile="${project.build.outputDirectory}/client-config.wsdd" />
 
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays4/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/_import/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/adaptive/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays3/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/addrNoImplSEI/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/any/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/anytype/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/attachments/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/attrGroup/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/choice/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/clash/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/dataset/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/datatypes/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/date/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/doclit_arrays/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/document/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/echo/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/echo2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/esr/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extensibility/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extension/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extra/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/faults/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/filegen/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/gateway/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/getPort/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/groups/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/header/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/include/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/inheritance/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/inout/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop3/build.xml" target="${ant.target}" dir="${project.basedir}/src/test/java/test/wsdl/interop3"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop4/build.xml" target="${ant.target}" dir="${project.basedir}/src/test/java/test/wsdl/interop4"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop5/build.xml" target="${ant.target}" dir="${project.basedir}/src/test/java/test/wsdl/interop5"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/jaxrpcdynproxy/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/jaxrpchandler/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/jaxrpchandler2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/literal/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/map/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marrays/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marshall/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marshall2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marshall3/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/multibinding/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/multiref/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/multithread/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/names/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/nested/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/omit/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/oneway/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/opStyles/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/opStylesDoc/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/parameterOrder/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/polymorphism/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/primitiveWrappers/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qname/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qnameser/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qualify/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qualify2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/query/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/ram/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/refattr/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/roundtrip/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/roundtrip2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/rpcParams/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/schema2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/schemaImport/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/selectivefilegen/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/sequence/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/session/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/soap12/additional/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/soap12/assertion/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/stubheaders/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/terra/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/types/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/uddiv2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/union/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/webref/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped2/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped_choice/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped_holders/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped_inout/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapperHolder/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wsrf/build.xml" target="${ant.target}"/>
-                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/xsd/build.xml" target="${ant.target}"/>
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays4/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/_import/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/adaptive/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/arrays3/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/addrNoImplSEI/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/any/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/anytype/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/attachments/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/attrGroup/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/choice/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/clash/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/dataset/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/datatypes/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/date/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/doclit_arrays/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/document/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/echo/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/echo2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/esr/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extensibility/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extension/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/extra/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/faults/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/filegen/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/gateway/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/getPort/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/groups/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/header/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/include/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/inheritance/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/inout/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop3/build.xml" target="${ant.target}" dir="${project.basedir}/src/test/java/test/wsdl/interop3" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop4/build.xml" target="${ant.target}" dir="${project.basedir}/src/test/java/test/wsdl/interop4" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/interop5/build.xml" target="${ant.target}" dir="${project.basedir}/src/test/java/test/wsdl/interop5" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/jaxrpcdynproxy/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/jaxrpchandler/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/jaxrpchandler2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/literal/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/map/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marrays/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marshall/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marshall2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/marshall3/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/multibinding/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/multiref/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/multithread/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/names/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/nested/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/omit/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/oneway/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/opStyles/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/opStylesDoc/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/parameterOrder/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/polymorphism/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/primitiveWrappers/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qname/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qnameser/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qualify/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/qualify2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/query/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/ram/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/refattr/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/roundtrip/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/roundtrip2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/rpcParams/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/schema2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/schemaImport/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/selectivefilegen/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/sequence/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/session/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/soap12/additional/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/soap12/assertion/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/stubheaders/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/terra/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/types/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/uddiv2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/union/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/webref/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped2/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped_choice/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped_holders/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapped_inout/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wrapperHolder/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/wsrf/build.xml" target="${ant.target}" />
+                                        <ant antfile="${project.basedir}/src/test/java/test/wsdl/xsd/build.xml" target="${ant.target}" />
                                     </target>
                                 </configuration>
                             </execution>
