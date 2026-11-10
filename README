@@ -10,3 +10,7 @@ Thanks from all of us on the Axis team for downloading the package; help
 us make it better by sending comments to axis-user@ws.apache.org.
 
 
+
+SOAP Monitor has been removed from this fork, including the servlet, handler,
+standalone client and applet. Remove existing SOAPMonitor servlet mappings and
+SOAPMonitorHandler entries from deployment configurations before upgrading.
