@@ -88,13 +88,6 @@
     %>
   </li>
 
-  <li>
-    <%
-      out.print("<a href=\""+ getMessage("soapMonitorURL") +"\">");
-      out.print(getMessage("soapMonitor") +"</a> - ");
-      out.print(getMessage("soapMonitorFootnote"));
-    %>
-  </li>
 
 </ul>
 
